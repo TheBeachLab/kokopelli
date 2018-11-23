@@ -227,7 +227,11 @@ _pad_USB_trace = s2d.rectangle(-0.0075, 0.0075, -0.04, 0.04)
 _pad_USB_foot  = s2d.rectangle(-0.049, 0.049, -0.043, 0.043)
 _pad_header  = s2d.rectangle(-0.06, 0.06, -0.025, 0.025)
 _pad_SOT23 = s2d.rectangle(-.02,.02,-.012,.012)
+_pad_SOT223 = s2d.rectangle(-.02,.02,-.03,.03)
+_pad_SOT223_ground = s2d.rectangle(-.065,.065,-.03,.03)
 _pad_XTAL_NX5032GA = s2d.rectangle(-.039,.039,-.047,.047)
+_pad_XTAL_EFOBM = s2d.rectangle(-.016,.016,-.085,.085)
+_pad_XTAL_CSM_7 = s2d.rectangle(-.108,.108,-.039,.039)
 _pad_SOIC = s2d.rectangle(-0.041, 0.041, -0.015, 0.015)
 _pad_TQFP_h = s2d.rectangle(-0.025, 0.025, -0.008, 0.008)
 _pad_TQFP_v = s2d.rectangle(-0.008, 0.008, -0.025, 0.025)
@@ -238,6 +242,14 @@ _pad_MTA_solder = s2d.rectangle(-0.071, 0.071, -0.041, 0.041)
 _pad_screw_terminal = s2d.circle(0, 0, 0.047)
 _pad_hole_screw_terminal = s2d.circle(0, 0, 0.025)
 _pad_stereo_2_5mm = s2d.rectangle(-0.03, 0.03, -0.05, 0.05)
+_pad_Molex = s2d.rectangle(-0.0155, 0.0155, -0.0265, 0.0265)
+_pad_Molex_solder = s2d.rectangle(-0.055, 0.055, -0.065, 0.065)
+_pad_button_6mm = s2d.rectangle(-0.04, 0.04, -0.03, 0.03)
+_pad_RGB = s2d.rectangle(-0.02, 0.02, -0.029, 0.029)
+_pad_PLCC2 = s2d.rectangle(-0.029, 0.029, -0.059, 0.059)
+
+
+
 
 ################################################################################
 # Discrete passive components
