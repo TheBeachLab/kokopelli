@@ -371,6 +371,146 @@ class Header_FTDI(Component):
     ]
     prefix = 'J'
 
+class Header_signal(Component):
+    ''' signal header
+        FCI 95278-101A04LF Bergstik 2x2x0.1"
+    '''
+
+class Header_power(Component):
+    ''' power header
+        FCI 95278-101A04LF Bergstik 2x2x0.1"
+    '''
+
+class Header_i0(Component):
+    ''' i0 header
+        FCI 95278-101A04LF Bergstik 2x2x0.1"
+    '''
+
+class Header_serial(Component):
+    ''' serial comm header
+        FCI 95278-101A04LF Bergstik 2x2x0.1"
+    '''
+
+class Header_bus(Component):
+    ''' bus header
+        FCI 95278-101A04LF Bergstik 2x2x0.1"
+    '''
+
+class Header_I2C(Component):
+    ''' i2c header
+        FCI 95278-101A04LF Bergstik 2x2x0.1"
+    '''
+
+class Header_APA(Component):
+    ''' APA header
+        FCI 95278-101A04LF Bergstik 2x2x0.1"
+    '''
+
+class Header_6(Component):
+    ''' 6-pin header
+        FCI 95278-101A06LF Bergstik 2x3x0.1"
+    '''
+
+class Header_PDI(Component):
+    ''' in-circuit PDI programming header
+        FCI 95278-101A06LF Bergstik 2x3x0.1"
+    '''
+
+class Header_servo(Component):
+    ''' servo motor header
+        FCI 95278-101A06LF Bergstik 2x3x0.1"
+    '''
+
+class Header_unipolar_stepper(Component):
+    ''' unipolar stepper header
+        FCI 95278-101A06LF Bergstik 2x3x0.1"
+    '''
+
+class Header_LCD(Component):
+    ''' LCD interface header
+        FCI 95278-101A10LF Bergstik 2x5x0.1"
+    '''
+
+class HCSR4(Component):
+    ''' HC-SR04 sonar header
+    '''
+
+class HCSR501(Component):
+    ''' HC-SR0501 motion-detector header
+    '''
+
+class ESP8266_12E(Component):
+    ''' ESP8266 12E
+    '''
+
+class MTA_2(Component):
+    ''' AMP 1445121-2
+        MTA .050 SMT 2-pin vertical
+    '''
+
+class MTA_power(Component):
+    ''' AMP 1445121-2
+        MTA .050 SMT 2-pin vertical
+    '''
+
+class MTA_3(Component):
+    ''' AMP 1445121-3
+        MTA .050 SMT 3-pin vertical
+    '''
+
+class MTA_i0(Component):
+    ''' AMP 1445121-3
+        MTA .050 SMT 3-pin vertical
+    '''
+
+class MTA_4(Component):
+    ''' AMP 1445121-4
+        MTA .050 SMT 4-pin vertical
+    '''
+
+class MTA_serial(Component):
+    ''' AMP 1445121-4
+        MTA .050 SMT 4-pin vertical
+    '''
+
+class MTA_PS2(Component):
+    ''' AMP 1445121-4
+        MTA .050 SMT 4-pin vertical
+    '''
+
+class MTA_5(Component):
+    ''' AMP 1445121-5
+        MTA .050 SMT 5-pin vertical
+    '''
+
+class MTA_ICP(Component):
+    ''' AMP 1445121-5
+        MTA .050 SMT 5-pin vertical
+    '''
+
+class screw_terminal_2(Component):
+    ''' On Shore ED555/2DS
+        two position screw terminal
+    '''
+
+class screw_terminal_power(Component):
+    ''' On Shore ED555/2DS
+        power screw terminal
+    '''
+
+class screw_terminal_i0(Component):
+    ''' On Shore ED555/2DS
+        i0 screw terminal
+    '''
+
+class power_65mm(Component):
+    ''' CUI PJ1-023-SMT
+    '''
+
+class Molex_serial(Component):
+    ''' Molex 53261-0471
+    '''
+
 ################################################################################
 # Switches
 ################################################################################
