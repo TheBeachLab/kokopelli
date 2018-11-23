@@ -331,10 +331,10 @@ class Header_4(Component):
         fci 95278-101a04lf bergstik 2x2x0.1
     '''
     pins = [
-        Pin(-0.107,  0.05, _pad_header),
-        Pin(-0.107, -0.05, _pad_header),
-        Pin( 0.107, -0.05, _pad_header),
-        Pin( 0.107,  0.05, _pad_header)
+        Pin(-0.107,  0.05, _pad_header, '1'),
+        Pin(-0.107, -0.05, _pad_header, '2'),
+        Pin( 0.107, -0.05, _pad_header, '3'),
+        Pin( 0.107,  0.05, _pad_header, '4')
     ]
     prefix = 'J'
 
@@ -369,46 +369,113 @@ class Header_signal(Component):
     ''' signal header
         FCI 95278-101A04LF Bergstik 2x2x0.1"
     '''
+    pins = [
+        Pin(-0.107,  0.05, _pad_header, 'GND'),
+        Pin(-0.107, -0.05, _pad_header, ''),
+        Pin( 0.107, -0.05, _pad_header, 'signal'),
+        Pin( 0.107,  0.05, _pad_header, '')
+    ]
+    prefix = 'J'
 
 class Header_power(Component):
     ''' power header
         FCI 95278-101A04LF Bergstik 2x2x0.1"
     '''
+    pins = [
+        Pin(-0.107,  0.05, _pad_header, 'GND'),
+        Pin(-0.107, -0.05, _pad_header, ''),
+        Pin( 0.107, -0.05, _pad_header, 'V'),
+        Pin( 0.107,  0.05, _pad_header, '')
+    ]
+    prefix = 'J'
 
 class Header_i0(Component):
     ''' i0 header
         FCI 95278-101A04LF Bergstik 2x2x0.1"
     '''
+    pins = [
+        Pin(-0.107,  0.05, _pad_header, 'GND'),
+        Pin(-0.107, -0.05, _pad_header, 'data'),
+        Pin( 0.107, -0.05, _pad_header, 'V'),
+        Pin( 0.107,  0.05, _pad_header, '')
+    ]
+    prefix = 'J'
 
 class Header_serial(Component):
     ''' serial comm header
         FCI 95278-101A04LF Bergstik 2x2x0.1"
     '''
+    pins = [
+        Pin(-0.107,  0.05, _pad_header, 'GND'),
+        Pin(-0.107, -0.05, _pad_header, 'DTR'),
+        Pin( 0.107, -0.05, _pad_header, 'Tx'),
+        Pin( 0.107,  0.05, _pad_header, 'Rx')
+    ]
+    prefix = 'J'
 
 class Header_bus(Component):
     ''' bus header
         FCI 95278-101A04LF Bergstik 2x2x0.1"
     '''
+    pins = [
+        Pin(-0.107,  0.05, _pad_header, 'GND'),
+        Pin(-0.107, -0.05, _pad_header, 'Tx'),
+        Pin( 0.107, -0.05, _pad_header, 'V'),
+        Pin( 0.107,  0.05, _pad_header, 'Rx')
+    ]
+    prefix = 'J'
 
 class Header_I2C(Component):
     ''' i2c header
         FCI 95278-101A04LF Bergstik 2x2x0.1"
     '''
+    pins = [
+        Pin(-0.107,  0.05, _pad_header, 'SCL'),
+        Pin(-0.107, -0.05, _pad_header, 'G'),
+        Pin( 0.107, -0.05, _pad_header, 'SDA'),
+        Pin( 0.107,  0.05, _pad_header, 'V')
+    ]
+    prefix = 'J'
 
 class Header_APA(Component):
     ''' APA header
         FCI 95278-101A04LF Bergstik 2x2x0.1"
     '''
+    pins = [
+        Pin(-0.107,  0.05, _pad_header, 'GND'),
+        Pin(-0.107, -0.05, _pad_header, 'in'),
+        Pin( 0.107, -0.05, _pad_header, 'V'),
+        Pin( 0.107,  0.05, _pad_header, 'out')
+    ]
+    prefix = 'J'
 
 class Header_6(Component):
     ''' 6-pin header
         FCI 95278-101A06LF Bergstik 2x3x0.1"
     '''
+    pins = [
+        Pin(-0.107, 0.1,  _pad_header, '1'),
+        Pin(-0.107, 0,    _pad_header, '2'),
+        Pin(-0.107, -0.1, _pad_header, '3'),
+        Pin( 0.107, -0.1, _pad_header, '4'),
+        Pin( 0.107, 0,    _pad_header, '5'),
+        Pin( 0.107, 0.1,  _pad_header, '6')
+    ]
+    prefix = 'J'
 
 class Header_PDI(Component):
     ''' in-circuit PDI programming header
         FCI 95278-101A06LF Bergstik 2x3x0.1"
     '''
+    pins = [
+        Pin(-0.107, 0.1,  _pad_header, 'DAT'),
+        Pin(-0.107, 0,    _pad_header, 'VCC'),
+        Pin(-0.107, -0.1, _pad_header, 'NC'),
+        Pin( 0.107, -0.1, _pad_header, 'NC'),
+        Pin( 0.107, 0,    _pad_header, 'CLK'),
+        Pin( 0.107, 0.1,  _pad_header, 'GND')
+    ]
+    prefix = 'J'
 
 class Header_servo(Component):
     ''' servo motor header
