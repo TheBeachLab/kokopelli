@@ -264,7 +264,6 @@ TSSOP_pad_dy = 0.026
 TSSOP_pad_dx = 0.120
 _pad_TSSOP = s2d.rectangle(-TSSOP_pad_width/2.0,TSSOP_pad_width/2.0,-TSSOP_pad_height/2.0,TSSOP_pad_height/2.0)
 
-
 ################################################################################
 # Discrete passive components
 ################################################################################
@@ -272,6 +271,8 @@ _pad_TSSOP = s2d.rectangle(-TSSOP_pad_width/2.0,TSSOP_pad_width/2.0,-TSSOP_pad_h
 class R_0402(Component):
    ''' 0402 resistor
    '''
+   pins = [Pin(-0.0265, 0, _pad_0402), Pin(0.265, 0, _pad_0402)]
+   prefix = 'R'
 
 class R_1206(Component):
     ''' 1206 Resistor
@@ -285,23 +286,23 @@ class C_1206(Component):
     pins = [Pin(-0.06, 0, _pad_1206), Pin(0.06, 0, _pad_1206)]
     prefix = 'C'
 
+class L_1210(Component):
+    ''' 1210 inductor
+    '''
+    pins = [Pin(-0.06, 0, _pad_1210), Pin(0.06, 0, _pad_1210)]
+    prefix = 'L'
+
 class SJ(Component):
     ''' Solder jumper
     '''
     pins = [Pin(-0.029, 0, _pad_SJ), Pin(0.029, 0, _pad_SJ)]
     prefix = 'SJ'
 
-class R_0402(Component):
-   ''' 0402 resistor
-   '''
-
-class L_1210(Component):
-   ''' 1210 inductor
-   '''
-
 class choke(Component):
-   ''' Panasonic ELLCTV
-   '''
+    ''' Panasonic ELLCTV
+    '''
+    pins = [Pin(-0.177, -0.177, _pad_choke), Pin(0.177, 0.177, _pad_choke)]
+    prefix = 'CH'
 
 ################################################################################
 # Connectors
