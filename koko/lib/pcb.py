@@ -637,8 +637,16 @@ class ADXL343(Component):
     '''
 
 ################################################################################
-# ICs Atmel microcontrollers
+# ICs and Atmel microcontrollers
 ################################################################################
+
+class op_amp_SOT23_5(Component):
+    ''' SOT23-5 op amp
+    '''
+
+class op_amp_SOICN(Component):
+    ''' SOICN op amp
+    '''
 
 class ATtiny45_SOIC(Component):
     pins = []
@@ -664,6 +672,10 @@ class ATtiny44_SOIC(Component):
         pins.append(Pin(0.12, y, _pad_SOIC, t))
     prefix = 'U'
 
+class ATxmegaE5_TQFP(Component):
+    ''' ATxmegaE5_TQFP
+    '''
+
 class ATmega88_TQFP(Component):
     pins = []
     y = 0.1085
@@ -685,14 +697,31 @@ class ATmega88_TQFP(Component):
     del x, y
     prefix = 'U'
 
+class ATmega644_TQFP(Component):
+    ''' ATmega644_TQFP
+    '''
+
+class TRC102(Component):
+    ''' RFM TRC102 ISM transceiver
+    '''
+
+class A4953_SOICN(Component):
+    '''
+    '''
+
 ################################################################################
 #   CBA logo and other graphics
 ################################################################################
 _pin_circle_CBA = s2d.circle(0, 0, 0.02)
 _pin_square_CBA = s2d.rectangle(-0.02, 0.02, -0.02, 0.02)
+
 class CBA(Component):
     pins = []
     for i in range(3):
         for j in range(3):
             pin = _pin_circle_CBA if i == 2-j and j >= 1 else _pin_square_CBA
             pins.append(Pin(0.06*(i-1), 0.06*(j-1), pin))
+
+class fab(Component):
+    ''' fablab logo
+    '''
