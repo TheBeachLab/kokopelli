@@ -10,14 +10,14 @@ def show_about_box(event=None):
     info.SetVersion(VERSION)
 
     if HASH is None:
-        info.SetDescription('An interactive design tool for .cad files.')
+        info.SetDescription('An interactive design tool for .ko files.')
     else:
         info.SetDescription(
-            'An interactive design tool for .cad files.\ngit commit: ' +
+            'An interactive design tool for .ko files.\ngit commit: ' +
             HASH
         )
 
-    info.SetWebSite('https://github.com/mkeeter/kokopelli')
+    info.SetWebSite('https://github.com/thebeachlab/kokopelli')
     info.SetCopyright(
 '''(C) 2012-13 MIT Center for Bits and Atoms
 (C) 2013 Matt Keeter''')

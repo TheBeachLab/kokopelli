@@ -1,7 +1,7 @@
 """ Top-level module for kokopelli. """
 
-NAME = 'kokopelli'
-VERSION = '0.2'
+NAME = 'kokopelli reloaded'
+VERSION = '0.3'
 HASH = None
 
 """

@@ -77,22 +77,22 @@ DARK_THEME = Theme(
 
 SOLARIZED_THEME = Theme(
      txt=[
-        (wx.stc.STC_STYLE_DEFAULT,    '#002b36' '#002b36'), # base00
+        (wx.stc.STC_STYLE_DEFAULT,    '#002b36', '#657b83'), # base00
         (wx.stc.STC_STYLE_LINENUMBER, '#073642','#839496'),
-        (wx.stc.STC_P_CHARACTER,      '#2aa198'), # cyan
-        (wx.stc.STC_P_CLASSNAME,      '#268bd2'), # blue
-        (wx.stc.STC_P_COMMENTBLOCK,   '#586e75'), # base01
-        (wx.stc.STC_P_COMMENTLINE,    '#586e75'), # base01
-        (wx.stc.STC_P_DEFAULT,        '#657b83'), # base00
-        (wx.stc.STC_P_DEFNAME,        '#268bd2'), # blue
-        (wx.stc.STC_P_IDENTIFIER,     '#657b83'), # base00
-        (wx.stc.STC_P_NUMBER,         '#2aa198'), # blue
-        (wx.stc.STC_P_OPERATOR,       '#657b83'), # base00
-        (wx.stc.STC_P_STRING,         '#2aa198'), # cyan
-        (wx.stc.STC_P_STRINGEOL,      '#657b83'), # base00
-        (wx.stc.STC_P_TRIPLE,         '#dc322f'), # red
-        (wx.stc.STC_P_TRIPLEDOUBLE,   '#268bd2'), # blue
-        (wx.stc.STC_P_WORD,           '#cb4b16')  # green
+        (wx.stc.STC_P_CHARACTER,      '#002b36','#859900'), # green
+        (wx.stc.STC_P_CLASSNAME,      '#002b36','#d33682'), # magenta
+        (wx.stc.STC_P_COMMENTBLOCK,   '#002b36','#586e75'), # base01
+        (wx.stc.STC_P_COMMENTLINE,    '#002b36','#586e75'), # base01
+        (wx.stc.STC_P_DEFAULT,        '#002b36','#839496'), # base0
+        (wx.stc.STC_P_DEFNAME,        '#002b36','#2aa198'), # cyan
+        (wx.stc.STC_P_IDENTIFIER,     '#002b36','#268bd2'), # blue
+        (wx.stc.STC_P_NUMBER,         '#002b36','#b58900'), # yellow
+        (wx.stc.STC_P_OPERATOR,       '#002b36','#93a1a1'), # base1
+        (wx.stc.STC_P_STRING,         '#002b36','#859900'), # green
+        (wx.stc.STC_P_STRINGEOL,      '#002b36','#6c71c4'), # violet
+        (wx.stc.STC_P_TRIPLE,         '#002b36','#cb4b16'), # orange
+        (wx.stc.STC_P_TRIPLEDOUBLE,   '#002b36','#cb4b16'), # orange
+        (wx.stc.STC_P_WORD,           '#002b36','#6c71c4')  # violet
     ],
     background='#002b36',   # base03
     header='#073642',       # base02
@@ -101,4 +101,4 @@ SOLARIZED_THEME = Theme(
 )
 # http://www.zovirl.com/2011/07/22/solarized_cheat_sheet/
 
-APP_THEME = DARK_THEME
+APP_THEME = SOLARIZED_THEME

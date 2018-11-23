@@ -255,7 +255,8 @@ class MainFrame(wx.Frame):
                help='3D Shapes library')
         attach(libraries, 'koko.lib.text', app.show_library,
                help='Text library')
-
+        attach(libraries, 'koko.lib.pcb', app.show_library,
+               help='PCB library')
 
         menu_bar.Append(libraries, 'Libraries')
 
@@ -353,6 +354,3 @@ class MainFrame(wx.Frame):
         sub = m.GetSubMenu()
         if sub is None: return m
         else:           return sub.GetMenuItems()
-
-
-
