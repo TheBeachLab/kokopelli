@@ -545,6 +545,32 @@ class XTAL_CSM_7(Component):
 # Diodes, transistors and regulators
 ################################################################################
 
+class D_1206(Component):
+    ''' 1206 diode
+    '''
+
+class LED_1206(Component):
+    ''' 1206 LED
+    '''
+
+class LED_RGB(Component):
+    ''' CREE CLV1A-FKB
+    '''
+
+class phototransistor_1206(Component):
+    ''' 1206 phototransistor
+        OPTEK 520,521
+    '''
+
+class phototransistor_PLCC2(Component):
+    ''' PLCC2 phototransistor
+        OPTEK OP580
+    '''
+
+class D_SOD_123(Component):
+    ''' SOD-123 diode
+    '''
+
 class NMOS_SOT23(Component):
     ''' NMOS transistor in SOT23 package
         Fairchild NDS355AN
@@ -567,6 +593,14 @@ class PMOS_SOT23(Component):
     ]
     prefix = 'Q'
 
+class NMOS_TO252AA(Component):
+    ''' Fairchild RFD16N05LSM
+    '''
+
+class Hall_SOT23(Component):
+    ''' Allegro A1324
+    '''
+
 class Regulator_SOT23(Component):
     '''  SOT23 voltage regulator
     '''
@@ -577,6 +611,30 @@ class Regulator_SOT23(Component):
     ]
     prefix = 'U'
 
+class Regulator_SOT223(Component):
+    '''  SOT223 voltage regulator
+        Zetex ZLDO1117
+    '''
+
+class H_bridge_SM8(Component):
+    ''' Zetex ZXMHC3A01T8
+    '''
+
+class mic_SPU0414HR5H(Component):
+    ''' Knowles SPU0414HR5H-SB
+    '''
+
+class mic_SPM1437(Component):
+    ''' Knowles SPM1437HM4H-B
+    '''
+
+class accel_MXD6235M(Component):
+    ''' MEMSIC MXD6235M
+    '''
+
+class ADXL343(Component):
+    ''' ADI ADXL343 accelerometer
+    '''
 
 ################################################################################
 # ICs Atmel microcontrollers
