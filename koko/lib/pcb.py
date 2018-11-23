@@ -507,6 +507,10 @@ class power_65mm(Component):
     ''' CUI PJ1-023-SMT
     '''
 
+class stereo_2_5mm(Component):
+    ''' CUI SJ1-2533-SMT
+    '''
+
 class Molex_serial(Component):
     ''' Molex 53261-0471
     '''
