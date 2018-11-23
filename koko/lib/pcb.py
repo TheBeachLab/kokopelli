@@ -291,13 +291,6 @@ class SJ(Component):
     pins = [Pin(-0.029, 0, _pad_SJ), Pin(0.029, 0, _pad_SJ)]
     prefix = 'SJ'
 
-class D_SOD_123(Component):
-    ''' Diode
-    '''
-    pins = [Pin(-0.07, 0, _pad_SOD_123, 'A'),
-            Pin(0.07, 0, _pad_SOD_123, 'C')]
-    prefix = 'D'
-
 class R_0402(Component):
    ''' 0402 resistor
    '''
@@ -568,8 +561,11 @@ class phototransistor_PLCC2(Component):
     '''
 
 class D_SOD_123(Component):
-    ''' SOD-123 diode
+    ''' Diode
     '''
+    pins = [Pin(-0.07, 0, _pad_SOD_123, 'A'),
+            Pin(0.07, 0, _pad_SOD_123, 'C')]
+    prefix = 'D'
 
 class NMOS_SOT23(Component):
     ''' NMOS transistor in SOT23 package
