@@ -213,12 +213,35 @@ class Connection(object):
             t.append(s2d.move(s2d.rotate(r, degrees(a)), p1.x, p1.y))
         return reduce(operator.add, t)
 
+################################################################################
+# Pad definitions
+################################################################################
+
+_pad_1206 = s2d.rectangle(-0.032, 0.032, -0.034, 0.034)
+_pad_1210 = s2d.rectangle(-0.032, 0.032, -0.048, 0.048)
+_pad_choke = s2d.rectangle(-0.06, 0.06, -0.06, 0.06)
+_pad_0402 = s2d.rectangle(-0.175, 0.175, -0.014, 0.014)
+_pad_SJ = s2d.rectangle(-0.02, 0.02, -0.03, 0.03)
+_pad_SOD_123 = s2d.rectangle(-0.02, 0.02, -0.024, 0.024)
+_pad_USB_trace = s2d.rectangle(-0.0075, 0.0075, -0.04, 0.04)
+_pad_USB_foot  = s2d.rectangle(-0.049, 0.049, -0.043, 0.043)
+_pad_header  = s2d.rectangle(-0.06, 0.06, -0.025, 0.025)
+_pad_SOT23 = s2d.rectangle(-.02,.02,-.012,.012)
+_pad_XTAL_NX5032GA = s2d.rectangle(-.039,.039,-.047,.047)
+_pad_SOIC = s2d.rectangle(-0.041, 0.041, -0.015, 0.015)
+_pad_TQFP_h = s2d.rectangle(-0.025, 0.025, -0.008, 0.008)
+_pad_TQFP_v = s2d.rectangle(-0.008, 0.008, -0.025, 0.025)
+_pad_ESP8266 = s2d.rectangle(-0.0493, 0.0493, -0.0197, 0.0197)
+_pad_ESP8266_bot = s2d.rectangle(-0.0197, 0.0197, -0.0415, 0.0415)
+_pad_MTA = s2d.rectangle(-0.021, 0.021, -0.041, 0.041)
+_pad_MTA_solder = s2d.rectangle(-0.071, 0.071, -0.041, 0.041)
+_pad_screw_terminal = s2d.circle(0, 0, 0.047)
+_pad_hole_screw_terminal = s2d.circle(0, 0, 0.025)
+_pad_stereo_2_5mm = s2d.rectangle(-0.03, 0.03, -0.05, 0.05)
 
 ################################################################################
 # Discrete passive components
 ################################################################################
-
-_pad_1206 = s2d.rectangle(-0.032, 0.032, -0.034, 0.034)
 
 class R_1206(Component):
     ''' 1206 Resistor
@@ -232,14 +255,12 @@ class C_1206(Component):
     pins = [Pin(-0.06, 0, _pad_1206), Pin(0.06, 0, _pad_1206)]
     prefix = 'C'
 
-_pad_SJ = s2d.rectangle(-0.02, 0.02, -0.03, 0.03)
 class SJ(Component):
     ''' Solder jumper
     '''
     pins = [Pin(-0.029, 0, _pad_SJ), Pin(0.029, 0, _pad_SJ)]
     prefix = 'SJ'
 
-_pad_SOD_123 = s2d.rectangle(-0.02, 0.02, -0.024, 0.024)
 class D_SOD_123(Component):
     ''' Diode
     '''
@@ -252,8 +273,6 @@ class D_SOD_123(Component):
 # Connectors
 ################################################################################
 
-_pad_USB_trace = s2d.rectangle(-0.0075, 0.0075, -0.04, 0.04)
-_pad_USB_foot  = s2d.rectangle(-0.049, 0.049, -0.043, 0.043)
 class USB_mini_B(Component):
     ''' USB mini B connector
         Hirose UX60-MB-5ST
@@ -272,7 +291,6 @@ class USB_mini_B(Component):
     ]
     prefix = 'J'
 
-_pad_header  = s2d.rectangle(-0.06, 0.06, -0.025, 0.025)
 class Header_4(Component):
     ''' 4-pin header
         fci 95278-101a04lf bergstik 2x2x0.1
@@ -312,12 +330,10 @@ class Header_FTDI(Component):
     ]
     prefix = 'J'
 
-
 ################################################################################
 # SOT-23 components
 ################################################################################
 
-_pad_SOT23 = s2d.rectangle(-.02,.02,-.012,.012)
 class NMOS_SOT23(Component):
     ''' NMOS transistor in SOT23 package
         Fairchild NDS355AN
@@ -353,7 +369,6 @@ class Regulator_SOT23(Component):
 ################################################################################
 #   Clock crystals
 ################################################################################
-_pad_XTAL_NX5032GA = s2d.rectangle(-.039,.039,-.047,.047)
 
 class XTAL_NX5032GA(Component):
     pins = [Pin(-0.079, 0, _pad_XTAL_NX5032GA),
@@ -364,7 +379,6 @@ class XTAL_NX5032GA(Component):
 # Atmel microcontrollers
 ################################################################################
 
-_pad_SOIC = s2d.rectangle(-0.041, 0.041, -0.015, 0.015)
 class ATtiny45_SOIC(Component):
     pins = []
     y = 0.075
@@ -389,9 +403,6 @@ class ATtiny44_SOIC(Component):
         pins.append(Pin(0.12, y, _pad_SOIC, t))
     prefix = 'U'
 
-_pad_TQFP_h = s2d.rectangle(-0.025, 0.025, -0.008, 0.008)
-_pad_TQFP_v = s2d.rectangle(-0.008, 0.008, -0.025, 0.025)
-
 class ATmega88_TQFP(Component):
     pins = []
     y = 0.1085
@@ -412,7 +423,6 @@ class ATmega88_TQFP(Component):
         x -= 0.031
     del x, y
     prefix = 'U'
-
 
 ################################################################################
 #   CBA logo
