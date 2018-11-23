@@ -269,6 +269,10 @@ _pad_TSSOP = s2d.rectangle(-TSSOP_pad_width/2.0,TSSOP_pad_width/2.0,-TSSOP_pad_h
 # Discrete passive components
 ################################################################################
 
+class R_0402(Component):
+   ''' 0402 resistor
+   '''
+
 class R_1206(Component):
     ''' 1206 Resistor
     '''
@@ -294,6 +298,17 @@ class D_SOD_123(Component):
             Pin(0.07, 0, _pad_SOD_123, 'C')]
     prefix = 'D'
 
+class R_0402(Component):
+   ''' 0402 resistor
+   '''
+
+class L_1210(Component):
+   ''' 1210 inductor
+   '''
+
+class choke(Component):
+   ''' Panasonic ELLCTV
+   '''
 
 ################################################################################
 # Connectors
