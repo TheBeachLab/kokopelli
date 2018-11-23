@@ -220,7 +220,7 @@ class Connection(object):
 _pad_1206 = s2d.rectangle(-0.032, 0.032, -0.034, 0.034)
 _pad_1210 = s2d.rectangle(-0.032, 0.032, -0.048, 0.048)
 _pad_choke = s2d.rectangle(-0.06, 0.06, -0.06, 0.06)
-_pad_0402 = s2d.rectangle(-0.175, 0.175, -0.014, 0.014)
+_pad_0402 = s2d.rectangle(-0.0175, 0.0175, -0.014, 0.014)
 _pad_SJ = s2d.rectangle(-0.02, 0.02, -0.03, 0.03)
 _pad_SOD_123 = s2d.rectangle(-0.02, 0.02, -0.024, 0.024)
 _pad_USB_trace = s2d.rectangle(-0.0075, 0.0075, -0.04, 0.04)
@@ -271,7 +271,7 @@ _pad_TSSOP = s2d.rectangle(-TSSOP_pad_width/2.0,TSSOP_pad_width/2.0,-TSSOP_pad_h
 class R_0402(Component):
    ''' 0402 resistor
    '''
-   pins = [Pin(-0.0265, 0, _pad_0402), Pin(0.265, 0, _pad_0402)]
+   pins = [Pin(-0.0265, 0, _pad_0402), Pin(0.0265, 0, _pad_0402)]
    prefix = 'R'
 
 class R_1206(Component):
@@ -481,6 +481,7 @@ class Header_servo(Component):
     ''' servo motor header
         FCI 95278-101A06LF Bergstik 2x3x0.1"
     '''
+    pins = [
         Pin(-0.107, 0.1,  _pad_header, 'G/blk'),
         Pin(-0.107, 0,    _pad_header, 'G/blk'),
         Pin(-0.107, -0.1, _pad_header, 'V/red'),
@@ -494,6 +495,7 @@ class Header_unipolar_stepper(Component):
     ''' unipolar stepper header
         FCI 95278-101A06LF Bergstik 2x3x0.1"
     '''
+    pins = [
         Pin(-0.107, 0.1,  _pad_header, 'red'),
         Pin(-0.107, 0,    _pad_header, 'green'),
         Pin(-0.107, -0.1, _pad_header, 'black'),
@@ -507,26 +509,75 @@ class Header_LCD(Component):
     ''' LCD interface header
         FCI 95278-101A10LF Bergstik 2x5x0.1"
     '''
-        Pin(-0.107, 0.1,  _pad_header, 'DB7\n14'),
-        Pin(-0.107, 0,    _pad_header, 'DB6\n13'),
-        Pin(-0.107, -0.1, _pad_header, 'DB5\n12'),
-        Pin( 0.107, -0.1, _pad_header, 'DB4\n11'),
-        Pin( 0.107, 0,    _pad_header, 'E\n6'),
-        Pin( 0.107, 0.1,  _pad_header, 'R/W\n5')
+    pins = [
+        Pin(.107,-.2,  _pad_header, 'DB7\n14'),
+        Pin(-.107,-.2,    _pad_header, 'DB6\n13'),
+        Pin(.107,-.1, _pad_header, 'DB5\n12'),
+        Pin(-.107,-.1, _pad_header, 'DB4\n11'),
+        Pin(.107,0,    _pad_header, 'E\n6'),
+        Pin(-.107,0,  _pad_header, 'R/W\n5'),
+        Pin(.107,.1, _pad_header, 'RS\n4'),
+        Pin(-.107,.1, _pad_header, 'Vee\n3'),
+        Pin(.107,.2,    _pad_header, 'Vcc\n2'),
+        Pin(-.107,.2,  _pad_header, 'GND\n1')
     ]
     prefix = 'J'
 
-class HCSR4(Component):
+class HCSR04(Component):
     ''' HC-SR04 sonar header
     '''
+    pins = [
+        Pin(0, 0.15,  _pad_header, 'GND'),
+        Pin(0, 0.05,  _pad_header, 'echo'),
+        Pin(0, -0.05, _pad_header, 'trig'),
+        Pin(0, -0.15, _pad_header, 'Vcc')
+    ]
+    prefix = 'J'
 
 class HCSR501(Component):
     ''' HC-SR0501 motion-detector header
     '''
+    pins = [
+        Pin(0, 0.1,  _pad_header, 'Vcc'),
+        Pin(0, 0,    _pad_header, 'out'),
+        Pin(0, -0.1, _pad_header, 'GND')
+    ]
+    prefix = 'J'
 
 class ESP8266_12E(Component):
     ''' ESP8266 12E
     '''
+    height = 24/25.4
+    width = 16/25.4
+    pitch = 2/25.4
+    bottom = 1.8/25.4
+    left = 3/25.4
+    offset = .4/25.4 - .01
+    pins = [
+        Pin(-width/2.0+offset,-height/2.0+bottom+7*pitch,  _pad_ESP8266, 'RST'),
+        Pin(-width/2.0+offset,-height/2.0+bottom+6*pitch,  _pad_ESP8266, 'ADC'),
+        Pin(-width/2.0+offset,-height/2.0+bottom+5*pitch,  _pad_ESP8266, 'EN'),
+        Pin(-width/2.0+offset,-height/2.0+bottom+4*pitch,  _pad_ESP8266, 'GPIO16'),
+        Pin(-width/2.0+offset,-height/2.0+bottom+3*pitch,  _pad_ESP8266, 'GPIO14'),
+        Pin(-width/2.0+offset,-height/2.0+bottom+2*pitch,  _pad_ESP8266, 'GPIO12'),
+        Pin(-width/2.0+offset,-height/2.0+bottom+1*pitch,  _pad_ESP8266, 'GPIO13'),
+        Pin(-width/2.0+offset,-height/2.0+bottom+0*pitch,  _pad_ESP8266, 'VDD'),
+        Pin(-width/2.0+left+0*pitch,-height/2.0+offset,  _pad_ESP8266_bot, 'CS'),
+        Pin(-width/2.0+left+1*pitch,-height/2.0+offset,  _pad_ESP8266_bot, 'MISO'),
+        Pin(-width/2.0+left+2*pitch,-height/2.0+offset,  _pad_ESP8266_bot, 'GPIO9'),
+        Pin(-width/2.0+left+3*pitch,-height/2.0+offset,  _pad_ESP8266_bot, 'GPIO10'),
+        Pin(-width/2.0+left+4*pitch,-height/2.0+offset,  _pad_ESP8266_bot, 'MOSI'),
+        Pin(-width/2.0+left+5*pitch,-height/2.0+offset,  _pad_ESP8266_bot, 'SCLK'),
+        Pin(width/2.0-offset,-height/2.0+bottom+0*pitch,  _pad_ESP8266, 'GND'),
+        Pin(width/2.0-offset,-height/2.0+bottom+1*pitch,  _pad_ESP8266, 'GPIO15'),
+        Pin(width/2.0-offset,-height/2.0+bottom+2*pitch,  _pad_ESP8266, 'GPIO2'),
+        Pin(width/2.0-offset,-height/2.0+bottom+3*pitch,  _pad_ESP8266, 'GPIO0'),
+        Pin(width/2.0-offset,-height/2.0+bottom+4*pitch,  _pad_ESP8266, 'GPIO4'),
+        Pin(width/2.0-offset,-height/2.0+bottom+5*pitch,  _pad_ESP8266, 'GPIO5'),
+        Pin(width/2.0-offset,-height/2.0+bottom+6*pitch,  _pad_ESP8266, 'RXD'),
+        Pin(width/2.0-offset,-height/2.0+bottom+7*pitch,  _pad_ESP8266, 'TXD')
+    ]
+    prefix = 'J'
 
 class MTA_2(Component):
     ''' AMP 1445121-2
