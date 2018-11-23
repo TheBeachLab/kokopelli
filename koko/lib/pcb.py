@@ -481,16 +481,40 @@ class Header_servo(Component):
     ''' servo motor header
         FCI 95278-101A06LF Bergstik 2x3x0.1"
     '''
+        Pin(-0.107, 0.1,  _pad_header, 'G/blk'),
+        Pin(-0.107, 0,    _pad_header, 'G/blk'),
+        Pin(-0.107, -0.1, _pad_header, 'V/red'),
+        Pin( 0.107, -0.1, _pad_header, 'V/red'),
+        Pin( 0.107, 0,    _pad_header, 'S0/wht'),
+        Pin( 0.107, 0.1,  _pad_header, 'S1/wht')
+    ]
+    prefix = 'J'
 
 class Header_unipolar_stepper(Component):
     ''' unipolar stepper header
         FCI 95278-101A06LF Bergstik 2x3x0.1"
     '''
+        Pin(-0.107, 0.1,  _pad_header, 'red'),
+        Pin(-0.107, 0,    _pad_header, 'green'),
+        Pin(-0.107, -0.1, _pad_header, 'black'),
+        Pin( 0.107, -0.1, _pad_header, 'brown'),
+        Pin( 0.107, 0,    _pad_header, 'orange'),
+        Pin( 0.107, 0.1,  _pad_header, 'yellow')
+    ]
+    prefix = 'J'
 
 class Header_LCD(Component):
     ''' LCD interface header
         FCI 95278-101A10LF Bergstik 2x5x0.1"
     '''
+        Pin(-0.107, 0.1,  _pad_header, 'DB7\n14'),
+        Pin(-0.107, 0,    _pad_header, 'DB6\n13'),
+        Pin(-0.107, -0.1, _pad_header, 'DB5\n12'),
+        Pin( 0.107, -0.1, _pad_header, 'DB4\n11'),
+        Pin( 0.107, 0,    _pad_header, 'E\n6'),
+        Pin( 0.107, 0.1,  _pad_header, 'R/W\n5')
+    ]
+    prefix = 'J'
 
 class HCSR4(Component):
     ''' HC-SR04 sonar header
