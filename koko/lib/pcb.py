@@ -528,10 +528,18 @@ class button_6mm(Component):
 #   Clock crystals and resonators
 ################################################################################
 
+class XTAL_EFOBM(Component):
+    ''' Panasonic EFOBM series
+    '''
+
 class XTAL_NX5032GA(Component):
     pins = [Pin(-0.079, 0, _pad_XTAL_NX5032GA),
             Pin(0.079, 0, _pad_XTAL_NX5032GA)]
     prefix = 'X'
+
+class XTAL_CSM_7(Component):
+    ''' ECS CSM-7 series
+    '''
 
 ################################################################################
 # Diodes, transistors and regulators
