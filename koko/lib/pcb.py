@@ -277,13 +277,13 @@ class R_0402(Component):
    pins = [Pin(-0.0265, 0, _pad_0402), Pin(0.0265, 0, _pad_0402)]
    prefix = 'R'
 
-class R_1206(Component):
+class resistor(Component):
     ''' 1206 Resistor
     '''
     pins = [Pin(-0.06, 0, _pad_1206), Pin(0.06, 0, _pad_1206)]
     prefix = 'R'
 
-class C_1206(Component):
+class capacitor(Component):
     ''' 1206 Capacitor
     '''
     pins = [Pin(-0.06, 0, _pad_1206), Pin(0.06, 0, _pad_1206)]
@@ -295,7 +295,7 @@ class L_1210(Component):
     pins = [Pin(-0.06, 0, _pad_1210), Pin(0.06, 0, _pad_1210)]
     prefix = 'L'
 
-class SJ(Component):
+class sj(Component):
     ''' Solder jumper
     '''
     pins = [Pin(-0.029, 0, _pad_SJ), Pin(0.029, 0, _pad_SJ)]
@@ -311,7 +311,7 @@ class choke(Component):
 # Connectors
 ################################################################################
 
-class USB_mini_B(Component):
+class usb(Component):
     ''' USB mini B connector
         Hirose UX60-MB-5ST
     '''
@@ -329,7 +329,7 @@ class USB_mini_B(Component):
     ]
     prefix = 'J'
 
-class Header_4(Component):
+class header2x2(Component):
     ''' 4-pin header
         fci 95278-101a04lf bergstik 2x2x0.1
     '''
@@ -341,7 +341,7 @@ class Header_4(Component):
     ]
     prefix = 'J'
 
-class Header_ISP(Component):
+class headerisp(Component):
     ''' ISP programming header
         FCI 95278-101A06LF Bergstik 2x3x0.1
     '''
@@ -355,7 +355,7 @@ class Header_ISP(Component):
     ]
     prefix = 'J'
 
-class Header_FTDI(Component):
+class ftdi(Component):
     ''' FTDI cable header
     '''
     pins = [
@@ -368,7 +368,7 @@ class Header_FTDI(Component):
     ]
     prefix = 'J'
 
-class Header_signal(Component):
+class headersignal(Component):
     ''' signal header
         FCI 95278-101A04LF Bergstik 2x2x0.1"
     '''
@@ -380,7 +380,7 @@ class Header_signal(Component):
     ]
     prefix = 'J'
 
-class Header_power(Component):
+class headerpower(Component):
     ''' power header
         FCI 95278-101A04LF Bergstik 2x2x0.1"
     '''
@@ -392,7 +392,7 @@ class Header_power(Component):
     ]
     prefix = 'J'
 
-class Header_i0(Component):
+class headeri0(Component):
     ''' i0 header
         FCI 95278-101A04LF Bergstik 2x2x0.1"
     '''
@@ -404,7 +404,7 @@ class Header_i0(Component):
     ]
     prefix = 'J'
 
-class Header_serial(Component):
+class headerserial(Component):
     ''' serial comm header
         FCI 95278-101A04LF Bergstik 2x2x0.1"
     '''
@@ -416,7 +416,7 @@ class Header_serial(Component):
     ]
     prefix = 'J'
 
-class Header_bus(Component):
+class headerbus(Component):
     ''' bus header
         FCI 95278-101A04LF Bergstik 2x2x0.1"
     '''
@@ -428,7 +428,7 @@ class Header_bus(Component):
     ]
     prefix = 'J'
 
-class Header_I2C(Component):
+class headeri2c(Component):
     ''' i2c header
         FCI 95278-101A04LF Bergstik 2x2x0.1"
     '''
@@ -440,7 +440,7 @@ class Header_I2C(Component):
     ]
     prefix = 'J'
 
-class Header_APA(Component):
+class headerapa(Component):
     ''' APA header
         FCI 95278-101A04LF Bergstik 2x2x0.1"
     '''
@@ -452,7 +452,7 @@ class Header_APA(Component):
     ]
     prefix = 'J'
 
-class Header_6(Component):
+class header2x3(Component):
     ''' 6-pin header
         FCI 95278-101A06LF Bergstik 2x3x0.1"
     '''
@@ -466,7 +466,7 @@ class Header_6(Component):
     ]
     prefix = 'J'
 
-class Header_PDI(Component):
+class headerpdi(Component):
     ''' in-circuit PDI programming header
         FCI 95278-101A06LF Bergstik 2x3x0.1"
     '''
@@ -480,7 +480,7 @@ class Header_PDI(Component):
     ]
     prefix = 'J'
 
-class Header_servo(Component):
+class headerservo(Component):
     ''' servo motor header
         FCI 95278-101A06LF Bergstik 2x3x0.1"
     '''
@@ -494,7 +494,7 @@ class Header_servo(Component):
     ]
     prefix = 'J'
 
-class Header_unipolar_stepper(Component):
+class headerstepper(Component):
     ''' unipolar stepper header
         FCI 95278-101A06LF Bergstik 2x3x0.1"
     '''
@@ -508,7 +508,7 @@ class Header_unipolar_stepper(Component):
     ]
     prefix = 'J'
 
-class Header_LCD(Component):
+class headerlcd(Component):
     ''' LCD interface header
         FCI 95278-101A10LF Bergstik 2x5x0.1"
     '''
@@ -526,7 +526,7 @@ class Header_LCD(Component):
     ]
     prefix = 'J'
 
-class HCSR04(Component):
+class sonar(Component):
     ''' HC-SR04 sonar header
     '''
     pins = [
@@ -537,7 +537,7 @@ class HCSR04(Component):
     ]
     prefix = 'J'
 
-class HCSR501(Component):
+class pir(Component):
     ''' HC-SR0501 motion-detector header
     '''
     pins = [
@@ -547,7 +547,7 @@ class HCSR501(Component):
     ]
     prefix = 'J'
 
-class ESP8266_12E(Component):
+class esp8266(Component):
     ''' ESP8266 12E
     '''
     height = 24/25.4
@@ -658,7 +658,7 @@ class Molex_serial(Component):
 # Switches
 ################################################################################
 
-class button_6mm(Component):
+class button(Component):
     ''' Omron 6mm pushbutton
         B3SN-3112P
     '''
@@ -674,7 +674,7 @@ class button_6mm(Component):
 #   Clock crystals and resonators
 ################################################################################
 
-class XTAL_EFOBM(Component):
+class resonator(Component):
     ''' Panasonic EFOBM series
     '''
     pins = [
@@ -684,12 +684,12 @@ class XTAL_EFOBM(Component):
     ]
     prefix = 'X'
 
-class XTAL_NX5032GA(Component):
+class xtal(Component):
     pins = [Pin(-0.079, 0, _pad_XTAL_NX5032GA,'x1'),
             Pin(0.079, 0, _pad_XTAL_NX5032GA,'x2')]
     prefix = 'X'
 
-class XTAL_CSM_7(Component):
+class bigxtal(Component):
     ''' ECS CSM-7 series
     '''
     pins = [Pin(-0.187, 0, _pad_XTAL_CSM_7,'x1'),
@@ -700,21 +700,21 @@ class XTAL_CSM_7(Component):
 # Diodes, transistors and regulators
 ################################################################################
 
-class D_1206(Component):
+class diode(Component):
     ''' 1206 diode
     '''
     pins = [Pin(-0.06, 0, _pad_1206,'A'),
             Pin(0.06, 0, _pad_1206,'C')]
     prefix = 'D'
 
-class LED_1206(Component):
+class led(Component):
     ''' 1206 LED
     '''
     pins = [Pin(-0.06, 0, _pad_1206,'A'),
             Pin(0.06, 0, _pad_1206,'C')]
     prefix = 'LED'
 
-class LED_RGB(Component):
+class rgb(Component):
     ''' CREE CLV1A-FKB
     '''
     dx = .029
@@ -727,7 +727,7 @@ class LED_RGB(Component):
     ]
     prefix = 'RGB'
 
-class phototransistor_1206(Component):
+class phototransistor(Component):
     ''' 1206 phototransistor
         OPTEK 520,521
     '''
@@ -745,7 +745,7 @@ class phototransistor_PLCC2(Component):
             Pin(0.065, 0, _pad_PLCC2),'E']
     prefix = 'PT'
 
-class D_SOD_123(Component):
+class schottky(Component):
     ''' Diode
     '''
     pins = [Pin(-0.07, 0, _pad_SOD_123, 'A'),
@@ -778,7 +778,7 @@ class NMOS_TO252AA(Component):
     ''' Fairchild RFD16N05LSM
     '''
 
-class Hall_SOT23(Component):
+class hall(Component):
     ''' Allegro A1324
     '''
     pins = [
@@ -788,7 +788,7 @@ class Hall_SOT23(Component):
     ]
     prefix = 'H'
 
-class Regulator_SOT23(Component):
+class regulator(Component):
     '''  SOT23 voltage regulator
     '''
     pins = [
@@ -798,7 +798,7 @@ class Regulator_SOT23(Component):
     ]
     prefix = 'U'
 
-class Regulator_SOT223(Component): # review
+class bigregulator(Component): # review
     '''  SOT223 voltage regulator
         Zetex ZLDO1117
     '''
@@ -810,7 +810,7 @@ class Regulator_SOT223(Component): # review
     ]
     prefix = 'U'
 
-class H_bridge_SM8(Component):
+class hbridge(Component):
     ''' Zetex ZXMHC3A01T8
     '''
     d = .13
@@ -854,7 +854,7 @@ class op_amp_SOICN(Component):
     ''' SOICN op amp
     '''
 
-class ATtiny45_SOIC(Component):
+class t45(Component):
     pins = []
     y = 0.075
     for t in ['RST', 'PB3', 'PB4', 'GND']:
@@ -866,7 +866,7 @@ class ATtiny45_SOIC(Component):
     del y
     prefix = 'U'
 
-class ATtiny44_SOIC(Component):
+class t44(Component):
     pins = []
     y = 0.15
     for t in ['VCC', 'PB0', 'PB1', 'PB3', 'PB2', 'PA7', 'PA6']:
@@ -921,7 +921,7 @@ class A4953_SOICN(Component):
 _pin_circle_CBA = s2d.circle(0, 0, 0.02)
 _pin_square_CBA = s2d.rectangle(-0.02, 0.02, -0.02, 0.02)
 
-class CBA(Component):
+class cba(Component):
     pins = []
     for i in range(3):
         for j in range(3):
