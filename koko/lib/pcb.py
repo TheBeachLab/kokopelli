@@ -158,15 +158,20 @@ class Component(object):
 class Pin(object):
     ''' PCB pin, with name, shape, and position
     '''
-    def __init__(self, x, y, shape, name=''):
+    def __init__(self, x, y, shape, name='', label_size=.03, label_rot=0):
         self.x      = x
         self.y      = y
         self.shape  = shape
         self.name   = name
+        self.label_size   = label_size
+        self.label_rot   = label_rot
 
     @property
     def pad(self):
         return s2d.move(self.shape, self.x, self.y)
+
+    def mirror_x(self):
+        return Pin( -self.x, self.y, self.shape, self.name, label_size=self.label_size, label_rot=self.label_rot )
 
 ################################################################################
 
