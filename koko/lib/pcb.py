@@ -99,15 +99,18 @@ class Component(object):
     ''' Generic PCB component.
     '''
     def __init__(self, x, y, rot=0, name=''):
+    #def __init__(self, x, y, rot=0, name='',plr=0):
         ''' Constructs a Component object
                 x           X position
                 y           Y position
                 rotation    angle (degrees)
                 name        String
+                plr         pin label rotation
         '''
         self.x = x
         self.y = y
-        self.rot   = rot
+        self.rot = rot
+        #self.plr = plr
 
         self.name = name
 
@@ -137,6 +140,7 @@ class Component(object):
             if p.pin.name:
                 L.append(text(p.pin.name, p.x, p.y, 0.03))
         return reduce(operator.add, L) if L else None
+        #return s2d.rotate(reduce(operator.add, L) if L else None,self.plr)
 
     @property
     def label(self):
@@ -659,6 +663,13 @@ class button_6mm(Component):
     ''' Omron 6mm pushbutton
         B3SN-3112P
     '''
+    pins = [
+        Pin(-.125,.08,  _pad_button_6mm, 'L1'),
+        Pin(-.125,-.08,  _pad_button_6mm, 'R1'),
+        Pin(.125,-.08, _pad_button_6mm, 'R2'),
+        Pin(.125,.08, _pad_button_6mm, 'L2')
+    ]
+    prefix = 'S'
 
 ################################################################################
 #   Clock crystals and resonators
@@ -667,15 +678,24 @@ class button_6mm(Component):
 class XTAL_EFOBM(Component):
     ''' Panasonic EFOBM series
     '''
+    pins = [
+        Pin(-.053,0,  _pad_XTAL_EFOBM, 'x1'),
+        Pin(0,0,  _pad_XTAL_EFOBM, 'GND'),
+        Pin(.053,0, _pad_XTAL_EFOBM, 'x2')
+    ]
+    prefix = 'X'
 
 class XTAL_NX5032GA(Component):
-    pins = [Pin(-0.079, 0, _pad_XTAL_NX5032GA),
-            Pin(0.079, 0, _pad_XTAL_NX5032GA)]
+    pins = [Pin(-0.079, 0, _pad_XTAL_NX5032GA,'x1'),
+            Pin(0.079, 0, _pad_XTAL_NX5032GA),'x2']
     prefix = 'X'
 
 class XTAL_CSM_7(Component):
     ''' ECS CSM-7 series
     '''
+    pins = [Pin(-0.187, 0, _pad_XTAL_CSM_7,'x1'),
+            Pin(0.187, 0, _pad_XTAL_CSM_7),'x2']
+    prefix = 'X'
 
 ################################################################################
 # Diodes, transistors and regulators
@@ -684,24 +704,47 @@ class XTAL_CSM_7(Component):
 class D_1206(Component):
     ''' 1206 diode
     '''
+    pins = [Pin(-0.06, 0, _pad_1206,'A'),
+            Pin(0.06, 0, _pad_1206),'C']
+    prefix = 'D'
 
 class LED_1206(Component):
     ''' 1206 LED
     '''
+    pins = [Pin(-0.06, 0, _pad_1206,'A'),
+            Pin(0.06, 0, _pad_1206),'C']
+    prefix = 'LED'
 
 class LED_RGB(Component):
     ''' CREE CLV1A-FKB
     '''
+    dx = .029
+    dy = .059
+    pins = [
+        Pin(-dx,-dy,  _pad_RGB, 'R'),
+        Pin(dx,-dy,  _pad_RGB, 'A'),
+        Pin(dx,dy, _pad_RGB, 'B'),
+        Pin(-dx,dy, _pad_RGB, 'G')
+    ]
+    prefix = 'RGB'
 
 class phototransistor_1206(Component):
     ''' 1206 phototransistor
         OPTEK 520,521
     '''
+    ''' 1206 LED
+    '''
+    pins = [Pin(-0.06, 0, _pad_1206,'C'),
+            Pin(0.06, 0, _pad_1206),'E']
+    prefix = 'PT'
 
 class phototransistor_PLCC2(Component):
     ''' PLCC2 phototransistor
         OPTEK OP580
     '''
+    pins = [Pin(-0.065, 0, _pad_PLCC2,'C'),
+            Pin(0.065, 0, _pad_PLCC2),'E']
+    prefix = 'PT'
 
 class D_SOD_123(Component):
     ''' Diode
@@ -739,6 +782,12 @@ class NMOS_TO252AA(Component):
 class Hall_SOT23(Component):
     ''' Allegro A1324
     '''
+    pins = [
+        Pin(-0.045, 0.0375, _pad_SOT23, 'Vcc'),
+        Pin(-0.045,  -0.0375, _pad_SOT23, 'out'),
+        Pin(0.045, 0, _pad_SOT23, 'gnd')
+    ]
+    prefix = 'H'
 
 class Regulator_SOT23(Component):
     '''  SOT23 voltage regulator
@@ -750,14 +799,33 @@ class Regulator_SOT23(Component):
     ]
     prefix = 'U'
 
-class Regulator_SOT223(Component):
+class Regulator_SOT223(Component): # review
     '''  SOT223 voltage regulator
         Zetex ZLDO1117
     '''
+    pins = [
+        Pin(-0.09, -0.012, _pad_SOT223, 'GND'),
+        Pin(0,  -0.012, _pad_SOT223, 'O'),
+        Pin(0.09,  -0.012, _pad_SOT223, 'I'),
+        Pin(0, .012, _pad_SOT223_ground, 'out')
+    ]
+    prefix = 'U'
 
 class H_bridge_SM8(Component):
     ''' Zetex ZXMHC3A01T8
     '''
+    d = .13
+    pins = [
+        Pin(-d,.09, _pad_SM8, 'GRN'),
+        Pin(-d,.03, _pad_SM8, 'SN'),
+        Pin(-d,-.03, _pad_SM8, 'GLN'),
+        Pin(-d,-.09, _pad_SM8, 'GND'),
+        Pin(d,-.09, _pad_SM8, 'GLP'),
+        Pin(d,-.03, _pad_SM8, 'DL'),
+        Pin(d,.03, _pad_SM8, 'SP'),
+        Pin(d,.09, _pad_SM8, 'DR')
+    ]
+    prefix = 'H'
 
 class mic_SPU0414HR5H(Component):
     ''' Knowles SPU0414HR5H-SB
