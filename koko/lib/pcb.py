@@ -4,6 +4,14 @@ from math import cos, sin, atan2, radians, degrees, sqrt
 import koko.lib.shapes2d as s2d
 from koko.lib.text import text
 
+class AKA(type):
+    """ 'Also Known As' metaclass to create aliases for a class. """
+    def __new__(cls, classname, bases, attrs):
+        print('in AKA.__new__')
+        class_ = type(classname, bases, attrs)
+        globals().update({alias: class_ for alias in attrs.get('aliases', [])})
+        return class_
+
 class PCB(object):
     def __init__(self, x0, y0, width, height):
         self.x0 = x0
@@ -274,36 +282,48 @@ _pad_TSSOP = s2d.rectangle(-TSSOP_pad_width/2.0,TSSOP_pad_width/2.0,-TSSOP_pad_h
 class R_0402(Component):
    ''' 0402 resistor
    '''
+   __metaclass__ = AKA
+   aliases = '', ''
    pins = [Pin(-0.0265, 0, _pad_0402), Pin(0.0265, 0, _pad_0402)]
    prefix = 'R'
 
-class resistor(Component):
+class R_1206(Component):
     ''' 1206 Resistor
     '''
+    __metaclass__ = AKA
+    aliases = 'resistor', 'Resistor'
     pins = [Pin(-0.06, 0, _pad_1206), Pin(0.06, 0, _pad_1206)]
     prefix = 'R'
 
-class capacitor(Component):
+class C_1206(Component):
     ''' 1206 Capacitor
     '''
+    __metaclass__ = AKA
+    aliases = 'capacitor', ''
     pins = [Pin(-0.06, 0, _pad_1206), Pin(0.06, 0, _pad_1206)]
     prefix = 'C'
 
 class L_1210(Component):
     ''' 1210 inductor
     '''
+    __metaclass__ = AKA
+    aliases = '', ''
     pins = [Pin(-0.06, 0, _pad_1210), Pin(0.06, 0, _pad_1210)]
     prefix = 'L'
 
-class sj(Component):
+class SJ(Component):
     ''' Solder jumper
     '''
+    __metaclass__ = AKA
+    aliases = 'sj', ''
     pins = [Pin(-0.029, 0, _pad_SJ), Pin(0.029, 0, _pad_SJ)]
     prefix = 'SJ'
 
 class choke(Component):
     ''' Panasonic ELLCTV
     '''
+    __metaclass__ = AKA
+    aliases = '', ''
     pins = [Pin(-0.177, -0.177, _pad_choke), Pin(0.177, 0.177, _pad_choke)]
     prefix = 'CH'
 
@@ -311,10 +331,12 @@ class choke(Component):
 # Connectors
 ################################################################################
 
-class usb(Component):
+class USB_mini_B(Component):
     ''' USB mini B connector
         Hirose UX60-MB-5ST
     '''
+    __metaclass__ = AKA
+    aliases = 'usb', 'USB'
     pins = [
         Pin(0.063,   0.24, _pad_USB_trace, 'G'),
         Pin(0.0315,  0.24, _pad_USB_trace),
@@ -329,10 +351,12 @@ class usb(Component):
     ]
     prefix = 'J'
 
-class header2x2(Component):
+class Header_4(Component):
     ''' 4-pin header
         fci 95278-101a04lf bergstik 2x2x0.1
     '''
+    __metaclass__ = AKA
+    aliases = 'header2x2', ''
     pins = [
         Pin(-0.107,  0.05, _pad_header, '1'),
         Pin(-0.107, -0.05, _pad_header, '2'),
@@ -341,10 +365,12 @@ class header2x2(Component):
     ]
     prefix = 'J'
 
-class headerisp(Component):
+class Header_ISP(Component):
     ''' ISP programming header
         FCI 95278-101A06LF Bergstik 2x3x0.1
     '''
+    __metaclass__ = AKA
+    aliases = 'headerisp', ''
     pins = [
         Pin(-0.107, 0.1,  _pad_header, 'GND'),
         Pin(-0.107, 0,    _pad_header, 'MOSI'),
@@ -355,9 +381,11 @@ class headerisp(Component):
     ]
     prefix = 'J'
 
-class ftdi(Component):
+class Header_FTDI(Component):
     ''' FTDI cable header
     '''
+    __metaclass__ = AKA
+    aliases = 'ftdi', 'FTDI'
     pins = [
         Pin(0,  0.25, _pad_header, 'GND'),
         Pin(0,  0.15, _pad_header, 'CTS'),
@@ -368,10 +396,12 @@ class ftdi(Component):
     ]
     prefix = 'J'
 
-class headersignal(Component):
+class Header_signal(Component):
     ''' signal header
         FCI 95278-101A04LF Bergstik 2x2x0.1"
     '''
+    __metaclass__ = AKA
+    aliases = 'headersignal', 'signal'
     pins = [
         Pin(-0.107,  0.05, _pad_header, 'GND'),
         Pin(-0.107, -0.05, _pad_header, ''),
@@ -380,10 +410,12 @@ class headersignal(Component):
     ]
     prefix = 'J'
 
-class headerpower(Component):
+class Header_power(Component):
     ''' power header
         FCI 95278-101A04LF Bergstik 2x2x0.1"
     '''
+    __metaclass__ = AKA
+    aliases = 'headerpower', 'power'
     pins = [
         Pin(-0.107,  0.05, _pad_header, 'GND'),
         Pin(-0.107, -0.05, _pad_header, ''),
@@ -392,10 +424,12 @@ class headerpower(Component):
     ]
     prefix = 'J'
 
-class headeri0(Component):
+class Header_i0(Component):
     ''' i0 header
         FCI 95278-101A04LF Bergstik 2x2x0.1"
     '''
+    __metaclass__ = AKA
+    aliases = 'headeri0', 'i0'
     pins = [
         Pin(-0.107,  0.05, _pad_header, 'GND'),
         Pin(-0.107, -0.05, _pad_header, 'data'),
@@ -404,10 +438,12 @@ class headeri0(Component):
     ]
     prefix = 'J'
 
-class headerserial(Component):
+class Header_serial(Component):
     ''' serial comm header
         FCI 95278-101A04LF Bergstik 2x2x0.1"
     '''
+    __metaclass__ = AKA
+    aliases = 'headerserial', 'serial'
     pins = [
         Pin(-0.107,  0.05, _pad_header, 'GND'),
         Pin(-0.107, -0.05, _pad_header, 'DTR'),
@@ -416,10 +452,12 @@ class headerserial(Component):
     ]
     prefix = 'J'
 
-class headerbus(Component):
+class Header_bus(Component):
     ''' bus header
         FCI 95278-101A04LF Bergstik 2x2x0.1"
     '''
+    __metaclass__ = AKA
+    aliases = 'headerbus', 'bus'
     pins = [
         Pin(-0.107,  0.05, _pad_header, 'GND'),
         Pin(-0.107, -0.05, _pad_header, 'Tx'),
@@ -428,10 +466,12 @@ class headerbus(Component):
     ]
     prefix = 'J'
 
-class headeri2c(Component):
+class Header_i2c(Component):
     ''' i2c header
         FCI 95278-101A04LF Bergstik 2x2x0.1"
     '''
+    __metaclass__ = AKA
+    aliases = 'headeri2c', 'i2c'
     pins = [
         Pin(-0.107,  0.05, _pad_header, 'SCL'),
         Pin(-0.107, -0.05, _pad_header, 'G'),
@@ -440,10 +480,12 @@ class headeri2c(Component):
     ]
     prefix = 'J'
 
-class headerapa(Component):
+class Header_APA(Component):
     ''' APA header
         FCI 95278-101A04LF Bergstik 2x2x0.1"
     '''
+    __metaclass__ = AKA
+    aliases = 'headerapa', 'apa'
     pins = [
         Pin(-0.107,  0.05, _pad_header, 'GND'),
         Pin(-0.107, -0.05, _pad_header, 'in'),
@@ -452,10 +494,12 @@ class headerapa(Component):
     ]
     prefix = 'J'
 
-class header2x3(Component):
+class Header_6(Component):
     ''' 6-pin header
         FCI 95278-101A06LF Bergstik 2x3x0.1"
     '''
+    __metaclass__ = AKA
+    aliases = 'header2x3', 'header6'
     pins = [
         Pin(-0.107, 0.1,  _pad_header, '1'),
         Pin(-0.107, 0,    _pad_header, '2'),
@@ -466,10 +510,12 @@ class header2x3(Component):
     ]
     prefix = 'J'
 
-class headerpdi(Component):
+class Header_PDI(Component):
     ''' in-circuit PDI programming header
         FCI 95278-101A06LF Bergstik 2x3x0.1"
     '''
+    __metaclass__ = AKA
+    aliases = 'headerpdi', 'pdi'
     pins = [
         Pin(-0.107, 0.1,  _pad_header, 'DAT'),
         Pin(-0.107, 0,    _pad_header, 'VCC'),
@@ -480,10 +526,12 @@ class headerpdi(Component):
     ]
     prefix = 'J'
 
-class headerservo(Component):
+class Header_servo(Component):
     ''' servo motor header
         FCI 95278-101A06LF Bergstik 2x3x0.1"
     '''
+    __metaclass__ = AKA
+    aliases = 'headerservo', 'servo'
     pins = [
         Pin(-0.107, 0.1,  _pad_header, 'G/blk'),
         Pin(-0.107, 0,    _pad_header, 'G/blk'),
@@ -494,10 +542,12 @@ class headerservo(Component):
     ]
     prefix = 'J'
 
-class headerstepper(Component):
+class Header_unipolar_stepper(Component):
     ''' unipolar stepper header
         FCI 95278-101A06LF Bergstik 2x3x0.1"
     '''
+    __metaclass__ = AKA
+    aliases = 'headerstepper', 'unipolar', 'stepper'
     pins = [
         Pin(-0.107, 0.1,  _pad_header, 'red'),
         Pin(-0.107, 0,    _pad_header, 'green'),
@@ -508,10 +558,12 @@ class headerstepper(Component):
     ]
     prefix = 'J'
 
-class headerlcd(Component):
+class Header_LCD(Component):
     ''' LCD interface header
         FCI 95278-101A10LF Bergstik 2x5x0.1"
     '''
+    __metaclass__ = AKA
+    aliases = 'headerlcd', 'lcd'
     pins = [
         Pin(.107,-.2,  _pad_header, 'DB7\n14'),
         Pin(-.107,-.2,    _pad_header, 'DB6\n13'),
@@ -526,9 +578,11 @@ class headerlcd(Component):
     ]
     prefix = 'J'
 
-class sonar(Component):
+class HCSR04(Component):
     ''' HC-SR04 sonar header
     '''
+    __metaclass__ = AKA
+    aliases = 'sonar', ''
     pins = [
         Pin(0, 0.15,  _pad_header, 'GND'),
         Pin(0, 0.05,  _pad_header, 'echo'),
@@ -537,9 +591,11 @@ class sonar(Component):
     ]
     prefix = 'J'
 
-class pir(Component):
+class HCSR501(Component):
     ''' HC-SR0501 motion-detector header
     '''
+    __metaclass__ = AKA
+    aliases = 'pir', ''
     pins = [
         Pin(0, 0.1,  _pad_header, 'Vcc'),
         Pin(0, 0,    _pad_header, 'out'),
@@ -547,9 +603,11 @@ class pir(Component):
     ]
     prefix = 'J'
 
-class esp8266(Component):
+class ESP8266_12E(Component):
     ''' ESP8266 12E
     '''
+    __metaclass__ = AKA
+    aliases = 'esp8266', 'esp'
     height = 24/25.4
     width = 16/25.4
     pitch = 2/25.4
@@ -658,10 +716,12 @@ class Molex_serial(Component):
 # Switches
 ################################################################################
 
-class button(Component):
+class Button_6mm(Component):
     ''' Omron 6mm pushbutton
         B3SN-3112P
     '''
+    __metaclass__ = AKA
+    aliases = 'button', ''
     pins = [
         Pin(-.125,.08,  _pad_button_6mm, 'L1'),
         Pin(-.125,-.08,  _pad_button_6mm, 'R1'),
@@ -674,9 +734,11 @@ class button(Component):
 #   Clock crystals and resonators
 ################################################################################
 
-class resonator(Component):
+class XTAL_EFOBM(Component):
     ''' Panasonic EFOBM series
     '''
+    __metaclass__ = AKA
+    aliases = 'resonator', ''
     pins = [
         Pin(-.053,0,  _pad_XTAL_EFOBM, 'x1'),
         Pin(0,0,  _pad_XTAL_EFOBM, 'GND'),
@@ -684,14 +746,18 @@ class resonator(Component):
     ]
     prefix = 'X'
 
-class xtal(Component):
+class XTAL_NX5032GA(Component):
+    __metaclass__ = AKA
+    aliases = 'xtal', ''
     pins = [Pin(-0.079, 0, _pad_XTAL_NX5032GA,'x1'),
             Pin(0.079, 0, _pad_XTAL_NX5032GA,'x2')]
     prefix = 'X'
 
-class bigxtal(Component):
+class XTAL_CSM_7(Component):
     ''' ECS CSM-7 series
     '''
+    __metaclass__ = AKA
+    aliases = 'bigxtal', ''
     pins = [Pin(-0.187, 0, _pad_XTAL_CSM_7,'x1'),
             Pin(0.187, 0, _pad_XTAL_CSM_7,'x2')]
     prefix = 'X'
@@ -700,23 +766,29 @@ class bigxtal(Component):
 # Diodes, transistors and regulators
 ################################################################################
 
-class diode(Component):
+class D_1206(Component):
     ''' 1206 diode
     '''
+    __metaclass__ = AKA
+    aliases = 'diode', ''
     pins = [Pin(-0.06, 0, _pad_1206,'A'),
             Pin(0.06, 0, _pad_1206,'C')]
     prefix = 'D'
 
-class led(Component):
+class LED_1206(Component):
     ''' 1206 LED
     '''
+    __metaclass__ = AKA
+    aliases = 'led', 'LED'
     pins = [Pin(-0.06, 0, _pad_1206,'A'),
             Pin(0.06, 0, _pad_1206,'C')]
     prefix = 'LED'
 
-class rgb(Component):
+class LED_RGB(Component):
     ''' CREE CLV1A-FKB
     '''
+    __metaclass__ = AKA
+    aliases = 'rgb', 'RGB'
     dx = .029
     dy = .059
     pins = [
@@ -727,12 +799,12 @@ class rgb(Component):
     ]
     prefix = 'RGB'
 
-class phototransistor(Component):
+class phototransistor_1206(Component):
     ''' 1206 phototransistor
         OPTEK 520,521
     '''
-    ''' 1206 LED
-    '''
+    __metaclass__ = AKA
+    aliases = 'phototransistor', ''
     pins = [Pin(-0.06, 0, _pad_1206,'C'),
             Pin(0.06, 0, _pad_1206),'E']
     prefix = 'PT'
@@ -741,13 +813,17 @@ class phototransistor_PLCC2(Component):
     ''' PLCC2 phototransistor
         OPTEK OP580
     '''
+    __metaclass__ = AKA
+    aliases = '', ''
     pins = [Pin(-0.065, 0, _pad_PLCC2,'C'),
             Pin(0.065, 0, _pad_PLCC2),'E']
     prefix = 'PT'
 
-class schottky(Component):
+class D_SOD_123(Component):
     ''' Diode
     '''
+    __metaclass__ = AKA
+    aliases = 'schottky', ''
     pins = [Pin(-0.07, 0, _pad_SOD_123, 'A'),
             Pin(0.07, 0, _pad_SOD_123, 'C')]
     prefix = 'D'
@@ -756,6 +832,8 @@ class NMOS_SOT23(Component):
     ''' NMOS transistor in SOT23 package
         Fairchild NDS355AN
     '''
+    __metaclass__ = AKA
+    aliases = '', ''
     pins = [
         Pin(0.045, -0.0375, _pad_SOT23, 'G'),
         Pin(0.045,  0.0375, _pad_SOT23, 'S'),
@@ -767,6 +845,8 @@ class PMOS_SOT23(Component):
     ''' PMOS transistor in SOT23 package
         Fairchild NDS356AP
     '''
+    __metaclass__ = AKA
+    aliases = '', ''
     pins = [
         Pin(-0.045, -0.0375, _pad_SOT23, 'G'),
         Pin(-0.045,  0.0375, _pad_SOT23, 'S'),
@@ -777,10 +857,14 @@ class PMOS_SOT23(Component):
 class NMOS_TO252AA(Component):
     ''' Fairchild RFD16N05LSM
     '''
+    __metaclass__ = AKA
+    aliases = '', ''
 
-class hall(Component):
+class Hall_SOT23(Component):
     ''' Allegro A1324
     '''
+    __metaclass__ = AKA
+    aliases = 'hall', ''
     pins = [
         Pin(-0.045, 0.0375, _pad_SOT23, 'Vcc'),
         Pin(-0.045,  -0.0375, _pad_SOT23, 'out'),
@@ -788,9 +872,11 @@ class hall(Component):
     ]
     prefix = 'H'
 
-class regulator(Component):
+class Regulator_SOT23(Component):
     '''  SOT23 voltage regulator
     '''
+    __metaclass__ = AKA
+    aliases = 'regulator', ''
     pins = [
         Pin(-0.045, -0.0375, _pad_SOT23, 'Out'),
         Pin(-0.045,  0.0375, _pad_SOT23, 'In'),
@@ -798,10 +884,12 @@ class regulator(Component):
     ]
     prefix = 'U'
 
-class bigregulator(Component): # review
+class Regulator_SOT223(Component): # review
     '''  SOT223 voltage regulator
         Zetex ZLDO1117
     '''
+    __metaclass__ = AKA
+    aliases = 'bigregulator', ''
     pins = [
         Pin(-0.09, -0.012, _pad_SOT223, 'GND'),
         Pin(0,  -0.012, _pad_SOT223, 'O'),
@@ -810,9 +898,11 @@ class bigregulator(Component): # review
     ]
     prefix = 'U'
 
-class hbridge(Component):
+class H_bridge_SM8(Component):
     ''' Zetex ZXMHC3A01T8
     '''
+    __metaclass__ = AKA
+    aliases = 'hbridge', ''
     d = .13
     pins = [
         Pin(-d,.09, _pad_SM8, 'GRN'),
@@ -854,7 +944,9 @@ class op_amp_SOICN(Component):
     ''' SOICN op amp
     '''
 
-class t45(Component):
+class ATtiny45_SOIC(Component):
+    __metaclass__ = AKA
+    aliases = 't45', ''
     pins = []
     y = 0.075
     for t in ['RST', 'PB3', 'PB4', 'GND']:
@@ -866,7 +958,9 @@ class t45(Component):
     del y
     prefix = 'U'
 
-class t44(Component):
+class ATtiny44_SOIC(Component):
+    __metaclass__ = AKA
+    aliases = 't44', ''
     pins = []
     y = 0.15
     for t in ['VCC', 'PB0', 'PB1', 'PB3', 'PB2', 'PA7', 'PA6']:
@@ -881,8 +975,12 @@ class t44(Component):
 class ATxmegaE5_TQFP(Component):
     ''' ATxmegaE5_TQFP
     '''
+    __metaclass__ = AKA
+    aliases = '', ''
 
 class ATmega88_TQFP(Component):
+    __metaclass__ = AKA
+    aliases = '', ''
     pins = []
     y = 0.1085
     for t in ['PD3', 'PD4', 'GND', 'VCC', 'GND', 'VCC', 'PB6', 'PB7']:
@@ -906,14 +1004,20 @@ class ATmega88_TQFP(Component):
 class ATmega644_TQFP(Component):
     ''' ATmega644_TQFP
     '''
+    __metaclass__ = AKA
+    aliases = '', ''
 
 class TRC102(Component):
     ''' RFM TRC102 ISM transceiver
     '''
+    __metaclass__ = AKA
+    aliases = '', ''
 
 class A4953_SOICN(Component):
     '''
     '''
+    __metaclass__ = AKA
+    aliases = '', ''
 
 ################################################################################
 #   CBA logo and other graphics
@@ -921,7 +1025,9 @@ class A4953_SOICN(Component):
 _pin_circle_CBA = s2d.circle(0, 0, 0.02)
 _pin_square_CBA = s2d.rectangle(-0.02, 0.02, -0.02, 0.02)
 
-class cba(Component):
+class CBA(Component):
+    __metaclass__ = AKA
+    aliases = 'cba', ''
     pins = []
     for i in range(3):
         for j in range(3):
@@ -931,3 +1037,5 @@ class cba(Component):
 class fab(Component):
     ''' fablab logo
     '''
+    __metaclass__ = AKA
+    aliases = '', ''
