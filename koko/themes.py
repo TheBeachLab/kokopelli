@@ -101,4 +101,4 @@ SOLARIZED_THEME = Theme(
 )
 # http://www.zovirl.com/2011/07/22/solarized_cheat_sheet/
 
-APP_THEME = SOLARIZED_THEME
+APP_THEME = DARK_THEME

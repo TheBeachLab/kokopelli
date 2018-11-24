@@ -105,14 +105,13 @@ class Component(object):
                 y           Y position
                 rotation    angle (degrees)
                 name        String
-                plr         pin label rotation
+                # plr         pin label rotation
         '''
         self.x = x
         self.y = y
         self.rot = rot
-        #self.plr = plr
-
         self.name = name
+        #self.plr = plr
 
     def __getitem__(self, i):
         if isinstance(i, str):
@@ -687,14 +686,14 @@ class XTAL_EFOBM(Component):
 
 class XTAL_NX5032GA(Component):
     pins = [Pin(-0.079, 0, _pad_XTAL_NX5032GA,'x1'),
-            Pin(0.079, 0, _pad_XTAL_NX5032GA),'x2']
+            Pin(0.079, 0, _pad_XTAL_NX5032GA,'x2')]
     prefix = 'X'
 
 class XTAL_CSM_7(Component):
     ''' ECS CSM-7 series
     '''
     pins = [Pin(-0.187, 0, _pad_XTAL_CSM_7,'x1'),
-            Pin(0.187, 0, _pad_XTAL_CSM_7),'x2']
+            Pin(0.187, 0, _pad_XTAL_CSM_7,'x2')]
     prefix = 'X'
 
 ################################################################################
@@ -705,14 +704,14 @@ class D_1206(Component):
     ''' 1206 diode
     '''
     pins = [Pin(-0.06, 0, _pad_1206,'A'),
-            Pin(0.06, 0, _pad_1206),'C']
+            Pin(0.06, 0, _pad_1206,'C')]
     prefix = 'D'
 
 class LED_1206(Component):
     ''' 1206 LED
     '''
     pins = [Pin(-0.06, 0, _pad_1206,'A'),
-            Pin(0.06, 0, _pad_1206),'C']
+            Pin(0.06, 0, _pad_1206,'C')]
     prefix = 'LED'
 
 class LED_RGB(Component):
