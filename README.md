@@ -1,27 +1,43 @@
 # `kokopelli` is back
+
+* [Compile and run](#compile-and-run)
+* [What's new](#whats-new)
+  * [Aliases: PCB components, humanized](#aliases-pcb-components-humanized)
+  * [Sam Calish's pcb.lib additions merged](#sam-calishs-pcblib-additions-merged)
+  * [Free cutout shapes](#free-cutout-shapes)
+* [Warning](#warning)
+* [About](#about)
+* [Copyright](#copyright)
+
 `kokopelli reloaded` is a personal effort to prevent the end of something good. In 2013 [I took Fab Academy](http://fabacademy.org/archives/2013/students/sanchez.francisco/index.html) in Fab Lab Barcelona and discovered `kokopelli`. I was amazed by the versaltility of the tool (2D and 3D mechanical design, circuit boards, physical simulations, CAM, machine control...) and the fact that you could do all of these cool things with just a text editor.
 
 Over the years I felt that, even though new tools were appearing, we were going backwards. Back to to graphical interfaces (very cool and visual actually), but still you still needed to manually point and click. So I felt I wanted kokopelli back. And since Matt Keeter abandoned the project, I thought I would give it a try while learning Python. Say hello to `kokopelli reloaded`.
 
 ## Compile and run
-`kokopelli reloaded` has been tested on Linux (Arch). Clone or download the repository and then install it by typing in a terminal:
+
+`kokopelli reloaded` has been tested on Linux (Arch). Clone or download the repository and then install it using the Makefile in a terminal:
+
 ```bash
 make clean
 make
-sudo make install
 ```
+
 To run kokopelli just type `python2 kokopelli`
 
 ## What's new
 
 ### Aliases: PCB components, humanized
+
 Now components classes are easier to remember and recall. No more looking at the pcb library to remember some weird names, no more combinations of upper case, lower case and underscores. For example, to add a commonly used SMD resistor (1206 size) just type **any** of the following:
+
 ```python
 R1 = R_1206 (x, y, angle, 'label')
 R1 = resistor (x, y, angle, 'label')
 R1 = Resistor (x, y, angle, 'label')
 ```
+
 This way components are  easier to remember for people who are not used to electronics:
+
 ```python
 B1 = button (x, y, angle, 'label')
 XTAL1 = resonator (x, y, angle, 'label')
@@ -29,7 +45,9 @@ C1 = capacitor (x, y, angle, 'label')
 J1 = headerisp (x, y, angle, 'label')
 U1 = usb (x, y, angle, 'label')
 ```
+
 It works by adding a new class at the beginning of the library:
+
 ```python
 class AKA(type):
     """ 'Also Known As' metaclass to create aliases for a class. """
@@ -39,7 +57,9 @@ class AKA(type):
         globals().update({alias: class_ for alias in attrs.get('aliases', [])})
         return class_
 ```
+
 In every class where we want to add aliases, we just list them:
+
 ```python
 class R_1206(Component):
     ''' 1206 Resistor
@@ -51,12 +71,15 @@ class R_1206(Component):
 ```
 
 ### Sam Calish's pcb.lib additions merged
+
 (WIP) While hyperjumping the web I came across [Sam's additions](https://gitlab.cba.mit.edu/pub/libraries/tree/master/kokopelli) to the pcb.lib. I am merging part of his code so Kudos for him!
 
 ### Free cutout shapes
+
 WIP
 
 ## Warning
+
 `kokopelli` stores designs as Python scripts and executes them.  This means that you can do cool things like using `numpy` to process arrays, load and process images with `PIL`, or even scrape web data and use it to inform designs.
 
 However, it also means that bad actors can write malicious scripts.
@@ -64,6 +87,7 @@ However, it also means that bad actors can write malicious scripts.
 As such, **do not open a .ko file from an untrusted source** without first examining it in a text editor to confirm that it is not malicious.
 
 ## About
+
 `kokopelli` is an open-source tool for computer-aided design and manufacturing (CAD/CAM).
 
 It uses Python as a hardware description language for solid models.  A set of core libraries define common shapes and transforms, but users are free to extend their designs with their own definitions.
@@ -82,6 +106,7 @@ In that course, I worked on [fast geometry solvers](http://fab.cba.mit.edu/class
 This work grew into my [Master's thesis](http://cba.mit.edu/docs/theses/13.05.Keeter.pdf) at the MIT [Center for Bits and Atoms](http://cba.mit.edu).  This thesis focused on volumetric CAD/CAM workflows.  Now that it is complete, I'm releasing this tool for others to use and develop.  It has already been used by folks in [How to Make (Almost) Anything](http://fab.cba.mit.edu/classes/863.12/) and [Fab Academy](http://www.fabacademy.org/), but Matt Keeter was excited to offer it to a larger community.
 
 ## Copyright
+
 * (c) 2012-2013 Massachusetts Institute of Technology
 * (c) 2013 Matt Keeter
 * (c) 2017 Sam Calisch
