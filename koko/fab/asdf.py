@@ -5,7 +5,7 @@ from datetime       import datetime
 import threading
 from math           import sin, cos, radians, log, ceil
 import os
-import Queue
+import queue
 
 from koko.c.multithread    import multithread, monothread, threadsafe
 
@@ -393,7 +393,7 @@ class ASDF(object):
 
         # Create a set of arguments
         if threads:
-            q = Queue.Queue()
+            q = queue.Queue()
             args = []
             for b in self.branches:
                 if b is None:   continue
@@ -405,7 +405,7 @@ class ASDF(object):
             results = []
             while True:
                 try:                results.append(q.get_nowait())
-                except Queue.Empty: break
+                except queue.Empty: break
         else:
             results = [self._triangulate(halt)]
         m = Mesh.merge(results)
@@ -458,7 +458,7 @@ class ASDF(object):
 
         libfab.asdf_histogram(self.ptr, bins, 0)
 
-        return zip(*map(list, bins))
+        return list(zip(*list(map(list, bins))))
 
 
     def offset(self, o, resolution=10):

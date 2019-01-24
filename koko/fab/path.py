@@ -31,13 +31,13 @@ class Path(object):
         start = ptr
         points = np.array(xyz(ptr))
 
-        ptr = ptr.contents.next
+        ptr = ptr.contents.__next__
 
         while ptr.contents != start.contents:
             points = np.vstack( (points, xyz(ptr)) )
 
             # Advance through the linked list
-            if bool(ptr.contents.next): ptr = ptr.contents.next
+            if bool(ptr.contents.__next__): ptr = ptr.contents.__next__
             else:                       break
 
         closed = (ptr.contents == start.contents)

@@ -7,15 +7,15 @@ import wx.lib.stattext
 import  koko
 from    koko.about     import show_about_box
 
-print '\r'+' '*80+'\r[||||||----]    importing koko.canvas',
+print('\r'+' '*80+'\r[||||||----]    importing koko.canvas', end=' ')
 sys.stdout.flush()
 from    koko.canvas    import Canvas
 
-print '\r'+' '*80+'\r[|||||||---]    importing koko.glcanvas',
+print('\r'+' '*80+'\r[|||||||---]    importing koko.glcanvas', end=' ')
 sys.stdout.flush()
 from    koko.glcanvas  import GLCanvas
 
-print '\r'+' '*80+'\r[||||||||--]    importing koko.editor',
+print('\r'+' '*80+'\r[||||||||--]    importing koko.editor', end=' ')
 sys.stdout.flush()
 from    koko.editor    import Editor
 

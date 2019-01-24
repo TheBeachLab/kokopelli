@@ -4,7 +4,7 @@ import  ctypes
 import  os, sys
 import  threading
 import  math
-import  Queue
+import  queue
 
 from    koko.c.libfab       import libfab
 from    koko.c.interval     import Interval
@@ -608,7 +608,7 @@ class MathTree(object):
 
         try:
             float(mm_per_unit)
-        except ValueError, TypeError:
+        except ValueError as TypeError:
             raise ValueError('mm_per_unit must be a number')
 
         if interrupt is None:   interrupt = threading.Event()
@@ -624,7 +624,7 @@ class MathTree(object):
         subregions = region.split_xy(threads)
 
         # Solve each region in a separate thread
-        args = zip(packed, subregions, [image.pixels]*threads, [halt]*threads)
+        args = list(zip(packed, subregions, [image.pixels]*threads, [halt]*threads))
 
         multithread(libfab.render16, args, interrupt, halt)
 
@@ -682,8 +682,8 @@ class MathTree(object):
         asdf.lock.acquire()
 
         # Multithread the solver process
-        q = Queue.Queue()
-        args = zip(packed, ids, subregions, [q]*threads)
+        q = queue.Queue()
+        args = list(zip(packed, ids, subregions, [q]*threads))
 
         # Helper function to construct a single branch
         def construct_branch(ptree, id, region, queue):
@@ -697,7 +697,7 @@ class MathTree(object):
         # Attach the branches to the root
         for s in subregions:
             try:                id, branch = q.get_nowait()
-            except Queue.Empty: break
+            except queue.Empty: break
             else:
                 # Make sure we didn't get a NULL pointer back
                 # (which could occur if the halt flag was raised)

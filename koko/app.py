@@ -1,5 +1,5 @@
 import os
-import Queue
+import queue
 import sys
 import weakref
 
@@ -13,37 +13,37 @@ sys.path.append(os.path.join(sys.path[0], 'koko'))
 import koko
 from   koko             import NAME
 
-print '\r'+' '*80+'\r[||||||----]    importing koko.dialogs',
+print('\r'+' '*80+'\r[||||||----]    importing koko.dialogs', end=' ')
 sys.stdout.flush()
 import koko.dialogs     as dialogs
 
-print '\r'+' '*80+'\r[||||||----]    importing koko.frame',
+print('\r'+' '*80+'\r[||||||----]    importing koko.frame', end=' ')
 sys.stdout.flush()
 from   koko.frame       import MainFrame
 
-print '\r'+' '*80+'\r[||||||||--]    importing koko.template',
+print('\r'+' '*80+'\r[||||||||--]    importing koko.template', end=' ')
 sys.stdout.flush()
 from   koko.template    import TEMPLATE
 
-print '\r'+' '*80+'\r[||||||||--]    importing koko.struct',
+print('\r'+' '*80+'\r[||||||||--]    importing koko.struct', end=' ')
 sys.stdout.flush()
 from koko.struct        import Struct
 
-print '\r'+' '*80+'\r[||||||||--]    importing koko.taskbot',
+print('\r'+' '*80+'\r[||||||||--]    importing koko.taskbot', end=' ')
 sys.stdout.flush()
 from   koko.taskbot     import TaskBot
 
-print '\r'+' '*80+'\r[||||||||--]    importing koko.prims.core',
+print('\r'+' '*80+'\r[||||||||--]    importing koko.prims.core', end=' ')
 sys.stdout.flush()
 from   koko.prims.core  import PrimSet
 
-print '\r'+' '*80+'\r[||||||||--]    importing koko.fab',
+print('\r'+' '*80+'\r[||||||||--]    importing koko.fab', end=' ')
 sys.stdout.flush()
 from    koko.fab.image  import Image
 from    koko.fab.mesh   import Mesh
 from    koko.fab.asdf   import ASDF
 
-print '\r'+' '*80+'\r[|||||||||-]    reticulating splines',
+print('\r'+' '*80+'\r[|||||||||-]    reticulating splines', end=' ')
 sys.stdout.flush()
 
 # Dummy imports so that py2app includes these files

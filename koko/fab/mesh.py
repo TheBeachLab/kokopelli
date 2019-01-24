@@ -6,6 +6,7 @@ import  os
 import  tempfile
 
 from    koko.struct     import Struct
+from functools import reduce
 
 class Mesh(object):
     ''' Mesh objects represent a chunk of indexed geometry.'''

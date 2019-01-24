@@ -223,17 +223,17 @@ class Primitive(object):
     @property
     def valid(self):
         '''Returns true if all parameters are valid.'''
-        return all(p.valid for p in self.parameters.itervalues())
+        return all(p.valid for p in self.parameters.values())
 
     @property
     def modified(self):
         ''' Returns true if any parameters are modified.'''
-        return any(p.modified for p in self.parameters.itervalues())
+        return any(p.modified for p in self.parameters.values())
 
     @modified.setter
     def modified(self, value):
         ''' Sets the modified flag of each parameter to the provided value.'''
-        for p in self.parameters.itervalues():
+        for p in self.parameters.values():
             p.modified = value
 
     # Child classes should redefine these to appropriate values.
@@ -284,7 +284,7 @@ class Primitive(object):
             self.child, self.x, etc.)
            '''
 
-        for arg in kwargs.keys():
+        for arg in list(kwargs.keys()):
 
             # Create an evaluator with initial expression and desired type
             self.parameters[arg] = Evaluator(*kwargs[arg])

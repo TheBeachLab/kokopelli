@@ -9,6 +9,7 @@ from    koko.fab.path   import Path
 
 from    koko.c.vec3f    import Vec3f
 import  numpy as np
+from functools import reduce
 
 ################################################################################
 

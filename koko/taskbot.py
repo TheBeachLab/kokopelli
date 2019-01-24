@@ -97,13 +97,13 @@ class TaskBot(object):
             it as cached_cad (for later re-use).
         """
 
-        for task in filter(lambda t: not t.thread.is_alive(), self.tasks):
+        for task in [t for t in self.tasks if not t.thread.is_alive()]:
             self.cached_cad = task.cad
             if task.script:    koko.FAB.set_input(task.cad)
             task.thread.join()
             task.thread = None
 
-        self.tasks = filter(lambda t: t.thread is not None, self.tasks)
+        self.tasks = [t for t in self.tasks if t.thread is not None]
 
         if self.cam_task and not self.cam_task.is_alive():
             self.cam_task.join()

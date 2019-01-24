@@ -265,10 +265,10 @@ class Canvas(wx.Panel):
         if y is None:
             return int(x*scale)
         else:
-            return map(int,
+            return list(map(int,
                 [(x - xcenter) * scale + (width / 2.),
                  height/2. - (y - ycenter) * scale]
-            )
+            ))
 
 
     def pos_to_pixel(self, x, y=None):
@@ -282,10 +282,10 @@ class Canvas(wx.Panel):
         if y is None:
             return int(x*self.scale)
         else:
-            return map(int,
+            return list(map(int,
                 [(x - xcenter) * self.scale + (width / 2.),
                  height/2. - (y - ycenter) * self.scale]
-            )
+            ))
 
 ########################################
 
@@ -505,7 +505,7 @@ class Canvas(wx.Panel):
             i = (p[:,0] - center[0]) * scale + self.Size[0]/2.
             j = self.Size[1]/2. - (p[:,1] - center[1])*scale
 
-            self.dc.DrawLines(zip(i,j))
+            self.dc.DrawLines(list(zip(i,j)))
 
         if koko.FRAME.get_menu('View','Show traverses').IsChecked():
             self.dc.SetPen(wx.Pen((255,100,100), 1))
@@ -517,7 +517,7 @@ class Canvas(wx.Panel):
             i1 = (t[:,3] - center[0]) * scale + self.Size[0]/2.
             j1 = self.Size[1]/2. - (t[:,4] - center[1])*scale
 
-            self.dc.DrawLineList(zip(i0, j0, i1, j1))
+            self.dc.DrawLineList(list(zip(i0, j0, i1, j1)))
 
 
 ################################################################################
