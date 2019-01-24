@@ -17,12 +17,12 @@ class Region(ctypes.Structure):
                 ('Z', ctypes.POINTER(ctypes.c_float)),
                 ('L', ctypes.POINTER(ctypes.c_uint16))]
 
-    def __init__(self, (xmin, ymin, zmin)=(0.,0.,0.),
-                       (xmax, ymax, zmax)=(0.,0.,0.),
+    def __init__(self, xxx_todo_changeme=(0.,0.,0.), xxx_todo_changeme1=(0.,0.,0.),
                        scale=100., dummy=False, depth=None):
         """ @brief Creates an array.
         """
-
+        (xmin, ymin, zmin) = xxx_todo_changeme
+        (xmax, ymax, zmax) = xxx_todo_changeme1
         dx = float(xmax - xmin)
         dy = float(ymax - ymin)
         dz = float(zmax - zmin)

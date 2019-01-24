@@ -19,7 +19,7 @@ try:
     from OpenGL.arrays  import vbo
     from OpenGL.GL      import shaders
 except ImportError:
-    print 'kokopelli error: PyOpenGL import failed!'
+    print('kokopelli error: PyOpenGL import failed!')
     sys.exit(1)
 
 
@@ -481,7 +481,7 @@ class GLCanvas(glcanvas.GLCanvas):
 ################################################################################
 
     def load_paths(self, paths, xmin, ymin, zmin):
-        count = sum(map(lambda p: len(p.points)+p.closed+2, paths))
+        count = sum([len(p.points)+p.closed+2 for p in paths])
         vdata = (ctypes.c_float*(count*4))()
 
         xyz = lambda pt: [pt[0]+xmin, pt[1]+ymin, pt[2]+zmin]
@@ -635,7 +635,7 @@ class GLCanvas(glcanvas.GLCanvas):
             index_vbo.unbind()
             vertex_vbo.unbind()
 
-        for a in attributes.itervalues():   glDisableVertexAttribArray(a)
+        for a in attributes.values():   glDisableVertexAttribArray(a)
 
         shaders.glUseProgram(0)
 
@@ -984,7 +984,7 @@ class GLCanvas(glcanvas.GLCanvas):
         glDrawArrays(GL_TRIANGLES,  0, 6)
 
         # And disable all of those parameter
-        for a in attributes.itervalues():   glDisableVertexAttribArray(a)
+        for a in attributes.values():   glDisableVertexAttribArray(a)
 
         self.tex_vbo.unbind()
         shaders.glUseProgram(0)
@@ -1030,7 +1030,7 @@ class GLCanvas(glcanvas.GLCanvas):
         # Draw the triangles stored in the vbo
         glDrawArrays(GL_LINE_STRIP, 0, len(self.path_vbo)/4)
 
-        for a in attributes.itervalues():   glDisableVertexAttribArray(a)
+        for a in attributes.values():   glDisableVertexAttribArray(a)
 
         self.path_vbo.unbind()
 

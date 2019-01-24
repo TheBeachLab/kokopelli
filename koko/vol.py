@@ -219,10 +219,7 @@ class ImportPanel(wx.Panel):
 
     def get_params(self, show_error=True, get_bounds=True):
         try:
-            ni, nj, nk = map(
-                lambda d: int(d.GetValue()),
-                [self.ni, self.nj, self.nk]
-            )
+            ni, nj, nk = [int(d.GetValue()) for d in [self.ni, self.nj, self.nk]]
         except ValueError:
             if show_error:   dialogs.error('Invalid sample count.')
             return

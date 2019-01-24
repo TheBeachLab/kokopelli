@@ -4,6 +4,7 @@ import operator
 
 from koko.lib.shapes2d  import color
 from koko.fab.tree      import MathTree
+from functools import reduce
 
 class FabVars(object):
     ''' Container class to hold CAD state and settings.'''
@@ -20,7 +21,7 @@ class FabVars(object):
     def shapes(self, value):
         if type(value) not in (list, tuple):
             raise TypeError('cad.shapes must be a list or tuple of MathTree objects')
-        value = map(MathTree.wrap, value)
+        value = list(map(MathTree.wrap, value))
         self._shapes = list(value)
         self._shape = reduce(operator.add,
             [color(s, None) for s in self.shapes]

@@ -19,8 +19,8 @@ def text(text, x, y, height = 1, align = 'CC'):
         line_shape = None
 
         for c in line:
-            if not c in _glyphs.keys():
-                print 'Warning:  Unknown character "%s" in koko.lib.text' % c
+            if not c in list(_glyphs.keys()):
+                print('Warning:  Unknown character "%s" in koko.lib.text' % c)
             else:
                 chr_math = move(_glyphs[c], dx, dy)
                 if line_shape is None:  line_shape  = chr_math

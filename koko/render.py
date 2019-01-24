@@ -1,7 +1,7 @@
 from    datetime    import datetime
-import  Queue
+import  queue
 import  re
-import  StringIO
+import  io
 import  sys
 import  threading
 import  traceback
@@ -198,7 +198,7 @@ class RenderTask(object):
         if self.event.is_set(): return
 
         # Modify stdout to record messages
-        buffer = StringIO.StringIO()
+        buffer = io.StringIO()
         sys.stdout = buffer
 
         try:

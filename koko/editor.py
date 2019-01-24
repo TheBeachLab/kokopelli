@@ -10,6 +10,7 @@ from    koko.template import TEMPLATE
 
 import subprocess
 import platform
+from functools import reduce
 
 class Editor(wx.py.editwindow.EditWindow):
     '''Derived class for editing design scripts.'''
@@ -117,20 +118,20 @@ class Editor(wx.py.editwindow.EditWindow):
         line = line[:pos]
 
         # Find all "import" statements in the text and run them
-        imports = filter(lambda L: 'import' in L, self.text.split('\n'))
+        imports = [L for L in self.text.split('\n') if 'import' in L]
         imported = {}
         for i in imports:
             try:    exec(i, imported)
             except (SyntaxError, ImportError):  continue
 
-        for k in imported.keys():
+        for k in list(imported.keys()):
             if (isinstance(imported[k], object) and
                     not isinstance(imported[k], types.FunctionType)):
                 imported[k] = imported[k].__init__
 
         # Filter the functions to only include those that are callable
         # and can be analyzed with inspect.
-        for k in imported.keys():
+        for k in list(imported.keys()):
             if not callable(imported[k]):
                 del imported[k]
             else:
@@ -149,7 +150,7 @@ class Editor(wx.py.editwindow.EditWindow):
         # Sort through defined functions for matches
         matches = []
         for sym in symbols[::-1]:
-            for k in imported.keys():
+            for k in list(imported.keys()):
                 if k.startswith(sym):
                     score = float(len(sym)) / float(len(k))
                     matches += [(score, k)]

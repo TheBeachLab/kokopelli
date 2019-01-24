@@ -357,12 +357,12 @@ class Image(object):
 
         # Add bounds to the image
         if math.isnan(dx.value):
-            print 'Assuming 72 dpi for x resolution.'
+            print('Assuming 72 dpi for x resolution.')
             img.xmin, img.xmax = 0, 72*img.width/25.4
         else:   img.xmin, img.xmax = 0, dx.value
 
         if math.isnan(dy.value):
-            print 'Assuming 72 dpi for y resolution.'
+            print('Assuming 72 dpi for y resolution.')
             img.ymin, img.ymax = 0, 72*img.height/25.4
         else:   img.ymin, img.ymax = 0, dy.value
 
@@ -485,7 +485,7 @@ class Image(object):
             channels=1, depth=32
         )
         ibounds = [int(t/float(threads)*self.width) for t in range(threads)]
-        ibounds = zip(ibounds, ibounds[1:] + [self.width])
+        ibounds = list(zip(ibounds, ibounds[1:] + [self.width]))
 
         args1 = [(i[0], i[1], self.width, self.height, input.pixels, g.pixels)
                  for i in ibounds]
@@ -497,7 +497,7 @@ class Image(object):
         output = self.copy(depth='f')
 
         jbounds = [int(t/float(threads)*self.height) for t in range(threads)]
-        jbounds = zip(jbounds, jbounds[1:] + [self.height])
+        jbounds = list(zip(jbounds, jbounds[1:] + [self.height]))
 
         args2 = [(j[0], j[1], self.width, self.pixels_per_mm,
                  g.pixels, output.pixels) for j in jbounds]

@@ -4,6 +4,7 @@ from math import cos, sin, atan2, radians, degrees, sqrt
 import koko.lib.shapes2d as s2d
 from koko.lib.text import text
 from numpy import *
+from functools import reduce
 
 class PCB(object):
     def __init__(self, x0, y0, width, height, chamfer_distance=0):
@@ -118,7 +119,7 @@ class PCB(object):
             if self.part_shadows_bot:
                T.append(s2d.color(self.part_shadows_bot-self.holes,(45, 30, 62)))
         
-        for v in sorted(self.custom_layers.values(),key=lambda v: -v['position']):
+        for v in sorted(list(self.custom_layers.values()),key=lambda v: -v['position']):
             if v['visible']: T.append(s2d.color(v['layer'],v['color']))
         T.append(s2d.color(self.cutout, (35,35,40)))
         return T

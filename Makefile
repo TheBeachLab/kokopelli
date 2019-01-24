@@ -1,6 +1,6 @@
 all:
 	mkdir -p build
-	cd build && cmake ../libfab && make && make install
+	cd build && cmake ../libfab && make && sudo make install
 
 install: all
 	cp -rf kokopelli koko /usr/local/bin/

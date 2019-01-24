@@ -24,7 +24,7 @@ for filename in filenames:
     else:
         break
 else:
-    print 'Error: libfab not found'
+    print('Error: libfab not found')
     sys.exit(1)
 
 
@@ -35,7 +35,7 @@ def pp(t):  return p(p(t))
 ################################################################################
 
 # util/region.h
-from region import Region
+from .region import Region
 
 libfab.split.argtypes = [Region, p(Region), ctypes.c_int]
 libfab.split.restype  = ctypes.c_int
@@ -53,7 +53,7 @@ libfab.build_arrays.argtypes = [p(Region)] + [ctypes.c_float]*6
 libfab.free_arrays.argtypes  = [p(Region)]
 
 # util/vec3f.h
-from vec3f import Vec3f
+from .vec3f import Vec3f
 libfab.deproject.argtypes = [Vec3f, ctypes.c_float*4]
 libfab.deproject.restype  =  Vec3f
 
@@ -97,7 +97,7 @@ libfab.make_packed.restype  =  PackedTreeP
 libfab.free_packed.argtypes = [PackedTreeP]
 
 # tree/eval.h
-from interval import Interval
+from .interval import Interval
 
 libfab.eval_i.argtypes = [PackedTreeP, Interval, Interval, Interval]
 libfab.eval_i.restype  =  Interval

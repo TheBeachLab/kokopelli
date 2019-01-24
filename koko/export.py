@@ -1,5 +1,5 @@
 import ctypes
-import Queue
+import queue
 import shutil
 import subprocess
 import tempfile
