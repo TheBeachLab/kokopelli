@@ -1,13 +1,14 @@
 # `kokopelli` is back
 
-* [Compile and run](#compile-and-run)
-* [What's new](#whats-new)
-  * [Aliases: PCB components, humanized](#aliases-pcb-components-humanized)
-  * [Sam Calish's pcb.lib additions merged](#sam-calishs-pcblib-additions-merged)
-  * [Free cutout shapes](#free-cutout-shapes)
-* [Warning](#warning)
-* [About](#about)
-* [Copyright](#copyright)
+- [`kokopelli` is back](#kokopelli-is-back)
+  - [Compile and run](#compile-and-run)
+  - [What's new](#whats-new)
+    - [Aliases: PCB components, humanized](#aliases-pcb-components-humanized)
+    - [Sam Calish's pcb.lib additions merged](#sam-calishs-pcblib-additions-merged)
+    - [Free cutout shapes](#free-cutout-shapes)
+  - [Warning](#warning)
+  - [About](#about)
+  - [Copyright](#copyright)
 
 `kokopelli reloaded` is a personal effort to prevent the end of something good. In 2013 [I took Fab Academy](http://fabacademy.org/archives/2013/students/sanchez.francisco/index.html) in Fab Lab Barcelona and discovered `kokopelli`. I was amazed by the versaltility of the tool (2D and 3D mechanical design, circuit boards, physical simulations, CAM, machine control...) and the fact that you could do all of these cool things with just a text editor.
 
@@ -21,6 +22,8 @@ Over the years I felt that, even though new tools were appearing, we were going 
 make clean
 make
 ```
+
+Install the dependencies. In arch packages `wxgtk3 python2-wxpython3 numpy python2-numpy python2-opengl`
 
 To run kokopelli just type `python2 kokopelli`
 
