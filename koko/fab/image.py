@@ -222,13 +222,13 @@ class Image(object):
 
     @property
     def bits_per_mm(self):
-        if self.dz is None or self.depth is 'f': return None
+        if self.dz is None or self.depth == 'f': return None
         elif self.depth == 8:   return 255. / self.dz
         elif self.depth == 16:  return 65535. / self.dz
         elif self.depth == 32:  return 4294967295. / self.dz
     @property
     def mm_per_bit(self):
-        if self.dz is None or self.depth is 'f': return None
+        if self.dz is None or self.depth == 'f': return None
         elif self.depth == 8:   return self.dz / 255.
         elif self.depth == 16:  return self.dz / 65535.
         elif self.depth == 32:  return self.dz / 4294967295.
