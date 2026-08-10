@@ -41,7 +41,9 @@ class ExportProgress(wx.Frame):
     @property
     def progress(self): return self.gauge.GetValue()
     @progress.setter
-    def progress(self, v):  wx.CallAfter(self.gauge.SetValue, v)
+    def progress(self, value):
+        value = max(0, min(100, round(value)))
+        wx.CallAfter(self.gauge.SetValue, value)
 
     def cancel(self, event):
         for e in self.events:   e.set()

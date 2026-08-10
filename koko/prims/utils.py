@@ -89,7 +89,7 @@ class Slider(Primitive):
 
             txt = '%s: %2g' % (self.parent.name, self.parent.value)
             w, h = canvas.dc.GetTextExtent(txt)
-            x -= w/2
+            x -= w//2
             y -= 14
 
             canvas.dc.SetBrush(wx.Brush((0, 0, 0, 150)))
@@ -138,6 +138,7 @@ class Slider(Primitive):
     def draw(self, canvas):
         x, y = canvas.pos_to_pixel(self.x, self.y)
         w    = canvas.pos_to_pixel(self.size)
+        half_w = w//2
 
         if self.valid:
             highlight = (128, 128, 128, 128)
@@ -150,14 +151,14 @@ class Slider(Primitive):
 
         if self.hover:
             canvas.dc.SetPen(wx.Pen(highlight, 10))
-            canvas.dc.DrawLine(x - w/2, y, x+w/2, y)
+            canvas.dc.DrawLine(x - half_w, y, x+half_w, y)
         elif self.dragging:
             canvas.dc.SetPen(wx.Pen(highlight, 8))
-            canvas.dc.DrawLine(x - w/2, y, x+w/2, y)
+            canvas.dc.DrawLine(x - half_w, y, x+half_w, y)
 
         canvas.dc.SetPen(wx.Pen(dark, 6))
-        canvas.dc.DrawLine(x - w/2, y, x+w/2, y)
+        canvas.dc.DrawLine(x - half_w, y, x+half_w, y)
         canvas.dc.SetPen(wx.Pen(light, 4))
-        canvas.dc.DrawLine(x - w/2, y, x+w/2, y)
+        canvas.dc.DrawLine(x - half_w, y, x+half_w, y)
 
         self.handle.draw(canvas)

@@ -126,7 +126,7 @@ class Path(object):
 
     def save_svg(self, filename):
         self.write_svg_header(filename, self.dx, self.dy)
-        self.write_svg_contour(filename, self.xmin, self.ymin)
+        self.write_svg_contour(filename, self.xmin, self.ymax)
         self.write_svg_footer(filename)
 
     @classmethod
@@ -134,25 +134,26 @@ class Path(object):
         ''' Writes the header to an SVG file.
             dx and dy should be in mm.
         '''
-        with open(filename, 'wb') as f:
+        scale = 90 / 25.4
+        with open(filename, 'w', encoding='utf-8') as f:
             f.write(
-"""<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+"""<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with kokopelli (kokompe.cba.mit.edu) -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
- "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
 <svg
     xmlns   = "http://www.w3.org/2000/svg"
+    version = "1.1"
     width   = "{dx:g}mm"
     height  = "{dy:g}mm"
-    units   = "mm"
->""".format(dx=dx, dy=dy))
+    viewBox = "0 0 {view_dx:g} {view_dy:g}"
+>""".format(dx=dx, dy=dy, view_dx=dx*scale, view_dy=dy*scale))
 
 
     @classmethod
     def write_svg_footer(cls, filename):
         ''' Writes the footer to an SVG file.
         '''
-        with open(filename, 'a') as f:  f.write('</svg>')
+        with open(filename, 'a', encoding='utf-8') as f:
+            f.write('</svg>')
 
 
     def write_svg_contour(self, filename, xmin, ymax,
@@ -163,12 +164,12 @@ class Path(object):
 
         xy = lambda p: (scale*(p[0]-xmin), scale*(ymax-p[1]))
 
-        with open(filename, 'a') as f:
+        with open(filename, 'a', encoding='utf-8') as f:
 
             # Write the opening statement for this path
             f.write(
 '  <path style="stroke:rgb(%i,%i,%i); stroke-width:%g; fill:none"'
-                % (color[0], color[1], color[2], stroke)
+                % (color[0], color[1], color[2], stroke*scale)
             )
 
             # Write the first point of the path

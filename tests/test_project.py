@@ -4,8 +4,12 @@ import sys
 
 import pytest
 
+import koko
+import koko.prims.points
+import koko.prims.utils
 from koko.cli import runtime_check
 from koko.fab.fabvars import FabVars
+from koko.prims.core import PrimSet
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -24,15 +28,25 @@ def test_example_designs_are_valid_python3():
 
 
 @pytest.mark.parametrize("example", sorted((ROOT / "examples").glob("*.ko")))
-def test_noninteractive_examples_execute(example):
+def test_examples_execute(example):
     source = example.read_text()
-    if source.startswith("##    Geometry header    ##"):
-        pytest.skip("interactive example requires GUI primitives")
+    namespace = {}
+    interactive = source.startswith("##    Geometry header    ##")
 
-    namespace = {"cad": FabVars()}
+    if interactive:
+        lines = source.splitlines()
+        koko.PRIMS = PrimSet()
+        reconstruction = eval(lines[1], {"koko": koko})
+        koko.PRIMS.reconstruct(reconstruction)
+        namespace.update(koko.PRIMS.dict)
+        source = "\n".join(lines[3:])
+
+    namespace["cad"] = FabVars()
     exec(compile(source, str(example), "exec"), namespace)
 
     assert namespace["cad"].shapes
+    if interactive:
+        assert all(primitive.valid for primitive in koko.PRIMS.shapes)
 
 
 def test_development_launcher_help():

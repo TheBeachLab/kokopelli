@@ -541,10 +541,10 @@ If it is an example file, the 'kokopelli/examples' folder may include an updated
             key = 'use_cms'
         elif filetype == '.png':
             dlg = dialogs.ResolutionDialog(
-                10, '.stl export', cad, 'Heightmap'
+                10, '.png export', cad, 'Heightmap'
             )
             key = 'make_heightmap'
-        elif filetype in '.svg':
+        elif filetype == '.svg':
             dlg = dialogs.ResolutionDialog(
                 10, '.svg export', cad
             )

@@ -13,15 +13,21 @@ still needs direct testing.
   `uv.lock`.
 - The macOS application starts with wxPython Phoenix and renders both the
   default circle and the bundled multicolor involute-gear example in 2D.
-- Automated smoke tests cover native-tree parsing, interval and vector division,
-  current NumPy compatibility, runtime imports, and Python 3 syntax for examples.
+- Every bundled `.ko` example executes under Python 3. The parameterized box,
+  living-hinge, and mandala examples reconstruct their interactive primitives;
+  all three also load in the macOS GUI, with the mandala and slider rendering.
+- Heightmap PNG, multicolor PNG, and physically sized SVG export run headlessly
+  through the real export implementation and have deterministic content tests.
+- Automated tests also cover native-tree parsing, interval and vector division,
+  current NumPy compatibility, and runtime imports.
 
 ## Not yet verified
 
 These are capabilities present in the source, not claims that they work today:
 
 - opening, editing, saving, and reloading every supported input type;
-- PNG, SVG, STL, DOT, and ASDF export correctness;
+- STL, DOT, and ASDF export correctness;
+- the modal file-dialog portion of PNG and SVG export;
 - 3D OpenGL rendering and mesh operations;
 - CAM workflows and output for each supported machine;
 - Linux and Windows builds;
@@ -29,9 +35,12 @@ These are capabilities present in the source, not claims that they work today:
 
 ## Proposed stages
 
-1. Add headless golden tests for 2D geometry and PNG/SVG export.
-2. Exercise every bundled example in the GUI and repair evaluation failures.
-3. Test 3D geometry, ASDF generation, STL round trips, and OpenGL rendering.
+1. Completed: add headless golden-style tests for 2D geometry and PNG/SVG
+   export.
+2. Completed: execute every bundled example and exercise the parameterized
+   examples in the GUI.
+3. Next: test 3D geometry, ASDF generation, STL round trips, and OpenGL
+   rendering.
 4. Validate CAM workflows one machine at a time using fixture inputs and expected
    output files, without connecting real equipment during automated tests.
 5. Audit and finish the repository's explicit WIP areas: the dot-matrix font,
