@@ -37,7 +37,7 @@ class ImportPanel(wx.Panel):
         hs.Add(preview, flag=wx.LEFT|wx.ALIGN_CENTER, border=10, proportion=1)
         vs.Add(hs, flag=wx.TOP|wx.LEFT|wx.EXPAND, border=10)
 
-        gs = wx.GridSizer(3, 2)
+        gs = wx.GridSizer(3, 2, 0, 0)
 
         t = wx.lib.stattext.GenStaticText(
                 self, style=wx.ALIGN_CENTER, label='File parameters'
@@ -63,7 +63,7 @@ class ImportPanel(wx.Panel):
         t.header = True
         vs.Add(t, flag=wx.TOP|wx.LEFT|wx.EXPAND, border=10)
 
-        gs = wx.GridSizer(3, 2)
+        gs = wx.GridSizer(3, 2, 0, 0)
         for t in [('Density threshold','density'),
                 ('Voxel size (mm)','mm')]:
             gs.Add(
@@ -96,7 +96,7 @@ class ImportPanel(wx.Panel):
         vs.Add(hs, flag=wx.TOP|wx.LEFT|wx.EXPAND, border=10)
 
         bpanel = wx.Panel(self)
-        bounds = wx.FlexGridSizer(6, 3)
+        bounds = wx.FlexGridSizer(6, 3, 0, 0)
         bounds.AddGrowableCol(0, 1)
         bounds.AddGrowableCol(2, 1)
         self.bounds = {}
@@ -278,7 +278,10 @@ class ImportPanel(wx.Panel):
         """
         params = self.get_params(get_bounds=False)
         if params is None:  return
-        for p in params:    exec('{0} = params["{0}"]'.format(p))
+        ni, nj, nk = (params[name] for name in ('ni', 'nj', 'nk'))
+        mm = params['mm']
+        density = params['density']
+        close_boundary = params['close_boundary']
 
         voxels = ni * nj * nk
 
@@ -310,12 +313,20 @@ class ImportPanel(wx.Panel):
         params = self.get_params(show_error=False)
         if params is None:  return
 
-        for p in params:    exec('{0} = params["{0}"]'.format(p))
-        return (imin*mm, imax*mm, jmin*mm, jmax*mm, kmin*mm, kmax*mm)
+        mm = params['mm']
+        return tuple(params[name] * mm for name in (
+            'imin', 'imax', 'jmin', 'jmax', 'kmin', 'kmax'
+        ))
 
     def run(self, event):
         params = self.get_params()
-        for p in params:    exec('{0} = params["{0}"]'.format(p))
+        ni, nj, nk = (params[name] for name in ('ni', 'nj', 'nk'))
+        imin, imax = params['imin'], params['imax']
+        jmin, jmax = params['jmin'], params['jmax']
+        kmin, kmax = params['kmin'], params['kmax']
+        mm = params['mm']
+        density = params['density']
+        close_boundary = params['close_boundary']
 
         full = Region(
             (imin, jmin, kmin),

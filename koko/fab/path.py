@@ -31,13 +31,13 @@ class Path(object):
         start = ptr
         points = np.array(xyz(ptr))
 
-        ptr = ptr.contents.__next__
+        ptr = ptr.contents.next
 
         while ptr.contents != start.contents:
             points = np.vstack( (points, xyz(ptr)) )
 
             # Advance through the linked list
-            if bool(ptr.contents.__next__): ptr = ptr.contents.__next__
+            if bool(ptr.contents.next): ptr = ptr.contents.next
             else:                       break
 
         closed = (ptr.contents == start.contents)
@@ -69,7 +69,7 @@ class Path(object):
         # Create an array such that if before[i,j] is True, path i
         # needs to be cut before path j (because the bounds of path i
         # are contained within the bounds of path j).
-        before = np.ones((len(paths), len(paths)), dtype=np.bool)
+        before = np.ones((len(paths), len(paths)), dtype=bool)
         xmin = np.array([[p.xmin for p in paths]]*len(paths))
         before &= xmin < xmin.transpose()
         xmax = np.array([[p.xmax for p in paths]]*len(paths))

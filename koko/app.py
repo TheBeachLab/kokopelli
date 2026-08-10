@@ -369,7 +369,7 @@ If it is an example file, the 'kokopelli/examples' folder may include an updated
             koko.GLCANVAS.snap_bounds()
 
     def snap_axis(self, event=None):
-        axis = koko.FRAME.GetMenuBar().FindItemById(event.GetId()).GetLabel()
+        axis = koko.FRAME.GetMenuBar().FindItemById(event.GetId()).GetItemLabelText()
         if koko.CANVAS.IsShown():
             koko.CANVAS.snap_axis(axis)
         if koko.GLCANVAS.IsShown():
@@ -437,7 +437,7 @@ If it is an example file, the 'kokopelli/examples' folder may include an updated
         if type(event) is str:
             t = event
         else:
-            t = koko.FRAME.GetMenuBar().FindItemById(event.GetId()).GetLabel()
+            t = koko.FRAME.GetMenuBar().FindItemById(event.GetId()).GetItemLabelText()
 
         shading = koko.FRAME.get_menu('View', 'Shading mode')
 
@@ -471,7 +471,7 @@ If it is an example file, the 'kokopelli/examples' folder may include an updated
             command to call based on the menu item text.'''
 
         item = koko.FRAME.GetMenuBar().FindItemById(event.GetId())
-        filetype = item.GetLabel()
+        filetype = item.GetItemLabelText()
 
         if   self.mode == 'cad':    self.export_from_cad(filetype)
         elif self.mode == 'asdf':   self.export_from_asdf(filetype)
@@ -583,7 +583,7 @@ If it is an example file, the 'kokopelli/examples' folder may include an updated
     def show_library(self, event):
 
         item = koko.FRAME.GetMenuBar().FindItemById(event.GetId())
-        name = item.GetLabel()
+        name = item.GetItemLabelText()
 
         if koko.BUNDLED:
             path = koko.BASE_DIR + name.split('.')[-1] + '.py'

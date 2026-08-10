@@ -7,22 +7,16 @@
 
 uint32_t read_int(FILE* file)
 {
-    struct {
-        uint32_t i;
-        char c;
-    } ret;
-    char * buf = fgets((char*)&ret, 5, file);
-    return ret.i;
+    uint32_t value = 0;
+    fread(&value, sizeof(value), 1, file);
+    return value;
 }
 
 float read_float(FILE* file)
 {
-    struct {
-        float f;
-        char c;
-    } ret;
-    char * buf = fgets((char*)&ret, 5, file);
-    return ret.f;
+    float value = 0;
+    fread(&value, sizeof(value), 1, file);
+    return value;
 }
 
 Mesh* load_stl(const char* filename)

@@ -57,4 +57,4 @@ elif mode == 'cut sheet':
     cad.render_mode = '2D'
     cad.shapes = A, move(B, 2.5*R, 0), move(C, 5*R, 0)
 else:
-    print "Invalid mode."
+    print("Invalid mode.")

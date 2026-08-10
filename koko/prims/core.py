@@ -263,8 +263,8 @@ class Primitive(object):
             Returns a tuple containing the object class and a
             dictionary mapping parameter names to their expressions.'''
 
-        argspec = inspect.getargspec(self.__class__.__init__)
-        args = argspec.args[1:]
+        parameters = inspect.signature(self.__class__.__init__).parameters
+        args = list(parameters)[1:]
         return (self.__class__,
                 dict((k, self.parameters[k].expr) for k in self.parameters
                 if k in args))

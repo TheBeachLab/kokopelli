@@ -1,22 +1,27 @@
 """ Module to import the libfab shared C library. """
 
 import ctypes
+import ctypes.util
 import os
-import sys
+
+import koko
 
 # Here are a few likely filenames
-base = os.path.abspath(sys.argv[0])
-if sys.argv[0]: base = os.path.dirname(base)
+default_base = os.path.join(os.path.dirname(__file__), '..', '..')
+base = os.path.abspath(getattr(koko, 'BASE_DIR', default_base))
 
 libname = 'libfab' + ('.dylib' if 'Darwin' in os.uname() else '.so')
 filenames =[
     os.path.join(base, 'libfab/', libname),
     os.path.join(base, '../lib/', libname),
     os.path.join(base, '../Frameworks/', libname),
+    ctypes.util.find_library('fab'),
     libname
 ]
 
 for filename in filenames:
+    if not filename:
+        continue
     try:
         libfab = ctypes.CDLL(filename)
     except OSError:
@@ -24,13 +29,27 @@ for filename in filenames:
     else:
         break
 else:
-    print('Error: libfab not found')
-    sys.exit(1)
+    searched = ', '.join(str(filename) for filename in filenames if filename)
+    raise ImportError(
+        'libfab not found; run `make build` first. Searched: ' + searched
+    )
 
 
 # Helper functions for pointer and pointer to pointer
 def p(t):   return ctypes.POINTER(t)
 def pp(t):  return p(p(t))
+
+
+class CString:
+    """ctypes adapter accepting Python strings and path-like objects."""
+
+    @classmethod
+    def from_param(cls, value):
+        if isinstance(value, os.PathLike):
+            value = os.fspath(value)
+        if isinstance(value, str):
+            value = value.encode('utf-8')
+        return ctypes.c_char_p(value)
 
 ################################################################################
 
@@ -87,8 +106,8 @@ libfab.clone_tree.restype  =  MathTreeP
 libfab.count_nodes.argtypes = [MathTreeP]
 libfab.count_nodes.restype  = ctypes.c_uint
 
-libfab.dot_arrays.argtypes = [MathTreeP, p(ctypes.c_char)]
-libfab.dot_tree.argtypes = [MathTreeP, p(ctypes.c_char)]
+libfab.dot_arrays.argtypes = [MathTreeP, CString]
+libfab.dot_tree.argtypes = [MathTreeP, CString]
 
 # tree/packed.h
 libfab.make_packed.argtypes = [MathTreeP]
@@ -99,11 +118,24 @@ libfab.free_packed.argtypes = [PackedTreeP]
 # tree/eval.h
 from .interval import Interval
 
+for name in ('add_i', 'sub_i', 'mul_i', 'div_i', 'min_i', 'max_i', 'pow_i'):
+    function = getattr(libfab, name)
+    function.argtypes = [Interval, Interval]
+    function.restype = Interval
+
+for name in (
+    'abs_i', 'square_i', 'sqrt_i', 'sin_i', 'cos_i', 'tan_i',
+    'asin_i', 'acos_i', 'atan_i', 'neg_i', 'X_i', 'Y_i', 'Z_i',
+):
+    function = getattr(libfab, name)
+    function.argtypes = [Interval]
+    function.restype = Interval
+
 libfab.eval_i.argtypes = [PackedTreeP, Interval, Interval, Interval]
 libfab.eval_i.restype  =  Interval
 
 # tree/parser.h
-libfab.parse.argtypes = [p(ctypes.c_char)]
+libfab.parse.argtypes = [CString]
 libfab.parse.restype  =  MathTreeP
 
 ################################################################################
@@ -156,14 +188,14 @@ libfab.simplify.argtypes = [p(ASDF), ctypes.c_bool]
 
 # asdf/import.h
 libfab.import_vol_region.argtypes = (
-    [p(ctypes.c_char)] + [ctypes.c_int]*3 +
+    [CString] + [ctypes.c_int]*3 +
     [Region, ctypes.c_int, ctypes.c_float,
      ctypes.c_bool, ctypes.c_bool]
 )
 libfab.import_vol_region.restype  = p(ASDF)
 
 libfab.import_vol.argtypes = [
-    p(ctypes.c_char), ctypes.c_int, ctypes.c_int, ctypes.c_int,
+    CString, ctypes.c_int, ctypes.c_int, ctypes.c_int,
     ctypes.c_float, ctypes.c_float, ctypes.c_bool, ctypes.c_bool
 ]
 libfab.import_vol.restype  = p(ASDF)
@@ -191,9 +223,9 @@ libfab.draw_asdf_distance.argtypes = [
 
 
 # asdf/file_io.h
-libfab.asdf_write.argtypes = [p(ASDF), p(ctypes.c_char)]
+libfab.asdf_write.argtypes = [p(ASDF), CString]
 
-libfab.asdf_read.argtypes = [p(ctypes.c_char)]
+libfab.asdf_read.argtypes = [CString]
 libfab.asdf_read.restype  =  p(ASDF)
 
 
@@ -255,7 +287,7 @@ libfab.distance_transform.argtypes = [
 ]
 
 # formats/png.c
-libfab.save_png16L.argtypes = [p(ctypes.c_char), ctypes.c_int,
+libfab.save_png16L.argtypes = [CString, ctypes.c_int,
                                 ctypes.c_int, ctypes.c_float*6,
                                 pp(ctypes.c_uint16)]
 
@@ -270,28 +302,28 @@ libfab.depth_blit.argtypes = (
 
 
 libfab.load_png_stats.argtypes = (
-    [p(ctypes.c_char)] + [p(ctypes.c_int)]*2 + [p(ctypes.c_float)]*3
+    [CString] + [p(ctypes.c_int)]*2 + [p(ctypes.c_float)]*3
 )
 
-libfab.load_png.argtypes = [p(ctypes.c_char), pp(ctypes.c_uint16)]
+libfab.load_png.argtypes = [CString, pp(ctypes.c_uint16)]
 
 # formats/mesh.h
 libfab.free_mesh.argtypes = [p(Mesh)]
 
 libfab.increase_indices.argtypes = [p(Mesh), ctypes.c_uint32]
 
-libfab.save_mesh.argtypes = [p(ctypes.c_char), p(Mesh)]
+libfab.save_mesh.argtypes = [CString, p(Mesh)]
 
-libfab.load_mesh.argtypes = [p(ctypes.c_char)]
+libfab.load_mesh.argtypes = [CString]
 libfab.load_mesh.restype = p(Mesh)
 
 libfab.merge_meshes.argtypes = [ctypes.c_uint32, pp(Mesh)]
 libfab.merge_meshes.restype = p(Mesh)
 
 # formats/stl.c
-libfab.save_stl.argtypes = [p(Mesh), p(ctypes.c_char)]
+libfab.save_stl.argtypes = [p(Mesh), CString]
 
-libfab.load_stl.argtypes = [p(ctypes.c_char)]
+libfab.load_stl.argtypes = [CString]
 libfab.load_stl.restype = p(Mesh)
 
 

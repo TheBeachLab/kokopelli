@@ -1,11 +1,23 @@
-all:
-	mkdir -p build
-	cd build && cmake ../libfab && make && sudo make install
+.PHONY: all build install sync check test clean
 
-install: all
-	cp -rf kokopelli koko /usr/local/bin/
-	cp -rf libfab/libfab.* /usr/local/lib/
-	if which ldconfig; then ldconfig; fi
+all: build
+
+build:
+	cmake -S libfab -B build
+	cmake --build build --parallel
+	cmake --install build
+
+install: sync build
+
+sync:
+	uv sync --dev
+
+check: build
+	uv run python kokopelli --check
+
+test: build
+	uv run pytest
 
 clean:
-	rm -rf build
+	cmake -E remove_directory build
+	cmake -E rm -f libfab/libfab.dylib libfab/libfab.so

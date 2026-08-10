@@ -12,6 +12,8 @@ Based on a design by Terrence J. Fagan
 http://fabacademy.org/archives/2014/tutorials/LivingHingeinKokopelli.html
 
 """
+from functools import reduce
+
 from koko.lib.shapes import *
 import operator
 import math
@@ -43,7 +45,7 @@ es = reduce(operator.add,
          for i in range(-y_count, y_count + 1)])
 
 # Tile horizontally with interleaved offset cutouts.
-print x_count
+print(x_count)
 cutout = reduce(operator.add,
         [move(es, i * (esw + wt), 0)
          for i in range(-x_count, x_count + 1, 2)] +

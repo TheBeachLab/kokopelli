@@ -13,6 +13,7 @@ http://www.cartertools.com/involute.html
 """
 
 from math import sqrt, atan2, sin, cos, pi, radians
+from functools import reduce
 import operator
 
 from koko.lib.shapes import *
@@ -54,7 +55,7 @@ if N % 2:
                                   for i in range(N)])
 else:
     teeth = reduce(operator.add, [rotate(tooth, i*360./N)
-                                  for i in range(N/2)])
+                                  for i in range(N//2)])
 
 teeth += circle(0, 0, RR)
 teeth &= circle(0, 0, RO) - circle(0, 0, RR*0.9)

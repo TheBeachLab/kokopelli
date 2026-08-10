@@ -23,6 +23,7 @@ class Vec3f(ctypes.Structure):
         return Vec3f(self.x - rhs.x, self.y - rhs.y, self.z - rhs.z)
     def __div__(self, rhs):
         return Vec3f(self.x/rhs, self.y/rhs, self.z/rhs)
+    __truediv__ = __div__
     def __neg__(self):
         return Vec3f(-self.x, -self.y, -self.z)
     def length(self):

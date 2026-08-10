@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 2.6)
-project(libfab)
+cmake_minimum_required(VERSION 3.16)
+project(libfab LANGUAGES C)
 
 #set(CMAKE_BUILD_TYPE DEBUG)
 set(CMAKE_BUILD_TYPE RELEASE)
@@ -36,5 +36,8 @@ add_library(fab SHARED
     util/region.c util/vec3f.c util/path.c
 )
 
-target_link_libraries(fab ${PNG_LIBRARY} ${M_LIB})
+target_link_libraries(fab PRIVATE PNG::PNG)
+if(M_LIB)
+    target_link_libraries(fab PRIVATE ${M_LIB})
+endif()
 install(TARGETS fab DESTINATION ${PROJECT_SOURCE_DIR})

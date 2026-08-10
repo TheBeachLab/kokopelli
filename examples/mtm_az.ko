@@ -321,14 +321,14 @@ spindle = [_P_, _Q_, _R_, _S_,_U_,_T_, spindle_motor]
 ################################################################################
 
 # Move spindle pieces so that they line up with the base
-spindle = spindle_base + map(
+spindle = spindle_base + list(map(
     lambda part: move(part, -MH*p/2-SL/2, 0), spindle
-)
+))
 
 # Move the entire spindle contraption so that it lines up
 # with the y axis rods
 platform = [_B_,_C_,_D_,_E_,_F_]
-spindle = map(lambda p: move(p, yrod_x, 0, yrod_z), spindle)
+spindle = list(map(lambda p: move(p, yrod_x, 0, yrod_z), spindle))
 
 cad.shapes = body + platform + spindle
 

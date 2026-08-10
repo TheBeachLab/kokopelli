@@ -2,6 +2,9 @@
 *.DS_Store
 *.tags
 *.bak
+.venv/
+.pytest_cache/
+.ruff_cache/
 
 libfab/libfab.dylib
 libfab/libfab.so
@@ -14,4 +17,3 @@ util/doxygen/*/html/*
 util/doxygen/*/latex/*
 
 turbopush.sh
-

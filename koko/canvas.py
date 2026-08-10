@@ -383,7 +383,7 @@ class Canvas(wx.Panel):
 
             # If the image is at the correct scale, then we're fine
             # to simply render it at its set position
-            bitmap = wx.BitmapFromImage(self.image.wximg)
+            bitmap = wx.Bitmap(self.image.wximg)
             xmin = self.image.xmin
             ymax = self.image.ymax
         else:
@@ -401,9 +401,9 @@ class Canvas(wx.Panel):
             if int(img.Width*scale) == 0 or int(img.Height*scale) == 0:
                 return
 
-            img.Rescale(img.Width  * scale,
-                        img.Height * scale)
-            bitmap = wx.BitmapFromImage(img)
+            img.Rescale(round(img.Width * scale),
+                        round(img.Height * scale))
+            bitmap = wx.Bitmap(img)
 
             xmin = (
                 self.image.xmin +

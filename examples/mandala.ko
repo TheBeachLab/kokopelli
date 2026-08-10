@@ -12,6 +12,8 @@ parameters.
 
 """
 
+from functools import reduce
+
 from koko.lib.shapes import *
 from math import sqrt
 import operator
@@ -44,7 +46,7 @@ c += rectangle(-0.55, 0.55, -T/2, T/2)
 c = scale_x(move(c, 0, 0.6), 0, 0.5)
 c = reduce(
     operator.add,
-    [rotate(c, i*360./(N/2)) for i in range(N/2)]
+    [rotate(c, i*360./(N/2)) for i in range(N//2)]
 )
 c += circle(0, 0, 0.4)
 c -= circle(0, 0, 0.4-T/2)

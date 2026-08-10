@@ -83,7 +83,7 @@ class Editor(wx.py.editwindow.EditWindow):
 
         # Add a faint highlight to the selected line
         self.SetCaretLineVisible(True)
-        self.SetCaretLineBack('#303030')
+        self.SetCaretLineBackground('#303030')
 
         # Don't show horizontal scroll bar
         self.SetUseHorizontalScrollBar(False)
@@ -135,14 +135,16 @@ class Editor(wx.py.editwindow.EditWindow):
             if not callable(imported[k]):
                 del imported[k]
             else:
-                try:                inspect.getargspec(imported[k])
-                except TypeError:   del imported[k]
+                try:
+                    inspect.signature(imported[k])
+                except (TypeError, ValueError):
+                    del imported[k]
 
         # Remove closed functions (since we're not inside them)
-        parens  = re.findall('[a-zA-Z_][0-9a-zA-Z_]*\([^\(]*\)', line)
+        parens = re.findall(r'[a-zA-Z_][0-9a-zA-Z_]*\([^\(]*\)', line)
         while parens:
             for p in parens:    line = line.replace(p, '')
-            parens  = re.findall('[a-zA-Z_][0-9a-zA-Z_]*\([^\(]*\)', line)
+            parens = re.findall(r'[a-zA-Z_][0-9a-zA-Z_]*\([^\(]*\)', line)
 
         # Pick out valid symbols in the line of code
         symbols = re.findall('[a-zA-Z_][0-9a-zA-Z_]*', line)
@@ -167,12 +169,8 @@ class Editor(wx.py.editwindow.EditWindow):
         # Get the function
         f = imported[match[1]]
 
-        # Get its arguments and defaults
-        args = inspect.getargspec(f)
-
-        # Format them nicely
-        args = inspect.formatargspec(args.args, args.varargs,
-                                     args.keywords, args.defaults)
+        # Get and format its arguments and defaults.
+        args = str(inspect.signature(f))
 
         # Modify the formatting for a class constructor
         # (or anything starting with the argument 'self')

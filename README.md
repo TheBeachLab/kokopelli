@@ -16,16 +16,31 @@ Over the years I felt that, even though new tools were appearing, we were going 
 
 ## Compile and run
 
-`kokopelli reloaded` has been tested on Linux (Arch). Clone or download the repository and then install it using the Makefile in a terminal:
+The revived development baseline uses Python 3, CMake, `uv`, and `libpng`. On
+macOS with Homebrew, install the system tools first:
 
 ```bash
-make clean
-make
+brew install cmake libpng uv
 ```
 
-Install the dependencies. In arch packages `wxgtk3 python2-wxpython3 numpy python2-numpy python2-opengl`
+Then create the isolated Python environment and build the native geometry
+library:
 
-To run kokopelli just type `python2 kokopelli`
+```bash
+make install
+uv run kokopelli
+```
+
+The baseline checks are:
+
+```bash
+make check
+make test
+```
+
+See [`REVIVAL.md`](REVIVAL.md) for what has been demonstrated and what remains
+to be verified or completed. Kokopelli still executes design files as Python;
+keep the warning below in mind before opening third-party `.ko` files.
 
 ## What's new
 

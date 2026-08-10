@@ -46,7 +46,7 @@ Path* contour_zero_crossing(
  */
 _STATIC_
 void evaluate_pixel(
-    ASDF* const leaf, const ASDF* const neighbors[6]
+    ASDF* const leaf, const ASDF* const neighbors[4]
 );
 
 
@@ -56,7 +56,7 @@ void evaluate_pixel(
  */
 _STATIC_
 void find_edges(
-    ASDF* const asdf, const ASDF* const neighbors[6],
+    ASDF* const asdf, const ASDF* const neighbors[4],
     volatile int* const halt
 );
 

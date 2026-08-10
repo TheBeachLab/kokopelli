@@ -170,7 +170,7 @@ class RenderDialog(wx.Dialog):
         self.alpha.ChangeValue('0')
         self.beta.ChangeValue('0')
 
-        gs = wx.GridSizer(3, 2)
+        gs = wx.GridSizer(3, 2, 0, 0)
         gs.Add(wx.StaticText(self, wx.ID_ANY, 'Resolution (pixels/mm)'),
                 flag=wx.LEFT|wx.TOP, border=10)
         gs.Add(self.res, flag=wx.RIGHT|wx.TOP, border=10)

@@ -443,9 +443,13 @@ class MathTree(object):
     def __div__(self, rhs):
         return MathTree('/' + self.math + rhs.math)
 
+    __truediv__ = __div__
+
     @forcetree
     def __rdiv__(self, lhs):
         return MathTree('/' + lhs.math + self.math)
+
+    __rtruediv__ = __rdiv__
 
     @forcetree
     def __neg__(self):
@@ -487,7 +491,7 @@ class MathTree(object):
 
         os.close(read)
 
-        return s
+        return s.decode('utf-8')
 
     def __repr__(self):
         return "'%s' (tree at %s)" % (self, hex(self.ptr.value))

@@ -122,17 +122,17 @@ Node* constant_n(float value)
     return n;
 }
 
-Node* X_n()
+Node* X_n(void)
 {
     return nonary_n(OP_X);
 }
 
-Node* Y_n()
+Node* Y_n(void)
 {
     return nonary_n(OP_Y);
 }
 
-Node* Z_n()
+Node* Z_n(void)
 {
     return nonary_n(OP_Z);
 }

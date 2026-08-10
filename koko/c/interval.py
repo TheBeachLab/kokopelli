@@ -29,6 +29,8 @@ class Interval(ctypes.Structure):
     def __rmul__(self, lhs):    return libfab.mul_i(Interval(lhs), self)
     def __div__(self, rhs):     return libfab.div_i(self, Interval(rhs))
     def __rdiv__(self, lhs):    return libfab.div_i(Interval(lhs), self)
+    __truediv__ = __div__
+    __rtruediv__ = __rdiv__
     def __neg__(self):          return libfab.neg_i(self)
 
     @staticmethod

@@ -190,7 +190,7 @@ class MainFrame(wx.Frame):
         script = attach(view, 'Show script', self.show_script, 'Ctrl+T',
                         'Display Python script',
                          attach_function=view.AppendCheckItem)
-        script.Toggle()
+        script.Check(True)
 
         view.AppendSeparator()
         attach(view, '2D', app.render_mode,
@@ -209,7 +209,7 @@ class MainFrame(wx.Frame):
         ]:
             m = shaders.AppendRadioItem(wx.ID_ANY, s)
             m.Enable(False)
-            if s == 'Show shaded':    m.Check(True)
+            if s == 'Shaded':    m.Check(True)
             self.Bind(wx.EVT_MENU, lambda e: self.Refresh(), m)
 
         view.AppendSubMenu(shaders, 'Shading mode')
@@ -349,7 +349,7 @@ class MainFrame(wx.Frame):
         m = [m[0] for m in self.GetMenuBar().Menus
                   if m[1] == args[0]][0]
 
-        m = [m for m in m.GetMenuItems() if m.GetLabel() == args[1]][0]
+        m = [m for m in m.GetMenuItems() if m.GetItemLabelText() == args[1]][0]
 
         sub = m.GetSubMenu()
         if sub is None: return m

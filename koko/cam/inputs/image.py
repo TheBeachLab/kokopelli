@@ -23,7 +23,7 @@ class ImageInputPanel(FabPanel):
         title.header = True
         sizer.Add(title, flag=wx.EXPAND|wx.TOP|wx.LEFT|wx.RIGHT, border=5)
 
-        text = wx.GridSizer(2, 2)
+        text = wx.GridSizer(2, 2, 0, 0)
 
         ## @var file
         # UI label with filename

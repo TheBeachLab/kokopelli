@@ -558,9 +558,9 @@ class GLCanvas(glcanvas.GLCanvas):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
         shading = koko.FRAME.get_menu('View', 'Shading mode')
-        shader = [c.GetLabel() for c in shading if c.IsChecked()][0]
+        shader = [c.GetItemLabelText() for c in shading if c.IsChecked()][0]
 
-        if shader == 'Show subdivision':
+        if shader == 'Subdivision':
             self.draw_flat(50)
         else:
             self.draw_mesh(shader)
@@ -1082,4 +1082,3 @@ class GLCanvas(glcanvas.GLCanvas):
                       axes.Append(wx.ID_ANY, a))
         menu.AppendMenu(wx.ID_ANY, 'View axis', axes)
         self.PopupMenu(menu)
-

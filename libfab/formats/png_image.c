@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include <png.h>
+#include <string.h>
 
 #include "formats/png_image.h"
 
