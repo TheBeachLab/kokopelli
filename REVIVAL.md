@@ -16,6 +16,10 @@ still needs direct testing.
 - Every bundled `.ko` example executes under Python 3. The parameterized box,
   living-hinge, and mandala examples reconstruct their interactive primitives;
   all three also load in the macOS GUI, with the mandala and slider rendering.
+- A fabrication-oriented 5×7 font now constructs European and Japanese labels
+  from cutter-sized dots. Horizontal and vertical character spacing are
+  independently controllable, with zero joining adjacent matrix cells. The same
+  engine accepts arbitrary binary pixel-art patterns.
 - Heightmap PNG, multicolor PNG, and physically sized SVG export run headlessly
   through the real export implementation and have deterministic content tests.
 - Automated tests also cover native-tree parsing, interval and vector division,
@@ -43,9 +47,11 @@ These are capabilities present in the source, not claims that they work today:
    rendering.
 4. Validate CAM workflows one machine at a time using fixture inputs and expected
    output files, without connecting real equipment during automated tests.
-5. Audit and finish the repository's explicit WIP areas: the dot-matrix font,
-   the partial PCB-library merge, and free cutout shapes.
-6. Package a self-contained macOS application, then add Linux support and CI.
+5. Extend the dot-matrix work with calibrated V-bit variable-depth halftones,
+   preserving both visible dot geometry and plunge-center/depth data for CAM.
+6. Audit and finish the remaining explicit WIP areas: the partial PCB-library
+   merge and free cutout shapes.
+7. Package a self-contained macOS application, then add Linux support and CI.
 
 Kokopelli executes design files as Python. Treat `.ko` files like source code and
 only open files from trusted sources or inspect them first.

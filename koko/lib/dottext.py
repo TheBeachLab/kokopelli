@@ -1,659 +1,328 @@
-#   koko.lib.dottext.py
-#   Simple dot matrix math-string based font.
-
-#   Modified by Francisco Sanchez
-#   original code by Matt Keeter
-#   matt.keeter@cba.mit.edu
-
-#   kokompe.cba.mit.edu
-
-################################################################################
-
-from koko.lib.shapes2d import *
-
-def text(text, x, y, height = 1, align = 'CC'):
-
-    dx, dy = 0, -1
-    text_shape = None
-
-    for line in text.split('\n'):
-        line_shape = None
-
-        for c in line:
-            if not c in list(_glyphs.keys()):
-                print('Warning:  Unknown character "%s" in koko.lib.text' % c)
-            else:
-                chr_math = move(_glyphs[c], dx, dy)
-                if line_shape is None:  line_shape  = chr_math
-                else:                   line_shape += chr_math
-                dx += _glyphs[c].width + 0.1
-        dx -= 0.1
-
-        if line_shape is not None:
-            if align[0] == 'L':
-                pass
-            elif align[0] == 'C':
-                line_shape = move(line_shape, -dx / 2, 0)
-            elif align[0] == 'R':
-                line_shape = move(line_shape, -dx, 0)
-
-            text_shape += line_shape
-
-        dy -= 1.55
-        dx = 0
-
-    dy += 1.55
-    if text_shape is None:  return None
-
-    if align[1] == 'T':
-        pass
-    elif align[1] == 'B':
-        text_shape = move(text_shape, 0, -dy,)
-    elif align[1] == 'C':
-        text_shape = move(text_shape, 0, -dy/2)
-
-    if height != 1:
-        text_shape = scale_xy(text_shape, 0, 0, height)
-        dx *= height
-        dy *= height
-
-    return move(text_shape, x, y)
-
-
-_glyphs = {}
-
-shape = triangle(0, 0, 0.35, 1, 0.1, 0)
-shape += triangle(0.1, 0, 0.35, 1, 0.45, 1)
-shape += triangle(0.35, 1, 0.45, 1, 0.8, 0)
-shape += triangle(0.7, 0, 0.35, 1, 0.8, 0)
-shape += rectangle(0.2, 0.6, 0.3, 0.4)
-shape.width = 0.8
-_glyphs['A'] = shape
-
-
-shape = circle(0.25, 0.275, 0.275)
-shape -= circle(0.25, 0.275, 0.175)
-shape = shear_x_y(shape, 0, 0.35, 0, 0.1)
-shape += rectangle(0.51, 0.61, 0, 0.35)
-shape = move(shape, -0.05, 0)
-shape.width = 0.58
-_glyphs['a'] = shape
-
-
-shape = circle(0.3, 0.725, 0.275)
-shape -= circle(0.3, 0.725, 0.175)
-shape += circle(0.3, 0.275, 0.275)
-shape -= circle(0.3, 0.275, 0.175)
-shape &= rectangle(0.3, 1, 0, 1)
-shape += rectangle(0, 0.1, 0, 1)
-shape += rectangle(0.1, 0.3, 0, 0.1)
-shape += rectangle(0.1, 0.3, 0.45, 0.55)
-shape += rectangle(0.1, 0.3, 0.9, 1)
-shape.width = 0.575
-_glyphs['B'] = shape
-
-
-shape = circle(0.25, 0.275, 0.275)
-shape -= circle(0.25, 0.275, 0.175)
-shape &= rectangle(0.25, 1, 0, 0.275) + rectangle(0, 1, 0.275, 1)
-shape += rectangle(0, 0.1, 0, 1)
-shape += rectangle(0.1, 0.25, 0, 0.1)
-shape.width = 0.525
-_glyphs['b'] = shape
-
-
-shape = circle(0.3, 0.7, 0.3) - circle(0.3, 0.7, 0.2)
-shape += circle(0.3, 0.3, 0.3) - circle(0.3, 0.3, 0.2)
-shape -= rectangle(0, 0.6, 0.3, 0.7)
-shape -= triangle(0.3, 0.5, 1, 1.5, 1, -0.5)
-shape -= rectangle(0.3, 0.6, 0.2, 0.8)
-shape += rectangle(0, 0.1, 0.3, 0.7)
-shape.width = 0.57
-_glyphs['C'] = shape
-
-
-shape = circle(0.275, 0.275, 0.275)
-shape -= circle(0.275, 0.275, 0.175)
-shape -= triangle(0.275, 0.275, 0.55, 0.55, 0.55, 0)
-shape.width = 0.48
-_glyphs['c'] = shape
-
-
-shape = circle(0.1, 0.5, 0.5) - circle(0.1, 0.5, 0.4)
-shape &= rectangle(0, 1, 0, 1)
-shape += rectangle(0, 0.1, 0, 1)
-shape.width = 0.6
-_glyphs['D'] = shape
-
-
-shape = reflect_x(_glyphs['b'], _glyphs['b'].width/2)
-shape.width = _glyphs['b'].width
-_glyphs['d'] = shape
-
-
-shape = rectangle(0, 0.1, 0, 1)
-shape += rectangle(0.1, 0.6, 0.9, 1)
-shape += rectangle(0.1, 0.6, 0, 0.1)
-shape += rectangle(0.1, 0.5, 0.45, 0.55)
-shape.width = 0.6
-_glyphs['E'] = shape
-
-
-shape = circle(0.275, 0.275, 0.275)
-shape -= circle(0.275, 0.275, 0.175)
-shape -= triangle(0.1, 0.275, 0.75, 0.275, 0.6, 0)
-shape += rectangle(0.05, 0.55, 0.225, 0.315)
-shape &=  circle(0.275, 0.275, 0.275)
-shape.width = 0.55
-_glyphs['e'] = shape
-
-
-shape = rectangle(0, 0.1, 0, 1)
-shape += rectangle(0.1, 0.6, 0.9, 1)
-shape += rectangle(0.1, 0.5, 0.45, 0.55)
-shape.width = 0.6
-_glyphs['F'] = shape
-
-
-shape = circle(0.4, 0.75, 0.25) - circle(0.4, 0.75, 0.15)
-shape &= rectangle(0, 0.4, 0.75, 1)
-shape += rectangle(0, 0.4, 0.45, 0.55)
-shape += rectangle(0.15, 0.25, 0, 0.75)
-shape.width = 0.4
-_glyphs['f'] = shape
-
-
-shape = circle(0.275, -0.1, 0.275)
-shape -= circle(0.275, -0.1, 0.175)
-shape &= rectangle(0, 0.55, -0.375, -0.1)
-shape += circle(0.275, 0.275, 0.275) - circle(0.275, 0.275, 0.175)
-shape += rectangle(0.45, 0.55, -0.1, 0.55)
-shape.width = 0.55
-_glyphs['g'] = shape
-
-
-shape = circle(0.3, 0.7, 0.3) - circle(0.3, 0.7, 0.2)
-shape += circle(0.3, 0.3, 0.3) - circle(0.3, 0.3, 0.2)
-shape -= rectangle(0, 0.6, 0.3, 0.7)
-shape += rectangle(0, 0.1, 0.3, 0.7)
-shape += rectangle(0.5, 0.6, 0.3, 0.4)
-shape += rectangle(0.3, 0.6, 0.4, 0.5)
-shape.width = 0.6
-_glyphs['G'] = shape
-
-
-shape = rectangle(0, 0.1, 0, 1)
-shape += rectangle(0.5, 0.6, 0, 1)
-shape += rectangle(0.1, 0.5, 0.45, 0.55)
-shape.width = 0.6
-_glyphs['H'] = shape
-
-
-shape = circle(0.275, 0.275, 0.275)
-shape -= circle(0.275, 0.275, 0.175)
-shape &= rectangle(0, 0.55, 0.275, 0.55)
-shape += rectangle(0, 0.1, 0, 1)
-shape += rectangle(0.45, 0.55, 0, 0.275)
-shape.width = 0.55
-_glyphs['h'] = shape
-
-
-shape = rectangle(0, 0.5, 0, 0.1)
-shape += rectangle(0, 0.5, 0.9, 1)
-shape += rectangle(0.2, 0.3, 0.1, 0.9)
-shape.width = 0.5
-_glyphs['I'] = shape
-
-
-shape = rectangle(0.025, 0.125, 0, 0.55)
-shape += circle(0.075, 0.7, 0.075)
-shape.width = 0.15
-_glyphs['i'] = shape
-
-
-shape = circle(0.275, 0.275, 0.275)
-shape -= circle(0.275, 0.275, 0.175)
-shape &= rectangle(0, 0.55, 0, 0.275)
-shape += rectangle(0.45, 0.55, 0.275, 1)
-shape.width = 0.55
-_glyphs['J'] = shape
-
-
-shape = circle(0.0, -0.1, 0.275)
-shape -= circle(0.0, -0.1, 0.175)
-shape &= rectangle(0, 0.55, -0.375, -0.1)
-shape += rectangle(0.175, 0.275, -0.1, 0.55)
-shape += circle(0.225, 0.7, 0.075)
-shape.width = 0.3
-_glyphs['j'] = shape
-
-
-shape = rectangle(0, 0.6, 0, 1)
-shape -= triangle(0.1, 1, 0.5, 1, 0.1, 0.6)
-shape -= triangle(0.5, 0, 0.1, 0, 0.1, 0.4)
-shape -= triangle(0.6, 0.95, 0.6, 0.05, 0.18, 0.5)
-shape.width = 0.6
-_glyphs['K'] = shape
-
-
-shape = rectangle(0, 0.5, 0, 1)
-shape -= triangle(0.1, 1, 0.5, 1, 0.1, 0.45)
-shape -= triangle(0.36, 0, 0.1, 0, 0.1, 0.25)
-shape -= triangle(0.6, 1, 0.5, 0.0, 0.18, 0.35)
-shape -= triangle(0.1, 1, 0.6, 1, 0.6, 0.5)
-shape.width = 0.5
-_glyphs['k'] = shape
-
-
-shape = rectangle(0, 0.6, 0, 0.1)
-shape += rectangle(0, 0.1, 0, 1)
-shape.width = 0.6
-_glyphs['L'] = shape
-
-
-shape = rectangle(0.025, 0.125, 0, 1)
-shape.width = 0.15
-_glyphs['l'] = shape
-
-
-shape = rectangle(0, 0.1, 0, 1)
-shape += rectangle(0.7, 0.8, 0, 1)
-shape += triangle(0, 1, 0.1, 1, 0.45, 0)
-shape += triangle(0.45, 0, 0.35, 0, 0, 1)
-shape += triangle(0.7, 1, 0.8, 1, 0.35, 0)
-shape += triangle(0.35, 0, 0.8, 1, 0.45, 0)
-shape.width = 0.8
-_glyphs['M'] = shape
-
-
-shape = circle(0.175, 0.35, 0.175) - circle(0.175, 0.35, 0.075)
-shape += circle(0.425, 0.35, 0.175) - circle(0.425, 0.35, 0.075)
-shape &= rectangle(0, 0.65, 0.35, 0.65)
-shape += rectangle(0, 0.1, 0, 0.525)
-shape += rectangle(0.25, 0.35, 0, 0.35)
-shape += rectangle(0.5, 0.6, 0, 0.35)
-shape.width = 0.6
-_glyphs['m'] = shape
-
-
-shape = rectangle(0, 0.1, 0, 1)
-shape += rectangle(0.5, 0.6, 0, 1)
-shape += triangle(0, 1, 0.1, 1, 0.6, 0)
-shape += triangle(0.6, 0, 0.5, 0, 0, 1)
-shape.width = 0.6
-_glyphs['N'] = shape
-
-
-shape = circle(0.275, 0.275, 0.275)
-shape -= circle(0.275, 0.275, 0.175)
-shape &= rectangle(0, 0.55, 0.325, 0.55)
-shape += rectangle(0, 0.1, 0, 0.55)
-shape += rectangle(0.45, 0.55, 0, 0.325)
-shape.width = 0.55
-_glyphs['n'] = shape
-
-
-shape = circle(0.3, 0.7, 0.3) - circle(0.3, 0.7, 0.2)
-shape += circle(0.3, 0.3, 0.3) - circle(0.3, 0.3, 0.2)
-shape -= rectangle(0, 0.6, 0.3, 0.7)
-shape += rectangle(0, 0.1, 0.3, 0.7)
-shape += rectangle(0.5, 0.6, 0.3, 0.7)
-shape.width = 0.6
-_glyphs['O'] = shape
-
-
-shape = circle(0.275, 0.275, 0.275)
-shape -= circle(0.275, 0.275, 0.175)
-shape.width = 0.55
-_glyphs['o'] = shape
-
-
-shape = circle(0.3, 0.725, 0.275)
-shape -= circle(0.3, 0.725, 0.175)
-shape &= rectangle(0.3, 1, 0, 1)
-shape += rectangle(0, 0.1, 0, 1)
-shape += rectangle(0.1, 0.3, 0.45, 0.55)
-shape += rectangle(0.1, 0.3, 0.9, 1)
-shape.width = 0.575
-_glyphs['P'] = shape
-
-
-shape = circle(0.275, 0.275, 0.275)
-shape -= circle(0.275, 0.275, 0.175)
-shape += rectangle(0, 0.1, -0.375, 0.55)
-shape.width = 0.55
-_glyphs['p'] = shape
-
-
-shape = circle(0.3, 0.7, 0.3) - circle(0.3, 0.7, 0.2)
-shape += circle(0.3, 0.3, 0.3) - circle(0.3, 0.3, 0.2)
-shape -= rectangle(0, 0.6, 0.3, 0.7)
-shape += rectangle(0, 0.1, 0.3, 0.7)
-shape += rectangle(0.5, 0.6, 0.3, 0.7)
-shape += triangle(0.5, 0.1, 0.6, 0.1, 0.6, 0)
-shape += triangle(0.5, 0.1, 0.5, 0.3, 0.6, 0.1)
-shape.width = 0.6
-_glyphs['Q'] = shape
-
-
-shape = circle(0.275, 0.275, 0.275) - circle(0.275, 0.275, 0.175)
-shape += rectangle(0.45, 0.55, -0.375, 0.55)
-shape.width = 0.55
-_glyphs['q'] = shape
-
-
-shape = circle(0.3, 0.725, 0.275)
-shape -= circle(0.3, 0.725, 0.175)
-shape &= rectangle(0.3, 1, 0, 1)
-shape += rectangle(0, 0.1, 0, 1)
-shape += rectangle(0.1, 0.3, 0.45, 0.55)
-shape += rectangle(0.1, 0.3, 0.9, 1)
-shape += triangle(0.3, 0.5, 0.4, 0.5, 0.575, 0)
-shape += triangle(0.475, 0.0, 0.3, 0.5, 0.575, 0)
-shape.width = 0.575
-_glyphs['R'] = shape
-
-
-shape = circle(0.55, 0, 0.55) - scale_x(circle(0.55, 0, 0.45), 0.55, 0.8)
-shape &= rectangle(0, 0.55, 0, 0.55)
-shape = scale_x(shape, 0, 0.7)
-shape += rectangle(0, 0.1, 0, 0.55)
-shape.width = 0.385
-_glyphs['r'] = shape
-
-
-shape = circle(0.275, 0.725, 0.275)
-shape -= circle(0.275, 0.725, 0.175)
-shape -= rectangle(0.275, 0.55, 0.45, 0.725)
-shape += reflect_x(reflect_y(shape, 0.5), .275)
-shape.width = 0.55
-_glyphs['S'] = shape
-
-
-shape = circle(0.1625, 0.1625, 0.1625)
-shape -= scale_x(circle(0.165, 0.165, 0.0625), 0.165, 1.5)
-shape -= rectangle(0, 0.1625, 0.1625, 0.325)
-shape += reflect_x(reflect_y(shape, 0.275), 0.1625)
-shape = scale_x(shape, 0, 1.5)
-shape.width = 0.4875
-_glyphs['s'] = shape
-
-
-shape = rectangle(0, 0.6, 0.9, 1) + rectangle(0.25, 0.35, 0, 0.9)
-shape.width = 0.6
-_glyphs['T'] = shape
-
-
-shape = circle(0.4, 0.25, 0.25) - circle(0.4, 0.25, 0.15)
-shape &= rectangle(0, 0.4, 0, 0.25)
-shape += rectangle(0, 0.4, 0.55, 0.65)
-shape += rectangle(0.15, 0.25, 0.25, 1)
-shape.width = 0.4
-_glyphs['t'] = shape
-
-
-shape = circle(0.3, 0.3, 0.3) - circle(0.3, 0.3, 0.2)
-shape &= rectangle(0, 0.6, 0, 0.3)
-shape += rectangle(0, 0.1, 0.3, 1)
-shape += rectangle(0.5, 0.6, 0.3, 1)
-shape.width = 0.6
-_glyphs['U'] = shape
-
-
-shape = circle(0.275, 0.275, 0.275) - circle(0.275, 0.275, 0.175)
-shape &= rectangle(0, 0.55, 0, 0.275)
-shape += rectangle(0, 0.1, 0.275, 0.55)
-shape += rectangle(0.45, 0.55, 0, 0.55)
-shape.width = 0.55
-_glyphs['u'] = shape
-
-
-shape = triangle(0, 1, 0.1, 1, 0.35, 0)
-shape += triangle(0.35, 0, 0.25, 0, 0, 1)
-shape += reflect_x(shape, 0.3)
-shape.width = 0.6
-_glyphs['V'] = shape
-
-
-shape = triangle(0, 0.55, 0.1, 0.55, 0.35, 0)
-shape += triangle(0.35, 0, 0.25, 0, 0, 0.55)
-shape += reflect_x(shape, 0.3)
-shape.width = 0.6
-_glyphs['v'] = shape
-
-
-shape = triangle(0, 1, 0.1, 1, 0.25, 0)
-shape += triangle(0.25, 0, 0.15, 0, 0, 1)
-shape += triangle(0.15, 0, 0.35, 1, 0.45, 1)
-shape += triangle(0.45, 1, 0.25, 0, 0.15, 0)
-shape += reflect_x(shape, 0.4)
-shape.width = 0.8
-_glyphs['W'] = shape
-
-
-shape = triangle(0, 0.55, 0.1, 0.55, 0.25, 0)
-shape += triangle(0.25, 0, 0.15, 0, 0, 0.55)
-shape += triangle(0.15, 0, 0.35, 0.5, 0.45, 0.5)
-shape += triangle(0.45, 0.5, 0.25, 0, 0.15, 0)
-shape += reflect_x(shape, 0.4)
-shape.width = 0.8
-_glyphs['w'] = shape
-
-
-shape = triangle(0, 1, 0.125, 1, 0.8, 0)
-shape += triangle(0.8, 0, 0.675, 0, 0, 1)
-shape += reflect_x(shape, 0.4)
-shape.width = 0.8
-_glyphs['X'] = shape
-
-
-shape = triangle(0, 0.55, 0.125, 0.55, 0.55, 0)
-shape += triangle(0.55, 0, 0.425, 0, 0, 0.55)
-shape += reflect_x(shape, 0.275)
-shape.width = 0.55
-_glyphs['x'] = shape
-
-
-shape = triangle(0, 1, 0.1, 1, 0.45, 0.5)
-shape += triangle(0.45, 0.5, 0.35, 0.5, 0, 1)
-shape += reflect_x(shape, 0.4)
-shape += rectangle(0.35, 0.45, 0, 0.5)
-shape.width = 0.8
-_glyphs['Y'] = shape
-
-
-shape = triangle(0, 0.55, 0.1, 0.55, 0.325, 0)
-shape += triangle(0.325, 0, 0.225, 0, 0, 0.55)
-shape += reflect_x(shape, 0.275) + move(reflect_x(shape, 0.275), -0.225, -0.55)
-shape &= rectangle(0, 0.55, -0.375, 0.55)
-shape.width = 0.55
-_glyphs['y'] = shape
-
-
-shape = rectangle(0, 0.6, 0, 1)
-shape -= triangle(0, 0.1, 0, 0.9, 0.45, 0.9)
-shape -= triangle(0.6, 0.1, 0.15, 0.1, 0.6, 0.9)
-shape.width = 0.6
-_glyphs['Z'] = shape
-
-
-shape = rectangle(0, 0.6, 0, 0.55)
-shape -= triangle(0, 0.1, 0, 0.45, 0.45, 0.45)
-shape -= triangle(0.6, 0.1, 0.15, 0.1, 0.6, 0.45)
-shape.width = 0.6
-_glyphs['z'] = shape
-
-
-shape = MathTree.Constant(1)
-shape.bounds = [0,0,0,0,None,None,None]
-shape.shape = True
-shape.width = 0.55
-shape.xmin, shape.xmax = 0, 0.55
-shape.ymin, shape.ymax = 0, 1
-_glyphs[' '] = shape
-
-
-shape = circle(0.075, 0.075, 0.075)
-shape = scale_y(shape, 0.075, 3)
-shape &= rectangle(0.0, 0.15, -0.15, 0.075)
-shape -= triangle(0.075, 0.075, 0.0, -0.15, -0.5, 0.075)
-shape += circle(0.1, 0.075, 0.075)
-shape.width = 0.175
-_glyphs[','] = shape
-
-
-shape = circle(0.075, 0.075, 0.075)
-shape.width = 0.15
-_glyphs['.'] = shape
-
-
-shape = rectangle(0, 0.1, 0.55, 0.8)
-shape.width = 0.1
-_glyphs["'"] = shape
-
-shape = rectangle(0, 0.1, 0.55, 0.8) + rectangle(0.2, 0.3, 0.55, 0.8)
-shape.width = 0.3
-_glyphs['"'] = shape
-
-
-shape = circle(0.075, 0.15, 0.075) + circle(0.075, 0.45, 0.075)
-shape.width = 0.15
-_glyphs[':'] = shape
-
-
-shape = circle(0.075, 0.15, 0.075)
-shape = scale_y(shape, 0.15, 3)
-shape &= rectangle(0.0, 0.15, -0.075, 0.15)
-shape -= triangle(0.075, 0.15, 0.0, -0.075, -0.5, 0.15)
-shape += circle(0.075, 0.45, 0.075)
-shape += circle(0.1, 0.15, 0.075)
-shape.width = 0.15
-_glyphs[';'] = shape
-
-
-shape = rectangle(0.025, 0.125, 0.3, 1)
-shape += circle(0.075, 0.075, 0.075)
-shape.width = 0.1
-_glyphs['!'] = shape
-
-
-shape = rectangle(0.05, 0.4, 0.35, 0.45)
-shape.width = 0.45
-_glyphs['-'] = shape
-
-
-shape = circle(0, 0.4, 0.6) - scale_x(circle(0, 0.4, 0.5), 0, 0.7)
-shape &= rectangle(0, 0.6, -0.2, 1)
-shape = scale_x(shape, 0, 1/2.)
-shape.width = 0.3
-_glyphs[')'] = shape
-
-
-shape = circle(0.6, 0.4, 0.6) - scale_x(circle(0.6, 0.4, 0.5), 0.6, 0.7)
-shape &= rectangle(0, 0.6, -0.2, 1)
-shape = scale_x(shape, 0, 1/2.)
-shape.width = 0.3
-_glyphs['('] = shape
-
-
-shape = rectangle(0, 0.3, 0, 1)
-shape -= circle(0, 1, 0.2)
-shape -= rectangle(0, 0.2, 0, 0.7)
-shape.width = 0.3
-_glyphs['1'] = shape
-
-
-shape = circle(0.275, .725, .275)
-shape -= circle(0.275, 0.725, 0.175)
-shape -= rectangle(0, 0.55, 0, 0.725)
-shape += rectangle(0, 0.55, 0, 0.1)
-shape += triangle(0, 0.1, 0.45, 0.775, 0.55, 0.725)
-shape += triangle(0, 0.1, 0.55, 0.725, 0.125, 0.1)
-shape.width = 0.55
-_glyphs['2'] = shape
-
-
-shape = circle(0.3, 0.725, 0.275)
-shape -= circle(0.3, 0.725, 0.175)
-shape += circle(0.3, 0.275, 0.275)
-shape -= circle(0.3, 0.275, 0.175)
-shape -= rectangle(0, 0.275, 0.275, 0.725)
-shape.width = 0.55
-_glyphs['3'] = shape
-
-
-shape = triangle(-0.10, 0.45, 0.4, 1, 0.4, 0.45)
-shape += rectangle(0.4, 0.5, 0, 1)
-shape -= triangle(0.4, 0.85, 0.4, 0.55, 0.1, 0.55)
-shape &= rectangle(0, 0.5, 0, 1)
-shape.width = 0.5
-_glyphs['4'] = shape
-
-
-shape = circle(0.325, 0.325, 0.325) - circle(0.325, 0.325, 0.225)
-shape -= rectangle(0, 0.325, 0.325, 0.65)
-shape += rectangle(0, 0.325, 0.55, 0.65)
-shape += rectangle(0, 0.1, 0.55, 1)
-shape += rectangle(0.1, 0.65, 0.9, 1)
-shape.width = 0.65
-_glyphs['5'] = shape
-
-
-shape = circle(0.275, 0.725, 0.275) - scale_y(circle(0.275, 0.725, 0.175), .725, 1.2)
-shape &= rectangle(0, 0.55, 0.725, 1)
-shape -= triangle(0.275, 0.925, 0.55, 0.9, 0.55, 0.725)
-shape = scale_y(shape, 1, 2)
-shape = scale_x(shape, 0, 1.1)
-shape -= rectangle(0.275, 0.65, 0., 0.7)
-shape += rectangle(0, 0.1, 0.275, 0.45)
-shape += circle(0.275, 0.275, 0.275) - circle(0.275, 0.275, 0.175)
-shape.width = 0.55
-_glyphs['6'] = shape
-
-
-shape = rectangle(0, 0.6, 0.9, 1)
-shape += triangle(0, 0, 0.475, 0.9, 0.6, 0.9)
-shape += triangle(0, 0, 0.6, 0.9, 0.125, 0)
-shape.width = 0.6
-_glyphs['7'] = shape
-
-
-shape = circle(0.3, 0.725, 0.275)
-shape -= circle(0.3, 0.725, 0.175)
-shape += circle(0.3, 0.275, 0.275)
-shape -= circle(0.3, 0.275, 0.175)
-shape.width = 0.55
-_glyphs['8'] = shape
-
-
-shape = reflect_x(reflect_y(_glyphs['6'], 0.5), _glyphs['6'].width/2)
-shape.width = _glyphs['6'].width
-_glyphs['9'] = shape
-
-
-shape = circle(0.5, 0.5, 0.5) - scale_x(circle(0.5, 0.5, 0.4), 0.5, 0.7**0.5)
-shape = scale_x(shape, 0, 0.7)
-shape.width = 0.7
-_glyphs['0'] = shape
-
-
-shape = rectangle(0., 0.5, 0.45, 0.55)
-shape += rectangle(0.2, 0.3, 0.25, 0.75)
-shape.width = 0.55
-_glyphs['+'] = shape
-
-
-shape = triangle(0, 0, 0.425, 1, 0.55, 1)
-shape += triangle(0, 0, 0.55, 1, 0.125, 0)
-shape.width = 0.55
-_glyphs['/'] = shape
-
-
-shape = circle(0.275, 0.725, 0.275) - circle(0.275, 0.725, 0.175)
-shape -= rectangle(0, 0.275, 0.45, 0.725)
-shape += rectangle(0.225, 0.325, 0.3, 0.55)
-shape += circle(0.275, 0.075, 0.075)
-shape.width = 0.55
-_glyphs['?'] = shape
-
-del shape
+"""Tool-aware 5x7 dot-matrix text and pixel-art geometry.
+
+``horizontal_spacing`` and ``vertical_spacing`` count empty matrix columns
+and rows between character cells.  Their normal defaults are one; zero joins
+cells directly into a continuous matrix.  ``dot_spacing`` is separate: it is
+the edge-to-edge clearance between neighboring dots inside that matrix.
+
+All physical values use the current model's units.  A label made with a
+0.8 mm cutter should therefore use ``dot_diameter=0.8`` in a millimetre model.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from functools import reduce
+import operator
+import warnings
+
+from koko.lib.dotfont import (
+    GLYPH_HEIGHT,
+    GLYPH_WIDTH,
+    GLYPHS_5X7,
+    IBM_CP850_CHARACTERS,
+    JIS_X0201_KATAKANA,
+    expand_character,
+    glyph,
+)
+from koko.lib.shapes2d import circle
+
+
+@dataclass(frozen=True)
+class DotLayout:
+    """Physical dot centers and the complete matrix-cell bounds."""
+
+    points: tuple[tuple[float, float], ...]
+    bounds: tuple[float, float, float, float] | None
+    columns: int
+    rows: int
+
+
+def _positive_number(name: str, value: float) -> float:
+    try:
+        number = float(value)
+    except (TypeError, ValueError) as error:
+        raise TypeError(f"{name} must be a number") from error
+    if number <= 0:
+        raise ValueError(f"{name} must be greater than zero")
+    return number
+
+
+def _nonnegative_number(name: str, value: float) -> float:
+    try:
+        number = float(value)
+    except (TypeError, ValueError) as error:
+        raise TypeError(f"{name} must be a number") from error
+    if number < 0:
+        raise ValueError(f"{name} must be zero or greater")
+    return number
+
+
+def _matrix_spacing(name: str, value: int) -> int:
+    if isinstance(value, bool) or not isinstance(value, int):
+        raise TypeError(f"{name} must be an integer number of matrix cells")
+    if value < 0:
+        raise ValueError(f"{name} must be zero or greater")
+    return value
+
+
+def _alignment(align: str) -> str:
+    normalized = align.upper()
+    if len(normalized) != 2 or normalized[0] not in "LCR" or normalized[1] not in "TCB":
+        raise ValueError("align must combine L, C, or R with T, C, or B")
+    return normalized
+
+
+def _anchored_bounds(
+    columns: int,
+    rows: int,
+    pitch: float,
+    radius: float,
+    x: float,
+    y: float,
+    align: str,
+) -> tuple[tuple[float, float, float, float] | None, float, float]:
+    if columns <= 0 or rows <= 0:
+        return None, 0.0, 0.0
+
+    width = (columns - 1) * pitch + radius * 2
+    height = (rows - 1) * pitch + radius * 2
+    if align[0] == "L":
+        offset_x = x + radius
+    elif align[0] == "C":
+        offset_x = x - width / 2 + radius
+    else:
+        offset_x = x - width + radius
+
+    if align[1] == "T":
+        offset_y = y - radius
+    elif align[1] == "C":
+        offset_y = y + height / 2 - radius
+    else:
+        offset_y = y + height - radius
+
+    bounds = (
+        offset_x - radius,
+        offset_x + (columns - 1) * pitch + radius,
+        offset_y - (rows - 1) * pitch - radius,
+        offset_y + radius,
+    )
+    return bounds, offset_x, offset_y
+
+
+def _expanded_line(value: str, missing: str) -> list[str]:
+    cells: list[str] = []
+    for character in value:
+        expanded = expand_character(character)
+        if all(glyph(cell) is not None for cell in expanded):
+            cells.extend(expanded)
+            continue
+        warnings.warn(
+            f"Unknown 5x7 character U+{ord(character):04X}; using {missing!r}",
+            stacklevel=3,
+        )
+        cells.append(missing)
+    return cells
+
+
+def layout_text(
+    value: str,
+    x: float = 0,
+    y: float = 0,
+    *,
+    dot_diameter: float = 0.1,
+    dot_spacing: float = 0.05,
+    horizontal_spacing: int = 1,
+    vertical_spacing: int = 1,
+    align: str = "CC",
+    missing: str = "?",
+) -> DotLayout:
+    """Lay out Unicode text as physical dot centers without making geometry."""
+
+    if not isinstance(value, str):
+        raise TypeError("value must be a string")
+    if len(missing) != 1 or glyph(missing) is None:
+        raise ValueError("missing must be one character available in the 5x7 map")
+    diameter = _positive_number("dot_diameter", dot_diameter)
+    clearance = _nonnegative_number("dot_spacing", dot_spacing)
+    horizontal = _matrix_spacing("horizontal_spacing", horizontal_spacing)
+    vertical = _matrix_spacing("vertical_spacing", vertical_spacing)
+    normalized_align = _alignment(align)
+    pitch = diameter + clearance
+    radius = diameter / 2
+
+    source_lines = value.split("\n")
+    lines = [_expanded_line(line, missing) for line in source_lines]
+    line_columns = [
+        len(line) * GLYPH_WIDTH + max(0, len(line) - 1) * horizontal for line in lines
+    ]
+    columns = max(line_columns, default=0)
+    rows = len(lines) * GLYPH_HEIGHT + max(0, len(lines) - 1) * vertical if value else 0
+    bounds, origin_x, origin_y = _anchored_bounds(
+        columns, rows, pitch, radius, float(x), float(y), normalized_align
+    )
+
+    points: list[tuple[float, float]] = []
+    for line_index, (line, occupied_columns) in enumerate(zip(lines, line_columns)):
+        if normalized_align[0] == "L":
+            line_offset = 0.0
+        elif normalized_align[0] == "C":
+            line_offset = (columns - occupied_columns) * pitch / 2
+        else:
+            line_offset = (columns - occupied_columns) * pitch
+        line_row = line_index * (GLYPH_HEIGHT + vertical)
+        for cell_index, character in enumerate(line):
+            matrix = glyph(character)
+            assert matrix is not None
+            cell_column = cell_index * (GLYPH_WIDTH + horizontal)
+            for row_index, row in enumerate(matrix):
+                for column_index, pixel in enumerate(row):
+                    if pixel == "1":
+                        points.append(
+                            (
+                                origin_x + line_offset + (cell_column + column_index) * pitch,
+                                origin_y - (line_row + row_index) * pitch,
+                            )
+                        )
+
+    return DotLayout(tuple(points), bounds, columns, rows)
+
+
+def text_points(*args, **kwargs) -> tuple[tuple[float, float], ...]:
+    """Return the physical center of every dot in a label."""
+
+    return layout_text(*args, **kwargs).points
+
+
+def _matrix_rows(matrix) -> tuple[str, ...]:
+    try:
+        rows = tuple(str(row) for row in matrix)
+    except TypeError as error:
+        raise TypeError("matrix must be an iterable of binary strings") from error
+    if not rows:
+        return ()
+    width = len(rows[0])
+    if width == 0 or any(len(row) != width or set(row) - {"0", "1"} for row in rows):
+        raise ValueError("matrix rows must be equally sized strings containing only 0 and 1")
+    return rows
+
+
+def layout_pattern(
+    matrix,
+    x: float = 0,
+    y: float = 0,
+    *,
+    dot_diameter: float = 0.1,
+    dot_spacing: float = 0.05,
+    align: str = "CC",
+) -> DotLayout:
+    """Lay out an arbitrary binary matrix for pixel art or fabrication."""
+
+    matrix = _matrix_rows(matrix)
+    diameter = _positive_number("dot_diameter", dot_diameter)
+    clearance = _nonnegative_number("dot_spacing", dot_spacing)
+    normalized_align = _alignment(align)
+    pitch = diameter + clearance
+    radius = diameter / 2
+    rows = len(matrix)
+    columns = len(matrix[0]) if matrix else 0
+    bounds, origin_x, origin_y = _anchored_bounds(
+        columns, rows, pitch, radius, float(x), float(y), normalized_align
+    )
+    points = tuple(
+        (origin_x + column * pitch, origin_y - row * pitch)
+        for row, encoded in enumerate(matrix)
+        for column, pixel in enumerate(encoded)
+        if pixel == "1"
+    )
+    return DotLayout(points, bounds, columns, rows)
+
+
+def pattern_points(*args, **kwargs) -> tuple[tuple[float, float], ...]:
+    """Return the physical center of every dot in an arbitrary matrix."""
+
+    return layout_pattern(*args, **kwargs).points
+
+
+def _geometry(layout: DotLayout, dot_diameter: float):
+    if not layout.points:
+        return None
+    radius = float(dot_diameter) / 2
+    shape = reduce(operator.add, (circle(x, y, radius) for x, y in layout.points))
+    if layout.bounds is not None:
+        shape.xmin, shape.xmax, shape.ymin, shape.ymax = layout.bounds
+    return shape
+
+
+def text(
+    value: str,
+    x: float = 0,
+    y: float = 0,
+    *,
+    dot_diameter: float = 0.1,
+    dot_spacing: float = 0.05,
+    horizontal_spacing: int = 1,
+    vertical_spacing: int = 1,
+    align: str = "CC",
+    missing: str = "?",
+):
+    """Create circular MathTree geometry for a Unicode dot-matrix label."""
+
+    layout = layout_text(
+        value,
+        x,
+        y,
+        dot_diameter=dot_diameter,
+        dot_spacing=dot_spacing,
+        horizontal_spacing=horizontal_spacing,
+        vertical_spacing=vertical_spacing,
+        align=align,
+        missing=missing,
+    )
+    return _geometry(layout, dot_diameter)
+
+
+def pattern(
+    matrix,
+    x: float = 0,
+    y: float = 0,
+    *,
+    dot_diameter: float = 0.1,
+    dot_spacing: float = 0.05,
+    align: str = "CC",
+):
+    """Create circular MathTree geometry from an arbitrary binary matrix."""
+
+    layout = layout_pattern(
+        matrix,
+        x,
+        y,
+        dot_diameter=dot_diameter,
+        dot_spacing=dot_spacing,
+        align=align,
+    )
+    return _geometry(layout, dot_diameter)
+
+
+label = text
+dot_text = text
+dot_pattern = pattern
+pixels = pattern
+
+
+__all__ = [
+    "DotLayout",
+    "GLYPHS_5X7",
+    "IBM_CP850_CHARACTERS",
+    "JIS_X0201_KATAKANA",
+    "dot_pattern",
+    "dot_text",
+    "label",
+    "layout_pattern",
+    "layout_text",
+    "pattern",
+    "pattern_points",
+    "pixels",
+    "text",
+    "text_points",
+]

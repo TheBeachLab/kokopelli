@@ -1,0 +1,55 @@
+##    Geometry header    ##
+[(koko.prims.utils.Slider, {'name': 'bit_diameter', 'min': '0.3', 'max': '1.2', 'value': '0.7', 'y': '14', 'x': '-32', 'size': '10'}),(koko.prims.utils.Slider, {'name': 'dot_gap', 'min': '0', 'max': '0.6', 'value': '0.2', 'y': '11', 'x': '-32', 'size': '10'}),(koko.prims.utils.Slider, {'name': 'horizontal_gap', 'min': '0', 'max': '3', 'value': '1', 'y': '8', 'x': '-32', 'size': '10'}),(koko.prims.utils.Slider, {'name': 'vertical_gap', 'min': '0', 'max': '3', 'value': '1', 'y': '5', 'x': '-32', 'size': '10'})]
+##    End of geometry header    ##
+"""
+examples/dottext.ko
+
+Tool-aware 5x7 labels and arbitrary pixel art.  The first two sliders set
+the physical dot diameter and edge-to-edge clearance.  The other sliders
+set blank matrix columns and rows between characters; set both to zero to
+join the character cells into one continuous matrix.
+"""
+
+from koko.lib.dottext import pattern, text
+
+
+diameter = bit_diameter.value
+clearance = dot_gap.value
+horizontal = int(round(horizontal_gap.value))
+vertical = int(round(vertical_gap.value))
+
+label = text(
+    "KOKOPELLI\nÄÖÜ · ÇÉÑ\nココペリ · こんにちは",
+    0,
+    14,
+    dot_diameter=diameter,
+    dot_spacing=clearance,
+    horizontal_spacing=horizontal,
+    vertical_spacing=vertical,
+    align="CT",
+)
+
+kokopelli = pattern(
+    (
+        "00000100000",
+        "00001110000",
+        "00111111100",
+        "01101110110",
+        "00001110000",
+        "00011111000",
+        "00110101100",
+        "01100100110",
+        "01000100010",
+        "00001010000",
+        "00010001000",
+    ),
+    0,
+    -12,
+    dot_diameter=diameter,
+    dot_spacing=clearance,
+    align="CT",
+)
+
+cad.mm_per_unit = 1
+cad.border = 0.1
+cad.shapes = [label, kokopelli]

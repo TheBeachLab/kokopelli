@@ -16,13 +16,14 @@ The following capabilities are verified in the current checkout:
 - reproducible dependencies through `pyproject.toml` and `uv.lock`;
 - native `libfab` compilation with current CMake and Apple Clang;
 - the wxPython Phoenix editor and 2D canvas;
-- all 15 bundled `.ko` examples, including interactive points and sliders;
+- all 16 bundled `.ko` examples, including interactive points and sliders;
+- tool-aware 5×7 labels and arbitrary binary pixel art;
 - 16-bit heightmap PNG, multicolor PNG, and physically sized SVG export; and
-- 21 automated tests covering the native geometry boundary, exports, and
+- automated tests covering the native geometry boundary, exports, and
   bundled examples.
 
-The mandala, living-hinge, box, gear, and other examples now evaluate in Python
-3. The complete evidence and staged roadmap are maintained in
+The mandala, living-hinge, box, gear, dot-matrix label, and other examples now
+evaluate in Python 3. The complete evidence and staged roadmap are maintained in
 [`REVIVAL.md`](REVIVAL.md).
 
 3D rendering, STL/ASDF workflows, CAM machine output, cross-platform builds, and
@@ -79,9 +80,10 @@ Run the full automated suite:
 make test
 ```
 
-At the time of this README update, the integrated suite reports 21 passing
+At the time of this README update, the integrated suite reports 37 passing
 tests. Three export tests verify decoded image/vector content rather than merely
-checking that files were created.
+checking that files were created; fifteen tests exercise glyph coverage,
+physical spacing, Unicode expansion, pixel art, and MathTree generation.
 
 ## Writing a design
 
@@ -102,6 +104,61 @@ cad.shapes = [ring]
 The bundled [`examples`](examples) directory contains 2D and 3D models,
 parameterized designs, text, PCB layouts, and mechanical assemblies. Start with
 `mandala.ko`, `gear.ko`, or `box.ko` to see the script-and-canvas workflow.
+
+## Tool-aware dot-matrix labels
+
+`koko.lib.dottext` constructs labels from physical dots rather than external
+font outlines. The dot diameter can match a milling cutter, while dot clearance
+and character spacing remain independent:
+
+```python
+from koko.lib.dottext import text
+
+label = text(
+    "KOKOPELLI\nÄÖÜ · ココペリ",
+    dot_diameter=0.8,
+    dot_spacing=0.25,
+    horizontal_spacing=1,
+    vertical_spacing=1,
+)
+
+cad.mm_per_unit = 1
+cad.shapes = [label]
+```
+
+Horizontal and vertical character spacing count empty matrix columns and rows.
+Their conventional default is one; setting either value to zero places 5×7
+cells directly beside one another, allowing continuous double-width or
+double-height patterns.
+
+The map covers the printable IBM-850 multilingual Latin-1 repertoire, common
+European Latin Extended-A letters, JIS X 0201 half-width katakana, full-width
+katakana input, and a compact hiragana set. A 5×7 cell is not sufficient for
+general kanji. IBM identifies CP850 as
+its Latin-1 multinational PC page and JIS X 0201 separately as Japanese CCSID
+897 ([IBM encoding table](https://www.ibm.com/docs/en/i/7.5.0?topic=encodings-fileencoding-values-i-ccsid)).
+The historical ASCII/katakana forms follow the public-domain
+[HD44780A00 character table](https://commons.wikimedia.org/wiki/File:Charset.gif).
+
+Arbitrary binary matrices use the same physical controls:
+
+```python
+from koko.lib.dottext import pattern
+
+art = pattern(
+    (
+        "00100",
+        "01110",
+        "11111",
+        "01010",
+    ),
+    dot_diameter=1.0,
+    dot_spacing=0.3,
+)
+```
+
+Open `examples/dottext.ko` to adjust cutter diameter, dot clearance, horizontal
+spacing, and vertical spacing with interactive sliders.
 
 ## Security warning
 
@@ -125,8 +182,9 @@ Anything.” It combines a Python design environment with the native `libfab`
 geometry engine and a modular fabrication workflow.
 
 This fork also contains PCB-library work derived from additions by Sam Calisch.
-The PCB merge and the repository's unfinished dot-matrix-font and free-cutout
-ideas remain roadmap items rather than completed features.
+The first fabrication-oriented dot-matrix font stage is now implemented. The
+PCB merge, V-bit variable-depth halftones, and free-cutout ideas remain roadmap
+items rather than completed features.
 
 ## Copyright
 
@@ -136,3 +194,5 @@ ideas remain roadmap items rather than completed features.
 - © 2018–2026 Francisco Sanchez
 
 See [`LICENSE.md`](LICENSE.md) for the repository's license text.
+Third-party attributions for adapted glyph data are preserved in
+[`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
