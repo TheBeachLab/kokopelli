@@ -17,6 +17,8 @@ The following capabilities are verified in the current checkout:
 - native `libfab` compilation with current CMake and Apple Clang;
 - the wxPython Phoenix editor and 2D canvas;
 - a self-contained Apple Silicon `Kokopelli.app` bundle for macOS;
+- Developer ID signing, Apple notarization, ticket stapling, and Gatekeeper
+  validation for public macOS distribution;
 - all 16 bundled `.ko` examples, including interactive points and sliders;
 - tool-aware 5×7 labels and arbitrary binary pixel art;
 - 16-bit heightmap PNG, multicolor PNG, and physically sized SVG export; and
@@ -27,9 +29,9 @@ The mandala, living-hinge, box, gear, dot-matrix label, and other examples now
 evaluate in Python 3. The complete evidence and staged roadmap are maintained in
 [`REVIVAL.md`](REVIVAL.md).
 
-3D rendering, STL/ASDF workflows, CAM machine output, cross-platform builds, and
-notarized public distribution still require direct validation. Their presence in
-the source tree should not yet be interpreted as a claim that they work.
+3D rendering, STL/ASDF workflows, CAM machine output, and cross-platform builds
+still require direct validation. Their presence in the source tree should not
+yet be interpreted as a claim that they work.
 
 ## Quick start on macOS
 
@@ -88,11 +90,11 @@ make app-check
 ```
 
 [PyInstaller builds for the selected macOS target architecture](https://pyinstaller.org/en/stable/usage.html#cmdoption-target-architecture).
-The current bundle has been verified on Apple Silicon (`arm64`). Public
-downloads without Gatekeeper warnings additionally require an
+The current bundle and distributable ZIP have been verified on Apple Silicon
+(`arm64`). Release builds use an
 [Apple Developer ID certificate](https://developer.apple.com/help/account/certificates/create-developer-id-certificates)
-and [notarization](https://developer.apple.com/documentation/security/notarizing-macos-software-before-distribution);
-those credentials are intentionally not needed for local builds.
+and [notarization](https://developer.apple.com/documentation/security/notarizing-macos-software-before-distribution),
+while local builds intentionally require neither credential.
 
 For public distribution, first store reusable notary credentials in the local
 macOS Keychain. The profile can be used by multiple app build workflows for the
@@ -116,7 +118,9 @@ make app-notarize \
 `util/app/notarize_app.py` is not Kokopelli-specific: it accepts any correctly
 signed `.app`, verifies Developer ID and Hardened Runtime, submits it to Apple,
 staples and validates the ticket, checks Gatekeeper acceptance, and creates the
-final ZIP archive.
+final ZIP archive. The complete Kokopelli workflow has been exercised through
+an accepted Apple notarization submission and validation of the app after
+extracting the resulting ZIP.
 
 ## Verification
 
@@ -132,10 +136,12 @@ Run the full automated suite:
 make test
 ```
 
-At the time of this README update, the integrated suite reports 38 passing
+At the time of this README update, the integrated suite reports 39 passing
 tests. Three export tests verify decoded image/vector content rather than merely
 checking that files were created; fifteen tests exercise glyph coverage,
-physical spacing, Unicode expansion, pixel art, and MathTree generation.
+physical spacing, Unicode expansion, pixel art, and MathTree generation. The
+release-tooling checks also exercise the application and notarization command
+line interfaces.
 
 ## Writing a design
 
