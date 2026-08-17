@@ -2,6 +2,7 @@ from pathlib import Path
 import subprocess
 import sys
 
+from PIL import Image
 import pytest
 
 import koko
@@ -77,3 +78,27 @@ def test_notarization_tool_help():
 
     assert "Developer ID-signed macOS application" in result.stdout
     assert "--verify-only" in result.stdout
+
+
+def test_dmg_tool_help():
+    result = subprocess.run(
+        [sys.executable, str(ROOT / "util" / "app" / "make_dmg.py"), "--help"],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    assert "drag-to-Applications DMG" in result.stdout
+    assert "--profile" in result.stdout
+
+
+def test_dmg_background_contains_install_arrow(tmp_path):
+    from util.app.make_dmg import BACKGROUND_SIZE, create_background
+
+    background = tmp_path / "background.png"
+    create_background(background, "Kokopelli")
+
+    with Image.open(background) as image:
+        assert image.size == BACKGROUND_SIZE
+        assert image.getpixel((330, 215)) == (38, 118, 255)
+        assert image.getpixel((440, 215)) == (38, 118, 255)

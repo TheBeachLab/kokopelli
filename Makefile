@@ -1,5 +1,6 @@
-.PHONY: all app app-check app-notarize app-signed build install sync check test clean
+.PHONY: all app app-check app-notarize app-signed build dmg dmg-notarize install sync check test clean
 
+RELEASE_DMG ?= dist/Kokopelli-0.3.0-macOS-arm64.dmg
 RELEASE_ZIP ?= dist/Kokopelli-0.3.0-macOS-arm64.zip
 
 all: build
@@ -24,6 +25,13 @@ app-signed: sync build
 app-notarize: app-signed
 	@test -n "$(NOTARY_PROFILE)" || (echo "Set NOTARY_PROFILE to a notarytool Keychain profile" >&2; exit 2)
 	uv run python util/app/notarize_app.py dist/Kokopelli.app --profile "$(NOTARY_PROFILE)" --output "$(RELEASE_ZIP)" --force
+
+dmg: app
+	uv run python util/app/make_dmg.py dist/Kokopelli.app --output "$(RELEASE_DMG)" --volume-name "Kokopelli 0.3.0" --force
+
+dmg-notarize: app-signed
+	@test -n "$(NOTARY_PROFILE)" || (echo "Set NOTARY_PROFILE to a notarytool Keychain profile" >&2; exit 2)
+	uv run python util/app/make_dmg.py dist/Kokopelli.app --output "$(RELEASE_DMG)" --volume-name "Kokopelli 0.3.0" --identity "$(DEVELOPER_IDENTITY)" --profile "$(NOTARY_PROFILE)" --force
 
 sync:
 	uv sync --dev

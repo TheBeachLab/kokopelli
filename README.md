@@ -90,8 +90,8 @@ make app-check
 ```
 
 [PyInstaller builds for the selected macOS target architecture](https://pyinstaller.org/en/stable/usage.html#cmdoption-target-architecture).
-The current bundle and distributable ZIP have been verified on Apple Silicon
-(`arm64`). Release builds use an
+The current bundle, distributable ZIP, and drag-to-Applications DMG workflow
+have been verified on Apple Silicon (`arm64`). Release builds use an
 [Apple Developer ID certificate](https://developer.apple.com/help/account/certificates/create-developer-id-certificates)
 and [notarization](https://developer.apple.com/documentation/security/notarizing-macos-software-before-distribution),
 while local builds intentionally require neither credential.
@@ -122,6 +122,26 @@ final ZIP archive. The complete Kokopelli workflow has been exercised through
 an accepted Apple notarization submission and validation of the app after
 extracting the resulting ZIP.
 
+For the familiar macOS installer window with an arrow from `Kokopelli.app` to
+`Applications`, build a local DMG with:
+
+```bash
+make dmg
+```
+
+Create the public Developer ID-signed and Apple-notarized DMG with:
+
+```bash
+make dmg-notarize \
+  DEVELOPER_IDENTITY="Developer ID Application: Your Name (TEAM_ID)" \
+  NOTARY_PROFILE="PROFILE_NAME"
+```
+
+This produces `dist/Kokopelli-0.3.0-macOS-arm64.dmg`. The generic
+`util/app/make_dmg.py` tool creates the background and arrow, positions the app
+and `/Applications` link in Finder, signs the disk image, submits the outermost
+DMG to Apple, staples its ticket, and validates the mounted contents.
+
 ## Verification
 
 Run the native build and dependency check:
@@ -136,7 +156,7 @@ Run the full automated suite:
 make test
 ```
 
-At the time of this README update, the integrated suite reports 39 passing
+At the time of this README update, the integrated suite reports 41 passing
 tests. Three export tests verify decoded image/vector content rather than merely
 checking that files were created; fifteen tests exercise glyph coverage,
 physical spacing, Unicode expansion, pixel art, and MathTree generation. The
