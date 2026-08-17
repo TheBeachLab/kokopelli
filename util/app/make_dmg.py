@@ -31,7 +31,24 @@ def parser() -> argparse.ArgumentParser:
     command.add_argument("--identity", help="Developer ID Application identity for the DMG")
     command.add_argument(
         "--profile",
-        help="notarytool credentials profile stored in the macOS Keychain",
+        default=os.environ.get("NOTARY_PROFILE"),
+        help="notarytool Keychain profile (or NOTARY_PROFILE)",
+    )
+    command.add_argument(
+        "--api-key",
+        type=Path,
+        default=os.environ.get("NOTARY_API_KEY"),
+        help="App Store Connect Team API private key .p8 (or NOTARY_API_KEY)",
+    )
+    command.add_argument(
+        "--api-key-id",
+        default=os.environ.get("NOTARY_API_KEY_ID"),
+        help="App Store Connect Team API key ID (or NOTARY_API_KEY_ID)",
+    )
+    command.add_argument(
+        "--api-issuer",
+        default=os.environ.get("NOTARY_API_ISSUER"),
+        help="App Store Connect API issuer UUID (or NOTARY_API_ISSUER)",
     )
     command.add_argument("--force", action="store_true", help="replace an existing DMG")
     return command
@@ -279,14 +296,29 @@ def sign_dmg(dmg: Path, identity: str) -> None:
     run("codesign", "--verify", "--verbose=2", dmg)
 
 
-def notarize_dmg(dmg: Path, profile: str) -> None:
+def notarization_authentication(args: argparse.Namespace) -> list[str] | None:
+    api_values = (args.api_key, args.api_key_id, args.api_issuer)
+    if args.profile and any(api_values):
+        raise SystemExit("Use either --profile or Team API key authentication, not both")
+    if any(api_values) and not all(api_values):
+        raise SystemExit("--api-key, --api-key-id, and --api-issuer must be provided together")
+    if args.profile:
+        return ["--keychain-profile", args.profile]
+    if all(api_values):
+        key = args.api_key.resolve()
+        if not key.is_file():
+            raise SystemExit(f"App Store Connect API key does not exist: {key}")
+        return ["--key", str(key), "--key-id", args.api_key_id, "--issuer", args.api_issuer]
+    return None
+
+
+def notarize_dmg(dmg: Path, authentication: list[str]) -> None:
     result = run(
         "xcrun",
         "notarytool",
         "submit",
         dmg,
-        "--keychain-profile",
-        profile,
+        *authentication,
         "--wait",
         "--output-format",
         "json",
@@ -298,7 +330,7 @@ def notarize_dmg(dmg: Path, profile: str) -> None:
     print(f"Apple submission {submission_id}: {status}")
     if status != "Accepted":
         if submission_id:
-            run("xcrun", "notarytool", "log", submission_id, "--keychain-profile", profile)
+            run("xcrun", "notarytool", "log", submission_id, *authentication)
         raise SystemExit(f"Apple notarization did not succeed: {status}")
 
     if submission_id:
@@ -307,8 +339,7 @@ def notarize_dmg(dmg: Path, profile: str) -> None:
             "notarytool",
             "log",
             submission_id,
-            "--keychain-profile",
-            profile,
+            *authentication,
             capture=True,
         )
         issues = json.loads(log.stdout).get("issues", [])
@@ -360,8 +391,9 @@ def main() -> int:
     app = args.app.resolve()
     if app.suffix != ".app" or not app.is_dir():
         raise SystemExit(f"Not an application bundle: {app}")
-    if args.profile and not args.identity:
-        raise SystemExit("--identity is required when --profile is used")
+    authentication = notarization_authentication(args)
+    if authentication and not args.identity:
+        raise SystemExit("--identity is required when notarization credentials are used")
 
     output = args.output.resolve() if args.output else app.with_name(f"{app.stem}-macOS.dmg")
     if output.suffix != ".dmg":
@@ -372,8 +404,8 @@ def main() -> int:
     create_dmg(app, output, volume_name, args.force)
     if args.identity:
         sign_dmg(output, args.identity)
-    if args.profile:
-        notarize_dmg(output, args.profile)
+    if authentication:
+        notarize_dmg(output, authentication)
     if args.identity:
         run("codesign", "--verify", "--verbose=2", output)
     validate_dmg(output, app.name)

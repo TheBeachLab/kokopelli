@@ -30,8 +30,8 @@ dmg: app
 	uv run python util/app/make_dmg.py dist/Kokopelli.app --output "$(RELEASE_DMG)" --volume-name "Kokopelli 0.3.0" --force
 
 dmg-notarize: app-signed
-	@test -n "$(NOTARY_PROFILE)" || (echo "Set NOTARY_PROFILE to a notarytool Keychain profile" >&2; exit 2)
-	uv run python util/app/make_dmg.py dist/Kokopelli.app --output "$(RELEASE_DMG)" --volume-name "Kokopelli 0.3.0" --identity "$(DEVELOPER_IDENTITY)" --profile "$(NOTARY_PROFILE)" --force
+	@test -n "$(NOTARY_PROFILE)" || { test -n "$(NOTARY_API_KEY)" && test -n "$(NOTARY_API_KEY_ID)" && test -n "$(NOTARY_API_ISSUER)"; } || (echo "Set NOTARY_PROFILE, or NOTARY_API_KEY + NOTARY_API_KEY_ID + NOTARY_API_ISSUER" >&2; exit 2)
+	NOTARY_PROFILE="$(NOTARY_PROFILE)" NOTARY_API_KEY="$(NOTARY_API_KEY)" NOTARY_API_KEY_ID="$(NOTARY_API_KEY_ID)" NOTARY_API_ISSUER="$(NOTARY_API_ISSUER)" uv run python util/app/make_dmg.py dist/Kokopelli.app --output "$(RELEASE_DMG)" --volume-name "Kokopelli 0.3.0" --identity "$(DEVELOPER_IDENTITY)" --force
 
 sync:
 	uv sync --dev

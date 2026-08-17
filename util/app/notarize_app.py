@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from pathlib import Path
 import platform
 import subprocess
@@ -20,7 +21,24 @@ def parser() -> argparse.ArgumentParser:
     command.add_argument("app", type=Path, help="path to the signed .app bundle")
     command.add_argument(
         "--profile",
-        help="notarytool credentials profile stored in the macOS Keychain",
+        default=os.environ.get("NOTARY_PROFILE"),
+        help="notarytool Keychain profile (or NOTARY_PROFILE)",
+    )
+    command.add_argument(
+        "--api-key",
+        type=Path,
+        default=os.environ.get("NOTARY_API_KEY"),
+        help="App Store Connect Team API private key .p8 (or NOTARY_API_KEY)",
+    )
+    command.add_argument(
+        "--api-key-id",
+        default=os.environ.get("NOTARY_API_KEY_ID"),
+        help="App Store Connect Team API key ID (or NOTARY_API_KEY_ID)",
+    )
+    command.add_argument(
+        "--api-issuer",
+        default=os.environ.get("NOTARY_API_ISSUER"),
+        help="App Store Connect API issuer UUID (or NOTARY_API_ISSUER)",
     )
     command.add_argument("--output", type=Path, help="final ZIP path; defaults beside the app")
     command.add_argument("--force", action="store_true", help="replace an existing output ZIP")
@@ -77,7 +95,23 @@ def archive(app: Path, target: Path) -> None:
     run("unzip", "-tq", target)
 
 
-def notarize(app: Path, profile: str, output: Path, force: bool) -> None:
+def notarization_authentication(args: argparse.Namespace) -> list[str] | None:
+    api_values = (args.api_key, args.api_key_id, args.api_issuer)
+    if args.profile and any(api_values):
+        raise SystemExit("Use either --profile or Team API key authentication, not both")
+    if any(api_values) and not all(api_values):
+        raise SystemExit("--api-key, --api-key-id, and --api-issuer must be provided together")
+    if args.profile:
+        return ["--keychain-profile", args.profile]
+    if all(api_values):
+        key = args.api_key.resolve()
+        if not key.is_file():
+            raise SystemExit(f"App Store Connect API key does not exist: {key}")
+        return ["--key", str(key), "--key-id", args.api_key_id, "--issuer", args.api_issuer]
+    return None
+
+
+def notarize(app: Path, authentication: list[str], output: Path, force: bool) -> None:
     if output.exists():
         if not force:
             raise SystemExit(f"Output already exists: {output}; pass --force to replace it")
@@ -92,8 +126,7 @@ def notarize(app: Path, profile: str, output: Path, force: bool) -> None:
             "notarytool",
             "submit",
             submission,
-            "--keychain-profile",
-            profile,
+            *authentication,
             "--wait",
             "--output-format",
             "json",
@@ -110,8 +143,7 @@ def notarize(app: Path, profile: str, output: Path, force: bool) -> None:
                     "notarytool",
                     "log",
                     submission_id,
-                    "--keychain-profile",
-                    profile,
+                    *authentication,
                 )
             raise SystemExit(f"Apple notarization did not succeed: {status}")
 
@@ -135,9 +167,10 @@ def main() -> int:
     if args.verify_only:
         print(f"Distribution signature verified: {app}")
         return 0
-    if not args.profile:
-        raise SystemExit("--profile is required unless --verify-only is used")
-    notarize(app, args.profile, output, args.force)
+    authentication = notarization_authentication(args)
+    if not authentication:
+        raise SystemExit("notarization credentials are required unless --verify-only is used")
+    notarize(app, authentication, output, args.force)
     print(f"Notarized application: {app}")
     print(f"Distributable archive: {output}")
     return 0

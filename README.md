@@ -106,6 +106,25 @@ xcrun notarytool store-credentials PROFILE_NAME \
   --team-id YOUR_TEAM_ID
 ```
 
+For unattended or remote builds, use an App Store Connect **Team API key**
+instead of a session-protected Keychain profile. Apple documents that
+individual API keys cannot authenticate `notarytool`; keep the downloaded
+`.p8` file outside the repository and readable only by its owner:
+
+```bash
+chmod 600 /secure/path/AuthKey_KEY_ID.p8
+
+make dmg-notarize \
+  DEVELOPER_IDENTITY="Developer ID Application: Your Name (TEAM_ID)" \
+  NOTARY_API_KEY="/secure/path/AuthKey_KEY_ID.p8" \
+  NOTARY_API_KEY_ID="KEY_ID" \
+  NOTARY_API_ISSUER="ISSUER_UUID"
+```
+
+See Apple's documentation for
+[creating and protecting Team API keys](https://developer.apple.com/documentation/appstoreconnectapi/creating-api-keys-for-app-store-connect-api)
+and [`notarytool` API-key authentication](https://developer.apple.com/documentation/technotes/tn3147-migrating-to-the-latest-notarization-tool).
+
 Then build Kokopelli with any `Developer ID Application` identity and pass the
 generic Keychain profile to the reusable notarization tool:
 

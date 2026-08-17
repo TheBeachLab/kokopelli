@@ -78,6 +78,7 @@ def test_notarization_tool_help():
 
     assert "Developer ID-signed macOS application" in result.stdout
     assert "--verify-only" in result.stdout
+    assert "--api-key" in result.stdout
 
 
 def test_dmg_tool_help():
@@ -90,6 +91,7 @@ def test_dmg_tool_help():
 
     assert "drag-to-Applications DMG" in result.stdout
     assert "--profile" in result.stdout
+    assert "--api-key" in result.stdout
 
 
 def test_dmg_background_contains_install_arrow(tmp_path):
