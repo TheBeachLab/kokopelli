@@ -12,6 +12,8 @@ import koko
 
 
 def _project_root() -> Path:
+    if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
+        return Path(sys._MEIPASS)
     return Path(__file__).resolve().parent.parent
 
 
@@ -58,7 +60,7 @@ def main(argv: list[str] | None = None) -> int:
 
     root = _project_root()
     koko.BASE_DIR = os.fspath(root) + os.sep
-    koko.BUNDLED = ".app" in sys.argv[0]
+    koko.BUNDLED = bool(getattr(sys, "frozen", False))
 
     if args.check:
         return runtime_check()
@@ -67,6 +69,8 @@ def main(argv: list[str] | None = None) -> int:
         sys.argv = [sys.argv[0], args.filename]
     else:
         sys.argv = [sys.argv[0]]
+        if koko.BUNDLED:
+            os.chdir(Path.home())
 
     try:
         import wx

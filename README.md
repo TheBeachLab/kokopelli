@@ -16,6 +16,7 @@ The following capabilities are verified in the current checkout:
 - reproducible dependencies through `pyproject.toml` and `uv.lock`;
 - native `libfab` compilation with current CMake and Apple Clang;
 - the wxPython Phoenix editor and 2D canvas;
+- a self-contained Apple Silicon `Kokopelli.app` bundle for macOS;
 - all 16 bundled `.ko` examples, including interactive points and sliders;
 - tool-aware 5×7 labels and arbitrary binary pixel art;
 - 16-bit heightmap PNG, multicolor PNG, and physically sized SVG export; and
@@ -27,8 +28,8 @@ evaluate in Python 3. The complete evidence and staged roadmap are maintained in
 [`REVIVAL.md`](REVIVAL.md).
 
 3D rendering, STL/ASDF workflows, CAM machine output, cross-platform builds, and
-standalone application packaging still require direct validation. Their presence
-in the source tree should not yet be interpreted as a claim that they work.
+notarized public distribution still require direct validation. Their presence in
+the source tree should not yet be interpreted as a claim that they work.
 
 ## Quick start on macOS
 
@@ -66,6 +67,33 @@ The development launcher also supports module execution:
 uv run python -m koko --help
 ```
 
+## Build the macOS application
+
+Create a self-contained application that can be opened from Finder without a
+separate Python installation:
+
+```bash
+make app
+open dist/Kokopelli.app
+```
+
+The build includes Python, wxPython, OpenGL support, the native `libfab`
+library, examples, documentation, and the editable Kokopelli library sources.
+It also registers `.ko` as a Kokopelli design format and applies a local ad hoc
+code signature. Run its structural, signature, architecture, and bundled
+runtime checks again with:
+
+```bash
+make app-check
+```
+
+[PyInstaller builds for the selected macOS target architecture](https://pyinstaller.org/en/stable/usage.html#cmdoption-target-architecture).
+The current bundle has been verified on Apple Silicon (`arm64`). Public
+downloads without Gatekeeper warnings additionally require an
+[Apple Developer ID certificate](https://developer.apple.com/help/account/certificates/create-developer-id-certificates)
+and [notarization](https://developer.apple.com/documentation/security/notarizing-macos-software-before-distribution);
+those credentials are intentionally not needed for local builds.
+
 ## Verification
 
 Run the native build and dependency check:
@@ -80,7 +108,7 @@ Run the full automated suite:
 make test
 ```
 
-At the time of this README update, the integrated suite reports 37 passing
+At the time of this README update, the integrated suite reports 38 passing
 tests. Three export tests verify decoded image/vector content rather than merely
 checking that files were created; fifteen tests exercise glyph coverage,
 physical spacing, Unicode expansion, pixel art, and MathTree generation.

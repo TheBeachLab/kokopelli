@@ -13,38 +13,38 @@ sys.path.append(os.path.join(sys.path[0], 'koko'))
 import koko
 from   koko             import NAME
 
-print('\r'+' '*80+'\r[||||||----]    importing koko.dialogs', end=' ')
-sys.stdout.flush()
+
+def _startup_status(message):
+    """Write optional startup progress without requiring a console."""
+    if sys.stdout is not None:
+        print('\r' + ' ' * 80 + '\r' + message, end=' ')
+        sys.stdout.flush()
+
+
+_startup_status('[||||||----]    importing koko.dialogs')
 import koko.dialogs     as dialogs
 
-print('\r'+' '*80+'\r[||||||----]    importing koko.frame', end=' ')
-sys.stdout.flush()
+_startup_status('[||||||----]    importing koko.frame')
 from   koko.frame       import MainFrame
 
-print('\r'+' '*80+'\r[||||||||--]    importing koko.template', end=' ')
-sys.stdout.flush()
+_startup_status('[||||||||--]    importing koko.template')
 from   koko.template    import TEMPLATE
 
-print('\r'+' '*80+'\r[||||||||--]    importing koko.struct', end=' ')
-sys.stdout.flush()
+_startup_status('[||||||||--]    importing koko.struct')
 from koko.struct        import Struct
 
-print('\r'+' '*80+'\r[||||||||--]    importing koko.taskbot', end=' ')
-sys.stdout.flush()
+_startup_status('[||||||||--]    importing koko.taskbot')
 from   koko.taskbot     import TaskBot
 
-print('\r'+' '*80+'\r[||||||||--]    importing koko.prims.core', end=' ')
-sys.stdout.flush()
+_startup_status('[||||||||--]    importing koko.prims.core')
 from   koko.prims.core  import PrimSet
 
-print('\r'+' '*80+'\r[||||||||--]    importing koko.fab', end=' ')
-sys.stdout.flush()
+_startup_status('[||||||||--]    importing koko.fab')
 from    koko.fab.image  import Image
 from    koko.fab.mesh   import Mesh
 from    koko.fab.asdf   import ASDF
 
-print('\r'+' '*80+'\r[|||||||||-]    reticulating splines', end=' ')
-sys.stdout.flush()
+_startup_status('[|||||||||-]    reticulating splines')
 
 # Dummy imports so that py2app includes these files
 import koko.lib.shapes

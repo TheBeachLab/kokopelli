@@ -7,7 +7,7 @@ import pytest
 import koko
 import koko.prims.points
 import koko.prims.utils
-from koko.cli import runtime_check
+from koko.cli import _project_root, runtime_check
 from koko.fab.fabvars import FabVars
 from koko.prims.core import PrimSet
 
@@ -17,6 +17,13 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def test_runtime_dependencies_and_native_library():
     assert runtime_check() == 0
+
+
+def test_frozen_project_root_uses_bundle_resources(monkeypatch, tmp_path):
+    monkeypatch.setattr(sys, "frozen", True, raising=False)
+    monkeypatch.setattr(sys, "_MEIPASS", str(tmp_path), raising=False)
+
+    assert _project_root() == tmp_path
 
 
 def test_example_designs_are_valid_python3():

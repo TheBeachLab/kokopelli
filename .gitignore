@@ -9,6 +9,7 @@
 libfab/libfab.dylib
 libfab/libfab.so
 build/*
+dist/
 util/app/ko.icns
 util/app/kokopelli.app
 util/app/kokopelli.zip
