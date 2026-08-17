@@ -65,3 +65,15 @@ def test_development_launcher_help():
     )
 
     assert "Script-based CAD/CAM" in result.stdout
+
+
+def test_notarization_tool_help():
+    result = subprocess.run(
+        [sys.executable, str(ROOT / "util" / "app" / "notarize_app.py"), "--help"],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    assert "Developer ID-signed macOS application" in result.stdout
+    assert "--verify-only" in result.stdout

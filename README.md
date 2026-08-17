@@ -94,6 +94,30 @@ downloads without Gatekeeper warnings additionally require an
 and [notarization](https://developer.apple.com/documentation/security/notarizing-macos-software-before-distribution);
 those credentials are intentionally not needed for local builds.
 
+For public distribution, first store reusable notary credentials in the local
+macOS Keychain. The profile can be used by multiple app build workflows for the
+same Apple developer account and team:
+
+```bash
+xcrun notarytool store-credentials PROFILE_NAME \
+  --apple-id YOUR_APPLE_ID \
+  --team-id YOUR_TEAM_ID
+```
+
+Then build Kokopelli with any `Developer ID Application` identity and pass the
+generic Keychain profile to the reusable notarization tool:
+
+```bash
+make app-notarize \
+  DEVELOPER_IDENTITY="Developer ID Application: Your Name (TEAM_ID)" \
+  NOTARY_PROFILE="PROFILE_NAME"
+```
+
+`util/app/notarize_app.py` is not Kokopelli-specific: it accepts any correctly
+signed `.app`, verifies Developer ID and Hardened Runtime, submits it to Apple,
+staples and validates the ticket, checks Gatekeeper acceptance, and creates the
+final ZIP archive.
+
 ## Verification
 
 Run the native build and dependency check:

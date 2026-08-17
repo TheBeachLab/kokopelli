@@ -1,5 +1,6 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+import os
 from pathlib import Path
 
 from PyInstaller.utils.hooks import collect_submodules
@@ -7,6 +8,7 @@ from PyInstaller.utils.hooks import collect_submodules
 
 ROOT = Path(SPECPATH).parents[1]
 ICON = ROOT / "util" / "app" / "ko.icns"
+MACOS_CODESIGN_IDENTITY = os.environ.get("MACOS_CODESIGN_IDENTITY") or None
 LIBRARY_SOURCES = [(str(path), ".") for path in sorted((ROOT / "koko" / "lib").glob("*.py"))]
 
 a = Analysis(
@@ -44,7 +46,7 @@ exe = EXE(
     disable_windowed_traceback=False,
     argv_emulation=True,
     target_arch=None,
-    codesign_identity=None,
+    codesign_identity=MACOS_CODESIGN_IDENTITY,
     entitlements_file=None,
     icon=[str(ICON)],
 )
