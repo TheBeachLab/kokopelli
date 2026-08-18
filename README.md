@@ -5,186 +5,53 @@ description language. Designs are ordinary Python programs: geometry can be
 parameterized, composed, rendered, and prepared for fabrication without leaving
 the editor.
 
-This fork is being revived after several years of inactivity. Version 0.3.0 now
-runs on modern Python 3 and current macOS development tools.
+![A cutter-aware 5x7 label and Kokopelli pixel-art figure rendered by Kokopelli](docs/images/dottext.png)
 
-## Current status
+This fork revives Kokopelli on modern Python while preserving the direct,
+fabrication-oriented workflow built around its native implicit-geometry engine,
+`libfab`.
 
-The following capabilities are verified in the current checkout:
+## Why Kokopelli
 
-- Python 3.12 runtime with declared support for Python 3.10 and newer;
-- reproducible dependencies through `pyproject.toml` and `uv.lock`;
-- native `libfab` compilation with current CMake and Apple Clang;
-- the wxPython Phoenix editor and 2D canvas;
-- a self-contained Apple Silicon `Kokopelli.app` bundle for macOS;
-- Developer ID signing, Apple notarization, ticket stapling, and Gatekeeper
-  validation for public macOS distribution;
-- all 16 bundled `.ko` examples, including interactive points and sliders;
-- tool-aware 5×7 labels and arbitrary binary pixel art;
-- 16-bit heightmap PNG, multicolor PNG, and physically sized SVG export; and
-- automated tests covering the native geometry boundary, exports, and
-  bundled examples.
-
-The mandala, living-hinge, box, gear, dot-matrix label, and other examples now
-evaluate in Python 3. The complete evidence and staged roadmap are maintained in
-[`REVIVAL.md`](REVIVAL.md).
-
-3D rendering, STL/ASDF workflows, CAM machine output, and cross-platform builds
-still require direct validation. Their presence in the source tree should not
-yet be interpreted as a claim that they work.
+- **Code is the model.** A `.ko` design is readable Python, with variables,
+  functions, repetition, and composition.
+- **Implicit geometry.** Shapes are combined as mathematical fields rather than
+  fragile boundary meshes.
+- **Interactive editing.** The wxPython editor provides a live 2D canvas,
+  draggable points, and parameter sliders.
+- **Fabrication-aware features.** Geometry can be defined from physical tool
+  dimensions, including cutter-aware dot-matrix text and arbitrary pixel art.
+- **Useful output.** The current revival verifies 16-bit heightmap PNG,
+  multicolor PNG, and physically sized SVG export.
 
 ## Quick start on macOS
 
-Install the system prerequisites with Homebrew:
+Install the build dependencies with [Homebrew](https://brew.sh):
 
 ```bash
 brew install cmake libpng uv
 ```
 
-Clone the repository, create the isolated Python environment, and build the
-native geometry library:
+Then clone, install, and launch Kokopelli:
 
 ```bash
 git clone https://github.com/TheBeachLab/kokopelli.git
 cd kokopelli
 make install
-```
-
-Start with a new design:
-
-```bash
 uv run kokopelli
 ```
 
-Or open one of the bundled examples:
+Open a bundled example by passing its `.ko` file:
 
 ```bash
 uv run kokopelli examples/mandala.ko
 uv run kokopelli examples/gear.ko
+uv run kokopelli examples/dottext.ko
 ```
 
-The development launcher also supports module execution:
+## Write a design
 
-```bash
-uv run python -m koko --help
-```
-
-## Build the macOS application
-
-Create a self-contained application that can be opened from Finder without a
-separate Python installation:
-
-```bash
-make app
-open dist/Kokopelli.app
-```
-
-The build includes Python, wxPython, OpenGL support, the native `libfab`
-library, examples, documentation, and the editable Kokopelli library sources.
-It also registers `.ko` as a Kokopelli design format and applies a local ad hoc
-code signature. Run its structural, signature, architecture, and bundled
-runtime checks again with:
-
-```bash
-make app-check
-```
-
-[PyInstaller builds for the selected macOS target architecture](https://pyinstaller.org/en/stable/usage.html#cmdoption-target-architecture).
-The current bundle, distributable ZIP, and drag-to-Applications DMG workflow
-have been verified on Apple Silicon (`arm64`). Release builds use an
-[Apple Developer ID certificate](https://developer.apple.com/help/account/certificates/create-developer-id-certificates)
-and [notarization](https://developer.apple.com/documentation/security/notarizing-macos-software-before-distribution),
-while local builds intentionally require neither credential.
-
-For public distribution, first store reusable notary credentials in the local
-macOS Keychain. The profile can be used by multiple app build workflows for the
-same Apple developer account and team:
-
-```bash
-xcrun notarytool store-credentials PROFILE_NAME \
-  --apple-id YOUR_APPLE_ID \
-  --team-id YOUR_TEAM_ID
-```
-
-For unattended or remote builds, use an App Store Connect **Team API key**
-instead of a session-protected Keychain profile. Apple documents that
-individual API keys cannot authenticate `notarytool`; keep the downloaded
-`.p8` file outside the repository and readable only by its owner:
-
-```bash
-chmod 600 /secure/path/AuthKey_KEY_ID.p8
-
-make dmg-notarize \
-  DEVELOPER_IDENTITY="Developer ID Application: Your Name (TEAM_ID)" \
-  NOTARY_API_KEY="/secure/path/AuthKey_KEY_ID.p8" \
-  NOTARY_API_KEY_ID="KEY_ID" \
-  NOTARY_API_ISSUER="ISSUER_UUID"
-```
-
-See Apple's documentation for
-[creating and protecting Team API keys](https://developer.apple.com/documentation/appstoreconnectapi/creating-api-keys-for-app-store-connect-api)
-and [`notarytool` API-key authentication](https://developer.apple.com/documentation/technotes/tn3147-migrating-to-the-latest-notarization-tool).
-
-Then build Kokopelli with any `Developer ID Application` identity and pass the
-generic Keychain profile to the reusable notarization tool:
-
-```bash
-make app-notarize \
-  DEVELOPER_IDENTITY="Developer ID Application: Your Name (TEAM_ID)" \
-  NOTARY_PROFILE="PROFILE_NAME"
-```
-
-`util/app/notarize_app.py` is not Kokopelli-specific: it accepts any correctly
-signed `.app`, verifies Developer ID and Hardened Runtime, submits it to Apple,
-staples and validates the ticket, checks Gatekeeper acceptance, and creates the
-final ZIP archive. The complete Kokopelli workflow has been exercised through
-an accepted Apple notarization submission and validation of the app after
-extracting the resulting ZIP.
-
-For the familiar macOS installer window with an arrow from `Kokopelli.app` to
-`Applications`, build a local DMG with:
-
-```bash
-make dmg
-```
-
-Create the public Developer ID-signed and Apple-notarized DMG with:
-
-```bash
-make dmg-notarize \
-  DEVELOPER_IDENTITY="Developer ID Application: Your Name (TEAM_ID)" \
-  NOTARY_PROFILE="PROFILE_NAME"
-```
-
-This produces `dist/Kokopelli-0.3.0-macOS-arm64.dmg`. The generic
-`util/app/make_dmg.py` tool creates the background and arrow, positions the app
-and `/Applications` link in Finder, signs the disk image, submits the outermost
-DMG to Apple, staples its ticket, and validates the mounted contents.
-
-## Verification
-
-Run the native build and dependency check:
-
-```bash
-make check
-```
-
-Run the full automated suite:
-
-```bash
-make test
-```
-
-At the time of this README update, the integrated suite reports 41 passing
-tests. Three export tests verify decoded image/vector content rather than merely
-checking that files were created; fifteen tests exercise glyph coverage,
-physical spacing, Unicode expansion, pixel art, and MathTree generation. The
-release-tooling checks also exercise the application and notarization command
-line interfaces.
-
-## Writing a design
-
-A `.ko` file is a Python program that assigns one or more shapes to `cad`:
+A design assigns one or more shapes to `cad`:
 
 ```python
 from koko.lib.shapes import *
@@ -198,15 +65,15 @@ ring.color = "red"
 cad.shapes = [ring]
 ```
 
-The bundled [`examples`](examples) directory contains 2D and 3D models,
-parameterized designs, text, PCB layouts, and mechanical assemblies. Start with
-`mandala.ko`, `gear.ko`, or `box.ko` to see the script-and-canvas workflow.
+The [`examples`](examples) directory includes 2D and 3D models, parameterized
+designs, text, PCB layouts, and mechanical assemblies. `mandala.ko`, `gear.ko`,
+and `box.ko` are good introductions to the script-and-canvas workflow.
 
-## Tool-aware dot-matrix labels
+## Cutter-aware dot-matrix text
 
 `koko.lib.dottext` constructs labels from physical dots rather than external
-font outlines. The dot diameter can match a milling cutter, while dot clearance
-and character spacing remain independent:
+font outlines. Dot diameter can match a milling cutter, while edge-to-edge dot
+clearance and character spacing remain independent:
 
 ```python
 from koko.lib.dottext import text
@@ -224,18 +91,13 @@ cad.shapes = [label]
 ```
 
 Horizontal and vertical character spacing count empty matrix columns and rows.
-Their conventional default is one; setting either value to zero places 5×7
-cells directly beside one another, allowing continuous double-width or
-double-height patterns.
+The conventional default is one; zero places 5×7 cells directly beside one
+another for continuous double-width or double-height patterns.
 
-The map covers the printable IBM-850 multilingual Latin-1 repertoire, common
-European Latin Extended-A letters, JIS X 0201 half-width katakana, full-width
-katakana input, and a compact hiragana set. A 5×7 cell is not sufficient for
-general kanji. IBM identifies CP850 as
-its Latin-1 multinational PC page and JIS X 0201 separately as Japanese CCSID
-897 ([IBM encoding table](https://www.ibm.com/docs/en/i/7.5.0?topic=encodings-fileencoding-values-i-ccsid)).
-The historical ASCII/katakana forms follow the public-domain
-[HD44780A00 character table](https://commons.wikimedia.org/wiki/File:Charset.gif).
+The map covers printable IBM-850 multilingual Latin-1, common European Latin
+Extended-A letters, JIS X 0201 half-width katakana, full-width katakana input,
+and a compact hiragana set. A 5×7 cell is not sufficient for general kanji. The
+sources are documented in [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
 
 Arbitrary binary matrices use the same physical controls:
 
@@ -254,10 +116,59 @@ art = pattern(
 )
 ```
 
-Open `examples/dottext.ko` to adjust cutter diameter, dot clearance, horizontal
-spacing, and vertical spacing with interactive sliders.
+Open `examples/dottext.ko` to adjust cutter diameter, dot clearance, and both
+character-spacing axes with interactive sliders.
 
-## Security warning
+## Current status
+
+The current checkout verifies:
+
+- Python 3.12, with declared support for Python 3.10 and newer;
+- reproducible dependencies through `pyproject.toml` and `uv.lock`;
+- native `libfab` compilation with current CMake and Apple Clang;
+- the wxPython Phoenix editor and 2D canvas;
+- all bundled `.ko` examples, including interactive points and sliders;
+- the dot-matrix and export capabilities described above; and
+- a self-contained Apple Silicon macOS app, Developer ID signing,
+  notarization, ticket stapling, Gatekeeper validation, and a
+  drag-to-Applications DMG.
+
+3D rendering, STL/ASDF workflows, CAM machine output, and cross-platform builds
+still require direct validation. Their presence in the source tree is not a
+claim that they currently work. Verified evidence and the staged roadmap live
+in [`REVIVAL.md`](REVIVAL.md).
+
+## Development and verification
+
+Build the native geometry library and check the runtime dependencies:
+
+```bash
+make check
+```
+
+Run the automated suite:
+
+```bash
+make test
+```
+
+Create and validate a self-contained local macOS application:
+
+```bash
+make app
+make app-check
+open dist/Kokopelli.app
+```
+
+The bundle contains Python, wxPython, OpenGL support, `libfab`, examples,
+documentation, and the editable Kokopelli library sources. It registers `.ko`
+as a Kokopelli design format and uses an ad hoc signature for local builds.
+
+Developer ID signing, unattended API authentication, Apple notarization, ZIP
+archives, and the graphical DMG are documented separately in
+[`docs/macos-release.md`](docs/macos-release.md).
+
+## Security
 
 Kokopelli executes design files as Python. This is what makes designs flexible,
 but it also means a `.ko` file can perform any action available to the current
@@ -269,9 +180,9 @@ first.**
 ## History
 
 Francisco Sanchez discovered Kokopelli while attending Fab Academy at Fab Lab
-Barcelona in 2013. This fork began as an effort to preserve the directness of
-script-based design: instead of manually pointing and clicking, a model can be
-described, parameterized, repeated, and transformed as code.
+Barcelona in 2013. This fork preserves the directness of script-based design:
+instead of manually pointing and clicking, a model can be described,
+parameterized, repeated, and transformed as code.
 
 The original Kokopelli was created by Matt Keeter at the MIT Center for Bits and
 Atoms and grew out of the course “How to Make Something that Makes (Almost)
@@ -279,17 +190,16 @@ Anything.” It combines a Python design environment with the native `libfab`
 geometry engine and a modular fabrication workflow.
 
 This fork also contains PCB-library work derived from additions by Sam Calisch.
-The first fabrication-oriented dot-matrix font stage is now implemented. The
-PCB merge, V-bit variable-depth halftones, and free-cutout ideas remain roadmap
-items rather than completed features.
+The first fabrication-oriented dot-matrix font stage is implemented. The PCB
+merge, V-bit variable-depth halftones, and free-cutout ideas remain roadmap
+items.
 
-## Copyright
+## License and attribution
 
 - © 2012–2013 Massachusetts Institute of Technology
 - © 2013 Matt Keeter
 - © 2017 Sam Calisch
 - © 2018–2026 Francisco Sanchez
 
-See [`LICENSE.md`](LICENSE.md) for the repository's license text.
-Third-party attributions for adapted glyph data are preserved in
-[`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
+See [`LICENSE.md`](LICENSE.md) for the license text and
+[`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) for third-party attribution.

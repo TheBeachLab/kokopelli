@@ -104,3 +104,15 @@ def test_dmg_background_contains_install_arrow(tmp_path):
         assert image.size == BACKGROUND_SIZE
         assert image.getpixel((330, 215)) == (38, 118, 255)
         assert image.getpixel((440, 215)) == (38, 118, 255)
+
+
+def test_make_targets_offer_the_same_notarization_credentials():
+    makefile = (ROOT / "Makefile").read_text()
+    app_target = makefile.split("app-notarize:", 1)[1].split("\ndmg:", 1)[0]
+    dmg_target = makefile.split("dmg-notarize:", 1)[1].split("\nsync:", 1)[0]
+
+    for target in (app_target, dmg_target):
+        assert "NOTARY_PROFILE" in target
+        assert "NOTARY_API_KEY" in target
+        assert "NOTARY_API_KEY_ID" in target
+        assert "NOTARY_API_ISSUER" in target
